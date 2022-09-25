@@ -34,6 +34,12 @@ public class LoginController {
 		return "index";
 	}
 
+	@GetMapping("/")
+	public String index() {
+		return "index";
+	}
+	
+
 	@PostMapping("/login")
 	public String loginvalidation(@ModelAttribute(name = "loginForm") UserMaster login, Model model,HttpServletRequest request) {
 		String ViewName = "";

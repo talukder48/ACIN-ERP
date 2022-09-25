@@ -18,8 +18,9 @@
 			
 			<div class="container my-3 bg-light">
 		        <div class="col-md-12 text-center">
-		           <a th:href="@{/AddNewEmployeeData}" class="btn btn-primary">Add  Employee</a>
+		           <a th:href="@{/AddNewEmployeeData}" class="btn btn-primary">Add  Army</a>
 		            <a th:href="@{/UserHome}" class="btn btn-warning">Back Home</a>
+		             <a th:href="@{/PrintAllArmyList}" class="btn btn-info">Download All </a>
 		        </div>
 		    </div>
 					
@@ -43,6 +44,7 @@
 																		
 						<td>
 							<a th:href="@{/showUpdateEmployeeForm(EmployeeId=${employee.EmployeeId})}" class="btn btn-info">Update</a>
+							<a th:href="@{/PrintPersonalInfo(EmployeeId=${employee.EmployeeId})}" class="btn btn-info">Profile Download</a>
 							
 						</td>
 					</tr>

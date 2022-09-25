@@ -43,6 +43,7 @@
 						<td th:text="${transaction.leaveReason}" />
 						<td>
 							<a th:href="@{/showUpdateLeaveRecomendation(LeaveID=${transaction.LeaveID})}" class="btn btn-info">Recommendation </a>
+							<a th:href="@{/PrintLeaveForm(LeaveID=${transaction.LeaveID})}" class="btn btn-info">Download</a>
 							
 						</td>
 					</tr>

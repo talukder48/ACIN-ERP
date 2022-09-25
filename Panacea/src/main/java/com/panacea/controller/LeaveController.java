@@ -1,16 +1,12 @@
 package com.panacea.controller;
 
-import java.io.File;
-import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,7 +72,7 @@ public class LeaveController {
 	@GetMapping({ "/UserListHRM" })
 	public ModelAndView getUserListHRM() {
 		ModelAndView mav = new ModelAndView("HRM/List-User");
-		mav.addObject("UserList", UserMasterRepo.findAll());
+		mav.addObject("UserList", UserMasterRepo.FindUserListByModule("LEAVE"));
 		return mav;
 	}
 
@@ -170,7 +166,16 @@ public class LeaveController {
 	@GetMapping({ "/LeaveDashBoard" })
 	public ModelAndView LeaveDashBoard() {
 		ModelAndView mav = new ModelAndView("HRM/LeaveDashBoard");
-		mav.addObject("LeaveList", leaveregisterRepo.findAll());
+		try {
+			
+			
+			mav.addObject("LeaveList", leaveregisterRepo.FindToBeRecomendedList());
+			
+			
+			
+		}catch(Exception e) {
+			
+		}
 		return mav;
 
 	}
@@ -178,7 +183,7 @@ public class LeaveController {
 	@GetMapping({ "/LeaveAuthorization" })
 	public ModelAndView LeaveAuthorization() {
 		ModelAndView mav = new ModelAndView("HRM/LeaveAuthorization");
-		mav.addObject("LeaveList", leaveregisterRepo.findAll());
+		mav.addObject("LeaveList", leaveregisterRepo.FindToBeApprovalList());
 		return mav;
 
 	}
@@ -204,6 +209,7 @@ public class LeaveController {
 
 	@PostMapping("/saveLeaveData")
 	public String saveLeaveData(@ModelAttribute LeaveRegister LeaveRegister,HttpServletRequest request) {
+		
 		if (LeaveRegister.getLeaveID() == null) {
 			ArmyEmployee ArmyEmployee = ArmyEmployeeRepo.findById(LeaveRegister.getEmployeeId()).get();
 			LeaveRegister.setEmployeeName(ArmyEmployee.getEmployeeName());
@@ -236,6 +242,7 @@ public class LeaveController {
 	
 	@PostMapping("/saveLeaveRecomendationData")
 	public String saveLeaveRecomendationData(@ModelAttribute LeaveRegister LeaveRegister,HttpServletRequest request) {
+		HttpSession sessionParam = request.getSession();
 		if (LeaveRegister.getLeaveID() == null) {
 			return "redirect:/LeaveDashBoard";
 		} else {
@@ -251,6 +258,7 @@ public class LeaveController {
 				leaveregister.setLeaveReason(LeaveRegister.getLeaveReason());
 				leaveregister.setLeaveType(LeaveRegister.getLeaveType());
 				leaveregister.setRecomendRemarks(LeaveRegister.getRecomendRemarks());
+				leaveregister.setRecomendBy(sessionParam.getValue("UserId").toString());
 				leaveregisterRepo.save(leaveregister);
 			} 
 			return "redirect:/LeaveDashBoard";
@@ -259,6 +267,7 @@ public class LeaveController {
 	
 	@PostMapping("/saveLeaveApprovalData")
 	public String saveLeaveApprovalData(@ModelAttribute LeaveRegister LeaveRegister,HttpServletRequest request) {
+		HttpSession sessionParam = request.getSession();
 		if (LeaveRegister.getLeaveID() == null) {
 			return "redirect:/LeaveAuthorization";
 		} else {
@@ -275,6 +284,7 @@ public class LeaveController {
 				leaveregister.setLeaveType(LeaveRegister.getLeaveType());
 				leaveregister.setRecomendRemarks(LeaveRegister.getRecomendRemarks());
 				leaveregister.setApprovedRemarks(LeaveRegister.getApprovedRemarks());
+				leaveregister.setApproveBy(sessionParam.getValue("UserId").toString());
 				leaveregisterRepo.save(leaveregister);
 			} 
 			return "redirect:/LeaveAuthorization";
@@ -294,29 +304,6 @@ public class LeaveController {
 		return model;
 	}
 	
-	
-	@Autowired
-	DataSource dataSource;
-	
-	
-	@GetMapping("/PrintLeaveForm")
-	public ResponseEntity<byte[]> PrintLeaveForm(@RequestParam Long LeaveID) {		
-		Map<String, Object> parameter = new HashMap<String, Object>();	
-		parameter.put("P_LEAVEID", LeaveID);
-		try {
-			
-			JasperPrint empReport =JasperFillManager.fillReport(JasperCompileManager.compileReport(ResourceUtils.getFile("classpath:templates/report-templates/ULMS/LeaveCard.jrxml").getAbsolutePath()) , parameter , dataSource.getConnection());
-			HttpHeaders headers = new HttpHeaders();
-			//set the PDF format
-			headers.setContentType(MediaType.APPLICATION_PDF);
-			headers.setContentDispositionFormData("filename", "LeaveCard.pdf");
-			//create the report in PDF format
-			return new ResponseEntity<byte[]>(JasperExportManager.exportReportToPdf(empReport), headers, HttpStatus.OK);
-			
-		} catch(Exception e) {
-			return new ResponseEntity<byte[]>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}		
-	}
 
 	@GetMapping("/showUpdateLeaveRecomendation")
 	public ModelAndView showUpdateLeaveRecomendation(@RequestParam Long LeaveID) {
@@ -356,5 +343,50 @@ public class LeaveController {
 		mav.addObject("UserList", UserMasterRepo.findAll());
 		return mav;
 	}
+	/*Leave Report Controller*/
+	
+	@Autowired
+	DataSource dataSource;
+	
+	
+	@GetMapping("/PrintLeaveForm")
+	public ResponseEntity<byte[]> PrintLeaveForm(@RequestParam Long LeaveID) {		
+		Map<String, Object> parameter = new HashMap<String, Object>();	
+		parameter.put("P_LEAVEID", LeaveID);
+		try {
+			
+			JasperPrint empReport =JasperFillManager.fillReport(JasperCompileManager.compileReport(ResourceUtils.getFile("classpath:templates/report-templates/ULMS/LeaveCard.jrxml").getAbsolutePath()) , parameter , dataSource.getConnection());
+			HttpHeaders headers = new HttpHeaders();
+			//set the PDF format
+			headers.setContentType(MediaType.APPLICATION_PDF);
+			headers.setContentDispositionFormData("filename", "LeaveCard ID#"+LeaveID+".pdf");
+			//create the report in PDF format
+			return new ResponseEntity<byte[]>(JasperExportManager.exportReportToPdf(empReport), headers, HttpStatus.OK);
+			
+		} catch(Exception e) {
+			return new ResponseEntity<byte[]>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}		
+	}
+	
+	
+	@GetMapping("/PrintPersonalInfo")
+	public ResponseEntity<byte[]> PrintPersonalInfo(@RequestParam String EmployeeId) {		
+		Map<String, Object> parameter = new HashMap<String, Object>();	
+		parameter.put("P_EMPLOYEE_ID", EmployeeId);
+		try {
+			
+			JasperPrint empReport =JasperFillManager.fillReport(JasperCompileManager.compileReport(ResourceUtils.getFile("classpath:templates/report-templates/ULMS/PersonalInfoData.jrxml").getAbsolutePath()) , parameter , dataSource.getConnection());
+			HttpHeaders headers = new HttpHeaders();
+			//set the PDF format
+			headers.setContentType(MediaType.APPLICATION_PDF);
+			headers.setContentDispositionFormData("filename", "Personal Info- ID#"+EmployeeId+".pdf");
+			//create the report in PDF format
+			return new ResponseEntity<byte[]>(JasperExportManager.exportReportToPdf(empReport), headers, HttpStatus.OK);
+			
+		} catch(Exception e) {
+			return new ResponseEntity<byte[]>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}		
+	}
+	
 
 }

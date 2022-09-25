@@ -11,19 +11,29 @@
 		
 		<div class="container">
 		
-			<h3>User List</h3>
 			
-			<hr/>
-			<a th:href="@{/AddNewEmployeeData}" class="btn btn-primary">Add New User</a>
-			<a th:href="@{/UserHome}" class="btn btn-primary">Back to Main Menu</a>
-			<br/><br/>
+			<div class="container my-3 bg-light">
+			<h3 class="col-md-12 text-center">ULMS System User List</h3>
+			</div>
+			
+			<div class="container my-3 bg-light">
+		        <div class="col-md-12 text-center">
+		           <a th:href="@{/AddNewUser}" class="btn btn-primary">New User</a>
+		            <a th:href="@{/UserHome}" class="btn btn-warning">Back Home</a>
+		        </div>
+		    </div>
+			
+			
+			
 			<table class="table table-bordered table-striped" id="productTable">
 			
 				<thead>
 					<tr>
 						<th>User ID</th>
 						<th>User Name</th>
-						<th>Branch>
+						<th>Branch</th>
+						<th>Module</th>
+						<th>Role</th>
 						<th>Action</th>
 					</tr>
 				</thead>
@@ -31,7 +41,9 @@
 					<tr th:each="user: ${UserList}">
 						<td th:text="${user.UserID}" />
 						<td th:text="${user.UserName}" />
-						<td th:text="${user.UserBranch}" />
+						<td th:text="${user.UserBranch}" />						
+						<td th:text="${user.UserModule}" />
+						<td th:text="${user.UserRole}" />
 																		
 						<td>
 							<a th:href="@{/showUpdateUserForm(UserID=${user.UserID})}" class="btn btn-info">View</a>
