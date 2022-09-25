@@ -28,15 +28,15 @@ public class RequisitionList {
 	private String Remarks;
 	@Column(name = "EntyBy", length = 20)
 	private String EntyBy;
-	@Column(name = "EntryOn",columnDefinition = "Date default SYSDATE")
+	@Column(name = "EntryOn")
 	private LocalDate EntryOn;
 	@Column(name = "ApproveBy", length = 20)
 	private String ApproveBy;
-	@Column(name = "ApproveOn",columnDefinition = "Date default SYSDATE")
+	@Column(name = "ApproveOn")
 	private LocalDate ApproveOn;
 	@Column(name = "RejBy", length = 20)
 	private String RejBy;
-	@Column(name = "RejOn",columnDefinition = "Date default SYSDATE")
+	@Column(name = "RejOn")
 	private LocalDate RejOn;
 	
 	private String RequisitionGrid;
