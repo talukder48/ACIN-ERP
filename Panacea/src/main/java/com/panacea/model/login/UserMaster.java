@@ -13,6 +13,8 @@ public class UserMaster {
 	private String UserID;
 	@Column(name = "UserName", length = 50)
 	private String UserName;
+	@Column(name = "EmployeeId", length = 20)
+	private String EmployeeId;
 	@Column(name = "UserPassword", length = 50)
 	private String UserPassword;
 	@Column(name = "UserBranch", length = 10)
@@ -27,6 +29,15 @@ public class UserMaster {
 	private String UserModule;
 	@Column(name = "UserRole", length = 5)
 	private String UserRole;
+    
+	
+	public String getEmployeeId() {
+		return EmployeeId;
+	}
+
+	public void setEmployeeId(String employeeId) {
+		EmployeeId = employeeId;
+	}
 
 	public String getUserID() {
 		return UserID;

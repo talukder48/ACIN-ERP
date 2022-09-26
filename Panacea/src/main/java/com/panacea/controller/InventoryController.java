@@ -191,53 +191,6 @@ public class InventoryController {
 		return "redirect:/DisburseList";
 	}
 
-	@GetMapping({ "/InventoryUserList" })
-	public ModelAndView getAllUser() {
-		List<InventoryUser> InventoryUserList = new ArrayList<InventoryUser>();
-		InventoryUserList.add(new InventoryUser("1457", "Mosharraf Hossain Talukder", "123", "AP", "0400", "M"));
-		InventoryUserList.add(new InventoryUser("1456", "Rubel Talukder", "123", "AP", "0400", "M"));
-
-		ModelAndView mav = new ModelAndView("Inventory/Parameter/list-user-inventory");
-		mav.addObject("InventoryUserList", InventoryUserList);
-		return mav;
-	}
-
-	@GetMapping("/addInventoryUserForm")
-	public ModelAndView addInventoryUserForm() {
-		ModelAndView mav = new ModelAndView("Inventory/Parameter/add-inventory-user-list");
-		InventoryUser newUser = new InventoryUser("1457", "Mosharraf Hossain Talukder", "123", "AP", "0400", "M");
-		mav.addObject("Inventory", newUser);
-		return mav;
-	}
-
-	@PostMapping("/saveInventoryUser")
-	public String saveInventoryUser(@ModelAttribute InventoryUser inventoryUser) {
-		// eRepo.save(inventoryUser);
-		return "redirect:/InventoryUserList";
-	}
-
-	@GetMapping("/showUpdateInventoryUserForm")
-	public ModelAndView showUpdateInventoryUserForm(@RequestParam int userId) {
-		System.out.println(userId);
-
-		ModelAndView mav = new ModelAndView("Inventory/Parameter/add-inventory-user-list");
-		InventoryUser newUser = new InventoryUser("1457", "Mosharraf Hossain Talukder", "123", "AP", "0400", "M");
-
-		/*
-		 * Employee employee = eRepo.findById(employeeId).get();
-		 * mav.addObject("employee", employee);
-		 */
-
-		mav.addObject("Inventory", newUser);
-		return mav;
-	}
-
-	@GetMapping("/deleteInventoryUser")
-	public String deleteInventoryUser(@RequestParam int userId) {
-		System.out.println(userId);
-		return "redirect:/InventoryUserList";
-	}
-
 	@Autowired
 	RequisitionListRepo RequisitionListRepo;
 

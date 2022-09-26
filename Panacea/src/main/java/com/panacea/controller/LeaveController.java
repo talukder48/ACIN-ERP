@@ -60,8 +60,7 @@ public class LeaveController {
 	LeaveRegisterRepo leaveregisterRepo;
 	@Autowired
 	EmployeeRepo employeeRepo;
-	@Autowired
-	UserMaserRepo UserMasterRepo;
+	
 	@Autowired
 	ArmyCompayRepo ArmyCompayRepo;
 	@Autowired
@@ -69,12 +68,7 @@ public class LeaveController {
 	@Autowired
 	ArmyTradeRepo ArmyTradeRepo;
 
-	@GetMapping({ "/UserListHRM" })
-	public ModelAndView getUserListHRM() {
-		ModelAndView mav = new ModelAndView("HRM/List-User");
-		mav.addObject("UserList", UserMasterRepo.FindUserListByModule("LEAVE"));
-		return mav;
-	}
+	
 
 	@Autowired
 	ArmyEmployeeRepo ArmyEmployeeRepo;
@@ -327,22 +321,7 @@ public class LeaveController {
 		return model;
 	}
 
-	@PostMapping("/AddUserInfo")
-	public String AddUserInfo(@ModelAttribute("usermaster") UserMaster usermaster) {
-		UserMasterRepo.save(usermaster);
-		return "redirect:UserListHRM";
-	}
-
-	@GetMapping("/DeleteUser/{UserID}")
-	public ModelAndView DeleteUser(@PathVariable String UserID) {
-
-		System.out.println(UserID);
-		UserMasterRepo.deleteById(UserID);
-
-		ModelAndView mav = new ModelAndView("HRM/List-User");
-		mav.addObject("UserList", UserMasterRepo.findAll());
-		return mav;
-	}
+	
 	/*Leave Report Controller*/
 	
 	@Autowired
