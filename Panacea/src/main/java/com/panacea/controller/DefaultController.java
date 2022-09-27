@@ -210,7 +210,7 @@ public class DefaultController {
     
     
     
-    @GetMapping("/DefaultParameterCreation")
+    @GetMapping("/DefaultLeaveParameterCreation")
    	public String DefaultParameterCreation() {
    		if (ArmyCompayRepo.count() == 0) {
    			List <ArmyCompany> ArmyCompanyList = new ArrayList<ArmyCompany>() ;
@@ -268,8 +268,14 @@ public class DefaultController {
    			LeavList.add(new LeaveDescription("W","Weekend"));
    			LeaveDescriptionRepo.saveAll(LeavList);
    		}
-	   	 
-	   	 
+	   	if (UserMasterRepo.count() == 0) {
+			List<UserMaster> UserList = new ArrayList<UserMaster>();
+			UserList.add(new UserMaster("40001", "Test", AESEncrypt.encrypt("admin"), "0018", "01", "01515240013","Test@gmail.com", "LEAVE","M"));
+			UserList.add(new UserMaster("40002", "Test", AESEncrypt.encrypt("admin"), "0018", "01", "01515240013","Test@gmail.com", "LEAVE","E"));
+			UserList.add(new UserMaster("50001", "Test", AESEncrypt.encrypt("admin"), "0018", "01", "01515240013","Test@gmail.com", "LEAVE","S"));
+			
+			UserMasterRepo.saveAll(UserList);
+		}
 	   	 
    		return "index";
    	}   

@@ -265,13 +265,20 @@ public class LoginController {
 	}
 
 	@GetMapping("/DeleteUser/{UserID}")
-	public ModelAndView DeleteUser(@PathVariable String UserID) {
-
-		System.out.println(UserID);
+	public ModelAndView DeleteUser(@PathVariable String UserID,HttpServletRequest request) {
 		UserMasterRepo.deleteById(UserID);
-
-		ModelAndView mav = new ModelAndView("HRM/List-User");
-		mav.addObject("UserList", UserMasterRepo.findAll());
+		String Module=null;
+		
+		HttpSession sessionParam = request.getSession();
+		try {
+			 Module = sessionParam.getAttribute("Module").toString();
+			
+		} catch (Exception e) {
+			Module= "NF";
+		}
+		
+		ModelAndView mav = new ModelAndView("Common/List-User");
+		mav.addObject("UserList", UserMasterRepo.FindUserListByModule(Module));
 		return mav;
 	}
 

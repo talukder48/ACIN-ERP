@@ -9,13 +9,15 @@
     	pagination: {
     	    limit: 5
     	  },
-    	  columns: ["Product Id ", "Product Name", "Action","To Whom","No of Goods","Prices"],
+    	  columns: ["Leave Code ", "Leave Name", "Remarks"],
     	  data: [
-    	    ["103", "Book", "Purchase","Stock",7,1400],
-    	    ["103", "Book", "Disburse","Mr. X",2,600],
-    	    ["104", "Pen", "Disburse","Zone1",5,130],
-    	    ["104", "Pencil", "Disburse","Zone3",7,120],
-    	    ["103", "Book", "Purchase","Stock",2,500]
+    	    ["C", "Casual leave", ""],
+    	    ["R", "Recreation leave", ""],
+    	    ["P", "Privilege leave", ""],
+    	    ["F", "Festival leave", ""],
+    	    ["E", "Emergency leave", ""],
+    	    ["W", "Weekend ", ""]
+    	    
     	  ]
     	}).render(document.getElementById("DailyWorks"));
     
