@@ -65,8 +65,13 @@ public class LoginController {
 				} else if (usermaster.getUserModule().equals("INVENTORY")) {
 					{
 						if (usermaster.getUserRole().equals("S")) {
-							ViewName = "Inventory/Inventory";
-						} else {
+							ViewName = "Inventory/InventorySuper";
+						} 
+						else if (usermaster.getUserRole().equals("E")) {
+							ViewName = "Inventory/InventoryEndUser";
+						}
+						
+						else {
 							ViewName = "Inventory/Inventory";
 						}
 					}
@@ -118,8 +123,13 @@ public class LoginController {
 						} else if (usermaster.getUserModule().equals("INVENTORY")) {
 							{
 								if (usermaster.getUserRole().equals("S")) {
-									ViewName = "Inventory/Inventory";
-								} else {
+									ViewName = "Inventory/InventorySuper";
+								} 
+								else if (usermaster.getUserRole().equals("E")) {
+									ViewName = "Inventory/InventoryEndUser";
+								}
+								
+								else {
 									ViewName = "Inventory/Inventory";
 								}
 							}
