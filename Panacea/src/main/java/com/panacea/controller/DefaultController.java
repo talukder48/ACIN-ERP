@@ -255,7 +255,7 @@ public class DefaultController {
    		}
 	   	 if (ArmyEmployeeRepo.count() == 0) {
 	 		List <ArmyEmployee> ArmyEmployeeList = new ArrayList<ArmyEmployee>() ;
-	 		ArmyEmployeeList.add(new ArmyEmployee("ID2020080002","Abu Tayab","Abdur Rahim","Amena Begum","101","101","101","O","A+","01-01-1991","M","test@gmail.com","017120908902","Barisal","10","Wirless Gate","M","01515222234","Abu Naser","01515222235"));	
+	 		ArmyEmployeeList.add(new ArmyEmployee("2022","Abu Tayab","Abdur Rahim","Amena Begum","101","101","101","O","A+","01-01-1991","M","test@gmail.com","017120908902","Barisal","10","Wirless Gate","M","01515222234","Abu Naser","01515222235"));	
 	 		ArmyEmployeeRepo.saveAll(ArmyEmployeeList);
 	 	}
 	   	if (LeaveDescriptionRepo.count() == 0) {
