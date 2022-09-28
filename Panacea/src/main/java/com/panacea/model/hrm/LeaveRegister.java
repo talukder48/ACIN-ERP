@@ -31,7 +31,7 @@ public class LeaveRegister {
 	@Column(name = "ApplyDate", length = 20)
 	private String ApplyDate;
 
-	@Column(name = "leaveStatus", length = 2)
+	@Column(name = "leaveStatus", length = 40)
 	private String leaveStatus;
 	@Column(name = "RecomendBy", length = 20)
 	private String RecomendBy;

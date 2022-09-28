@@ -183,9 +183,17 @@ public class LeaveController {
 	}
 
 	@GetMapping({ "/LeaveList" })
-	public ModelAndView getLeaveList() {
+	public ModelAndView getLeaveList(HttpServletRequest request) {
+		HttpSession sessionParam = request.getSession();
+		String EmployeeId=null;
+		try {
+			EmployeeId=sessionParam.getValue("EmployeeId").toString();
+		}catch(Exception e) {
+			EmployeeId="NF";
+		}
+		
 		ModelAndView mav = new ModelAndView("HRM/List-Leave");
-		mav.addObject("LeaveList", leaveregisterRepo.findAll());
+		mav.addObject("LeaveList", leaveregisterRepo.FindAppliedList(EmployeeId));
 		return mav;
 	}
 
@@ -207,6 +215,7 @@ public class LeaveController {
 		if (LeaveRegister.getLeaveID() == null) {
 			ArmyEmployee ArmyEmployee = ArmyEmployeeRepo.findById(LeaveRegister.getEmployeeId()).get();
 			LeaveRegister.setEmployeeName(ArmyEmployee.getEmployeeName());
+			LeaveRegister.setLeaveStatus("Recomendation Pending");
 			leaveregisterRepo.save(LeaveRegister);
 		} else {
 
@@ -221,7 +230,7 @@ public class LeaveController {
 				leaveregister.setEndDate(LeaveRegister.getEndDate());
 				leaveregister.setLeaveReason(LeaveRegister.getLeaveReason());
 				leaveregister.setLeaveType(LeaveRegister.getLeaveType());
-
+				leaveregister.setLeaveStatus(LeaveRegister.getLeaveStatus());
 				leaveregisterRepo.save(leaveregister);
 			} else {
 				ArmyEmployee ArmyEmployee = ArmyEmployeeRepo.findById(LeaveRegister.getEmployeeId()).get();
@@ -253,6 +262,7 @@ public class LeaveController {
 				leaveregister.setLeaveType(LeaveRegister.getLeaveType());
 				leaveregister.setRecomendRemarks(LeaveRegister.getRecomendRemarks());
 				leaveregister.setRecomendBy(sessionParam.getValue("UserId").toString());
+				leaveregister.setLeaveStatus("Approval Pending");
 				leaveregisterRepo.save(leaveregister);
 			} 
 			return "redirect:/LeaveDashBoard";
@@ -279,6 +289,7 @@ public class LeaveController {
 				leaveregister.setRecomendRemarks(LeaveRegister.getRecomendRemarks());
 				leaveregister.setApprovedRemarks(LeaveRegister.getApprovedRemarks());
 				leaveregister.setApproveBy(sessionParam.getValue("UserId").toString());
+				leaveregister.setLeaveStatus("Approved");
 				leaveregisterRepo.save(leaveregister);
 			} 
 			return "redirect:/LeaveAuthorization";
@@ -319,6 +330,29 @@ public class LeaveController {
 		model.addObject("Leavelist", LeaveDescriptionRepo.findAll());
 
 		return model;
+	}
+	
+	@GetMapping("/RejectLeave")
+	public ModelAndView RejectLeave(@RequestParam Long LeaveID,HttpServletRequest request) {
+		ModelAndView mav = new ModelAndView("HRM/LeaveAuthorization");
+		HttpSession sessionParam = request.getSession();
+		String UserId=null;
+		try {
+			UserId=sessionParam.getValue("UserId").toString();
+		}catch(Exception e) {
+			UserId="NF";
+		}
+		
+		if(leaveregisterRepo.existsById(LeaveID)) {
+			LeaveRegister leaveregister = leaveregisterRepo.findById(LeaveID).orElseThrow();
+			leaveregister.setRejectBy(UserId);
+			leaveregister.setLeaveStatus("Rejected");
+			leaveregisterRepo.save(leaveregister);
+		}
+		
+		
+		mav.addObject("LeaveList", leaveregisterRepo.FindToBeApprovalList());
+	return mav;
 	}
 
 	

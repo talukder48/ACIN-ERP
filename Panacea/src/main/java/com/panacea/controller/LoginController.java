@@ -19,7 +19,7 @@ import com.panacea.model.inventory.DropDownType;
 import com.panacea.model.inventory.InventoryUser;
 import com.panacea.model.login.UserMaster;
 import com.panacea.repository.leave.UserMaserRepo;
-import com.panacea.repository.hrm.EmployeeRepo;
+import com.panacea.repository.hrm.*;
 import com.panacea.utils.AESDecrypt;
 import com.panacea.utils.AESEncrypt;
 
@@ -29,7 +29,7 @@ public class LoginController {
 	@Autowired
 	UserMaserRepo UserMasterRepo;
 	@Autowired
-	EmployeeRepo EmployeeRepo;
+	ArmyEmployeeRepo ArmyEmployeeRepo;
 	private static final Logger LOGGER = LogManager.getLogger(LoginController.class);
 
 	@GetMapping("/LogOut")
@@ -221,7 +221,7 @@ public class LoginController {
 		mav.addObject("UserRoleList", UserRoleList);
 		mav.addObject("BranchList", BranchList);
 		mav.addObject("ModuleList", ModuleList);
-		mav.addObject("EmployeeList", EmployeeRepo.findAll());
+		mav.addObject("EmployeeList", ArmyEmployeeRepo.findAll());
 		return mav;
 	}
 	
@@ -262,7 +262,7 @@ public class LoginController {
 		mav.addObject("UserRoleList", UserRoleList);
 		mav.addObject("BranchList", BranchList);
 		mav.addObject("ModuleList", ModuleList);
-		mav.addObject("EmployeeList", EmployeeRepo.findAll());
+		mav.addObject("EmployeeList", ArmyEmployeeRepo.findAll());
 		return mav;
 	}
 	

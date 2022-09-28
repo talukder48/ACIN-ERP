@@ -13,4 +13,7 @@ public interface LeaveRegisterRepo extends JpaRepository<LeaveRegister,Long> {
 	 @Query(value = "select * from `hr_leave_register` r where r.recomend_by is not null and r.reject_by is null and r.approve_by is  null", nativeQuery = true)
 	 List<LeaveRegister> FindToBeApprovalList();
 	 
+	 @Query(value = "select * from `hr_leave_register` r where r.employee_id =?1", nativeQuery = true)
+	 List<LeaveRegister> FindAppliedList(String EmployeeId);
+	 
 }
