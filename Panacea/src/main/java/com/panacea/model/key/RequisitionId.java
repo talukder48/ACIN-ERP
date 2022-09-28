@@ -58,5 +58,29 @@ public class RequisitionId implements Serializable{
 			return false;
 		return true;
 	}
+	public String getBranchCode() {
+		return BranchCode;
+	}
+	public void setBranchCode(String branchCode) {
+		BranchCode = branchCode;
+	}
+	public Date getReqDate() {
+		return ReqDate;
+	}
+	public void setReqDate(Date reqDate) {
+		ReqDate = reqDate;
+	}
+	public int getReqSL() {
+		return ReqSL;
+	}
+	public void setReqSL(int reqSL) {
+		ReqSL = reqSL;
+	}
+	public String getProductCode() {
+		return ProductCode;
+	}
+	public void setProductCode(String productCode) {
+		ProductCode = productCode;
+	}
 	
 }

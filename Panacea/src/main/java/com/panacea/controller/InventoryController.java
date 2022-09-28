@@ -1,5 +1,6 @@
 package com.panacea.controller;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,8 +22,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.panacea.model.acounting.TransactionList;
+
 import com.panacea.model.inventory.*;
+import com.panacea.model.key.RequisitionListId;
 import com.panacea.repository.Accounting.GLCodeRepo;
 import com.panacea.repository.inventory.InventoryProductRepo;
 import com.panacea.repository.inventory.RequisitionListRepo;
@@ -30,7 +32,7 @@ import com.panacea.repository.inventory.RequisitionRepo;
 import com.panacea.utils.ProjectUtils;
 
 @Controller
-public class InventoryController {
+public class InventoryController<RequsitionList> {
 	@Autowired
 	InventoryProductRepo inventoryProductRepo;
 	@Autowired
@@ -193,7 +195,13 @@ public class InventoryController {
 
 	@Autowired
 	RequisitionListRepo RequisitionListRepo;
-
+	
+	@Autowired
+	private TransactionTemplate template;
+	@Autowired
+	RequisitionRepo RequisitionRepo;
+	
+	
 	@GetMapping({ "/RequisitionList" })
 	public ModelAndView RequisitionList() {
 		ModelAndView mav = new ModelAndView("Inventory/Entry/List-requisition");
@@ -209,10 +217,6 @@ public class InventoryController {
 		return "Inventory/Entry/add-requisition";
 	}
 
-	@Autowired
-	private TransactionTemplate template;
-	@Autowired
-	RequisitionRepo RequisitionRepo;
 
 	@SuppressWarnings({ "deprecation", "unchecked" })
 	@PostMapping("/saveRequisition")
@@ -243,6 +247,7 @@ public class InventoryController {
 					}
 				}
 				RequisitionRepo.saveAll(ReqList);
+				RequisitionList.setRequisitionGrid("");
 				RequisitionListRepo.save(RequisitionList);
 				
 				return 1L;
@@ -251,5 +256,62 @@ public class InventoryController {
 
 		return "redirect:/RequisitionList";
 	}
+	
+	
+	
+	
+	@GetMapping("/showUpdateRequisitionForm")
+	public ModelAndView showRequisitionDetails(@RequestParam String BranchCode, @RequestParam Date ReqDate,@RequestParam int ReqSL) {		
+		ModelAndView mav = new ModelAndView("Inventory/Entry/View-RequisitionDetails");			
+		mav.addObject("RequsitionDetailsList", RequisitionRepo.FindByRequisitionDetails(BranchCode, ReqDate, ReqSL));
+		return mav;
+	}
+	
+	
+	@GetMapping("/BacktoPurchaseList")
+	public String BacktoPurchaseList(HttpServletRequest request){		
+		return "redirect:/RequisitionList";
+	}
 
+	
+	@GetMapping({ "/AprrovalRequisitionList" })
+	public ModelAndView AprrovalRequisitionList() {
+		ModelAndView mav = new ModelAndView("Inventory/Authorization/list-requisition-Approval");
+		mav.addObject("RequisitionList", RequisitionListRepo.FindAllbyQuery());
+		return mav;
+	}
+	
+	@GetMapping("/showUpdateRequisitionApprovalForm")
+	public ModelAndView showUpdateRequisitionApprovalForm(@RequestParam String BranchCode, @RequestParam Date ReqDate,@RequestParam int ReqSL) {		
+		ModelAndView mav = new ModelAndView("Inventory/Authorization/View-RequisitionDetails-Approval");			
+		mav.addObject("RequsitionDetailsList", RequisitionRepo.FindByRequisitionDetails(BranchCode, ReqDate, ReqSL));
+		return mav;
+	}
+	
+	@GetMapping("/BacktoApprovePurchaseList")
+	public String BacktoApprovePurchaseList(HttpServletRequest request){		
+		return "redirect:/AprrovalRequisitionList";
+	}
+	
+	
+	@GetMapping({ "/OrderGenerationList" })
+	public ModelAndView OrderGenerationList() {
+		ModelAndView mav = new ModelAndView("Inventory/Entry/list-order-generation");
+		mav.addObject("RequisitionList", RequisitionListRepo.FindAllbyQuery());
+		return mav;
+	}
+	
+	@GetMapping("/showUpdateOrderApprovalForm")
+	public ModelAndView showUpdateOrderApprovalForm(@RequestParam String BranchCode, @RequestParam Date ReqDate,@RequestParam int ReqSL) {		
+		ModelAndView mav = new ModelAndView("Inventory/Entry/view-ordergeneration-data");			
+		mav.addObject("RequsitionDetailsList", RequisitionRepo.FindByRequisitionDetails(BranchCode, ReqDate, ReqSL));
+		return mav;
+	}
+	
+	@GetMapping("/BacktoOrderList")
+	public String BacktoOrderList(HttpServletRequest request){		
+		return "redirect:/OrderGenerationList";
+	}
+	
+	
 }

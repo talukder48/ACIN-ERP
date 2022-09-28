@@ -11,12 +11,11 @@
 		
 		<div class="container">
 			<div class="container my-3 bg-light">
-			<h3 class="col-md-12 text-center">Inventory Requisition List </h3>
+			<h3 class="col-md-12 text-center">Requisition List for Order Generation</h3>
 			</div>
 			
 			<div class="container my-3 bg-light">
 		        <div class="col-md-12 text-center">
-		            <a th:href="@{/addRequisitionForm}" class="btn btn-primary">Add Requisition</a>
 		            <a th:href="@{/UserHome}" class="btn btn-warning">Back Home</a>
 		        </div>
 		    </div>
@@ -40,8 +39,9 @@
 						<td th:text="${Requisition.ReqSL}" />
 						<td th:text="${Requisition.Remarks}" />
 						<td>
-							<a th:href="@{/RemoveRequisitionForm(BranchCode=${Requisition.BranchCode},ReqDate=${Requisition.ReqDate},ReqSL=${Requisition.ReqSL})}" class="btn btn-success">Remove</a>
-							<a th:href="@{/showUpdateRequisitionForm(BranchCode=${Requisition.BranchCode},ReqDate=${Requisition.ReqDate},ReqSL=${Requisition.ReqSL})}" class="btn btn-info ml-2">View</a>
+							<a th:href="@{/showUpdateOrderApprovalForm(BranchCode=${Requisition.BranchCode},ReqDate=${Requisition.ReqDate},ReqSL=${Requisition.ReqSL})}" class="btn btn-success">Generate</a>
+							<a th:href="@{/showUpdateOrderApprovalForm(BranchCode=${Requisition.BranchCode},ReqDate=${Requisition.ReqDate},ReqSL=${Requisition.ReqSL})}" class="btn btn-danger ml-2">Reject</a>
+							<a th:href="@{/showUpdateOrderApprovalForm(BranchCode=${Requisition.BranchCode},ReqDate=${Requisition.ReqDate},ReqSL=${Requisition.ReqSL})}" class="btn btn-info ml-2">View</a>
 						</td>
 					</tr>
 				</tbody>
