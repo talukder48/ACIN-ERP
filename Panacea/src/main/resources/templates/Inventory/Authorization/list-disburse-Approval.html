@@ -12,12 +12,11 @@
 		<div class="container">
 		
 		  <div class="container my-3 bg-light">
-			<h3 class="col-md-12 text-center">Disburse List:Inventor Management System</h3>
+			<h3 class="col-md-12 text-center">Disburse List for Authorization:Inventor Management System</h3>
 			</div>
 			
 			<div class="container my-3 bg-light">
 		        <div class="col-md-12 text-center">
-		            <a th:href="@{/addDisburseForm}" class="btn btn-primary">Add Disburse</a>
 		            <a th:href="@{/UserHome}" class="btn btn-warning">Back Home</a>
 		        </div>
 		    </div>
@@ -43,6 +42,7 @@
 						<td th:text="${Disburse.Comments}" />
 						<td>
 							<a th:href="@{/showUpdatePurchaseForm(DisburseId=${Disburse.DisburseId})}" class="btn btn-info">Update</a>
+							<a th:href="@{/AuthorizePurchaseOrder(DisburseId=${Disburse.DisburseId})}" class="btn btn-success ml-2">Authorize</a>							
 							<a th:href="@{/RejectPurchaseOrder(DisburseId=${Disburse.DisburseId})}" class="btn btn-danger ml-2">Reject</a>
 						</td>
 					</tr>

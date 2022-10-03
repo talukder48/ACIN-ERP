@@ -11,7 +11,7 @@
 		
 		<div class="container">
 			<div class="container my-3 bg-light">
-			<h3 class="col-md-12 text-center">Inventory Requisition List </h3>
+			<h3 class="col-md-12 text-center">Requisition List:Inventor Management System </h3>
 			</div>
 			
 			<div class="container my-3 bg-light">
@@ -30,6 +30,7 @@
 						<th>Requisition Date</th>
 						<th>Requisition SL</th>
 						<th>Comments</th>
+						<th>Order ID</th>
 						<th>Actions</th>
 					</tr>
 				</thead>
@@ -39,8 +40,9 @@
 						<td th:text="${Requisition.ReqDate}" />
 						<td th:text="${Requisition.ReqSL}" />
 						<td th:text="${Requisition.Remarks}" />
+						<td th:text="${Requisition.OrderId}" />
 						<td>
-							<a th:href="@{/RemoveRequisitionForm(BranchCode=${Requisition.BranchCode},ReqDate=${Requisition.ReqDate},ReqSL=${Requisition.ReqSL})}" class="btn btn-success">Remove</a>
+							<a th:href="@{/RejectByCreator(BranchCode=${Requisition.BranchCode},ReqDate=${Requisition.ReqDate},ReqSL=${Requisition.ReqSL})}" class="btn btn-danger">Reject</a>
 							<a th:href="@{/showUpdateRequisitionForm(BranchCode=${Requisition.BranchCode},ReqDate=${Requisition.ReqDate},ReqSL=${Requisition.ReqSL})}" class="btn btn-info ml-2">View</a>
 						</td>
 					</tr>

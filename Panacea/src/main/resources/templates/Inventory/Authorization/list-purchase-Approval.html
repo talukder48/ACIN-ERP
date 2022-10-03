@@ -12,12 +12,11 @@
 		<div class="container">
 		
 		  <div class="container my-3 bg-light">
-			<h3 class="col-md-12 text-center">Disburse List:Inventor Management System</h3>
+			<h3 class="col-md-12 text-center">Purchase List for Authorization :Inventor Management System</h3>
 			</div>
 			
 			<div class="container my-3 bg-light">
 		        <div class="col-md-12 text-center">
-		            <a th:href="@{/addDisburseForm}" class="btn btn-primary">Add Disburse</a>
 		            <a th:href="@{/UserHome}" class="btn btn-warning">Back Home</a>
 		        </div>
 		    </div>
@@ -28,22 +27,23 @@
 			
 				<thead>
 					<tr>					    
-						<th>Disburse ID</th>
-						<th>Disburse Date</th>
+						<th>Purchase ID</th>
+						<th>Purchase Date</th>
 						<th>Remarks</th>
 						<th>Comments</th>
 						<th>Actions</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:each="Disburse: ${disburseList}">
-						<td th:text="${Disburse.DisburseId}" />
-						<td th:text="${Disburse.Orderdate}" />
-						<td th:text="${Disburse.Remarks}" />
-						<td th:text="${Disburse.Comments}" />
+					<tr th:each="purchase: ${PurchaseList}">
+						<td th:text="${purchase.PurchaseId}" />
+						<td th:text="${purchase.Orderdate}" />
+						<td th:text="${purchase.Remarks}" />
+						<td th:text="${purchase.Comments}" />
 						<td>
-							<a th:href="@{/showUpdatePurchaseForm(DisburseId=${Disburse.DisburseId})}" class="btn btn-info">Update</a>
-							<a th:href="@{/RejectPurchaseOrder(DisburseId=${Disburse.DisburseId})}" class="btn btn-danger ml-2">Reject</a>
+							<a th:href="@{/showUpdatePurchaseForm(PurchaseId=${purchase.PurchaseId})}" class="btn btn-info">Update</a>
+							<a th:href="@{/AuthorizePurchaseOrder(PurchaseId=${purchase.PurchaseId})}" class="btn btn-success ml-2">Authorize</a>							
+							<a th:href="@{/RejectPurchaseOrder(PurchaseId=${purchase.PurchaseId})}" class="btn btn-danger ml-2">Reject</a>
 						</td>
 					</tr>
 				</tbody>

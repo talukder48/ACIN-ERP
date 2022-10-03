@@ -29,18 +29,44 @@ public class RequisitionList {
 	@Column(name = "EntyBy", length = 20)
 	private String EntyBy;
 	@Column(name = "EntryOn")
-	private LocalDate EntryOn;
+	private Date EntryOn;
 	@Column(name = "ApproveBy", length = 20)
 	private String ApproveBy;
 	@Column(name = "ApproveOn")
-	private LocalDate ApproveOn;
+	private Date ApproveOn;
 	@Column(name = "RejBy", length = 20)
 	private String RejBy;
 	@Column(name = "RejOn")
-	private LocalDate RejOn;
-	
+	private Date RejOn;
+	@Column(name = "OrdeBy", length = 20)
+	private String OrdeBy;
+	@Column(name = "OrderOn")
+	private Date OrderOn;
+	@Column(name = "OrderId", length = 20)
+	private String OrderId;
+	@Column(name = "RequisitionGrid", length = 400)
 	private String RequisitionGrid;
 	
+
+	
+	public String getOrdeBy() {
+		return OrdeBy;
+	}
+	public void setOrdeBy(String ordeBy) {
+		OrdeBy = ordeBy;
+	}
+	public Date getOrderOn() {
+		return OrderOn;
+	}
+	public void setOrderOn(Date orderOn) {
+		OrderOn = orderOn;
+	}
+	public String getOrderId() {
+		return OrderId;
+	}
+	public void setOrderId(String orderId) {
+		OrderId = orderId;
+	}
 	public String getRequisitionGrid() {
 		return RequisitionGrid;
 	}
@@ -77,10 +103,10 @@ public class RequisitionList {
 	public void setEntyBy(String entyBy) {
 		EntyBy = entyBy;
 	}
-	public LocalDate getEntryOn() {
+	public Date getEntryOn() {
 		return EntryOn;
 	}
-	public void setEntryOn(LocalDate entryOn) {
+	public void setEntryOn(Date entryOn) {
 		EntryOn = entryOn;
 	}
 	public String getApproveBy() {
@@ -89,10 +115,10 @@ public class RequisitionList {
 	public void setApproveBy(String approveBy) {
 		ApproveBy = approveBy;
 	}
-	public LocalDate getApproveOn() {
+	public Date getApproveOn() {
 		return ApproveOn;
 	}
-	public void setApproveOn(LocalDate approveOn) {
+	public void setApproveOn(Date approveOn) {
 		ApproveOn = approveOn;
 	}
 	public String getRejBy() {
@@ -101,10 +127,10 @@ public class RequisitionList {
 	public void setRejBy(String rejBy) {
 		RejBy = rejBy;
 	}
-	public LocalDate getRejOn() {
+	public Date getRejOn() {
 		return RejOn;
 	}
-	public void setRejOn(LocalDate rejOn) {
+	public void setRejOn(Date rejOn) {
 		RejOn = rejOn;
 	}
 	public RequisitionList() {

@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -26,9 +27,9 @@ import org.springframework.web.servlet.ModelAndView;
 import com.panacea.model.inventory.*;
 import com.panacea.model.key.RequisitionListId;
 import com.panacea.repository.Accounting.GLCodeRepo;
-import com.panacea.repository.inventory.InventoryProductRepo;
-import com.panacea.repository.inventory.RequisitionListRepo;
-import com.panacea.repository.inventory.RequisitionRepo;
+import com.panacea.repository.inventory.*;
+
+
 import com.panacea.utils.ProjectUtils;
 
 @Controller
@@ -37,7 +38,10 @@ public class InventoryController<RequsitionList> {
 	InventoryProductRepo inventoryProductRepo;
 	@Autowired
 	GLCodeRepo glcoderepository;
-
+	@Autowired
+	PurchaseListRepo PurchaseListRepo;
+	@Autowired
+	DisburseListRepo DisburseListRepo;
 	@GetMapping({ "/ProductList" })
 	public ModelAndView getAllProducts() {
 		ModelAndView mav = new ModelAndView("Inventory/Parameter/list-products");
@@ -62,8 +66,11 @@ public class InventoryController<RequsitionList> {
 		List<DropDownType> typeList = new ArrayList<DropDownType>();
 		typeList.add(new DropDownType("H", "H-Hardware"));
 		typeList.add(new DropDownType("S", "S-Software"));
+		
+		
+		
 
-		ModelAndView mav = new ModelAndView("Inventory/add-product-form");
+		ModelAndView mav = new ModelAndView("Inventory/Parameter/add-product-form");
 		InventoryProduct Product = inventoryProductRepo.findById(ProductCode).get();
 		mav.addObject("product", Product);
 		mav.addObject("typeList", typeList);
@@ -83,28 +90,21 @@ public class InventoryController<RequsitionList> {
 	}
 
 	@GetMapping({ "/PurchaseList" })
-	public ModelAndView getAllPurchases() {
-		List<Purchase> purchaseList = new ArrayList<Purchase>();
-		purchaseList.add(new Purchase("0100", 123, "14-02-2022", 1, "Pen", 120, 1620));
-		purchaseList.add(new Purchase("0100", 123, "14-02-2022", 2, "Pen", 100, 1200));
-		purchaseList.add(new Purchase("0100", 124, "13-02-2022", 1, "Note Book", 120, 1620));
-		purchaseList.add(new Purchase("0100", 124, "13-02-2022", 2, "Note Book", 120, 1620));
-		purchaseList.add(new Purchase("0100", 125, "12-02-2022", 1, "Harfik", 7, 840));
+	public ModelAndView getAllPurchases() {		
 		ModelAndView mav = new ModelAndView("Inventory/Entry/list-purchase");
-		mav.addObject("purchaseList", purchaseList);
+	    mav.addObject("PurchaseList", PurchaseListRepo.findAll());
 		return mav;
 	}
 
 	@GetMapping("/addPurchaseForm")
 	public ModelAndView addPurchaseForm() {
 		ModelAndView mav = new ModelAndView("Inventory/Entry/add-purchase-form");
-		Purchase newPurchase = new Purchase("0100", 125, "12-02-2022", 1, "Harfik", 7, 840);
-		mav.addObject("purchase", newPurchase);
+	
 		return mav;
 	}
 
 	@PostMapping("/savePurchase")
-	public String savePurchase(@ModelAttribute Purchase purchase) {
+	public String savePurchase(@ModelAttribute PurchaseList purchase) {
 		// eRepo.save(employee);
 		return "redirect:/PurchaseList";
 	}
@@ -121,8 +121,7 @@ public class InventoryController<RequsitionList> {
 		 * Employee employee = eRepo.findById(employeeId).get();
 		 * mav.addObject("employee", employee);
 		 */
-		Purchase newPurchase = new Purchase("0100", 125, "12-02-2022", 1, "Harfik", 7, 840);
-		mav.addObject("purchase", newPurchase);
+		//mav.addObject("purchase", newPurchase);
 		return mav;
 	}
 
@@ -137,13 +136,14 @@ public class InventoryController<RequsitionList> {
 		return "redirect:/PurchaseList";
 	}
 
+	
+	
+	
 	@GetMapping({ "/DisburseList" })
 	public ModelAndView getAllDisburse() {
-		List<Disburse> disburseList = new ArrayList<Disburse>();
-		disburseList
-				.add(new Disburse("0100", 125, "12-02-2022", 1, "Harfik", "S", 7, 840, "to Customer", "item is sold"));
+		
 		ModelAndView mav = new ModelAndView("Inventory/Entry/list-disburse");
-		mav.addObject("disburseList", disburseList);
+		mav.addObject("disburseList", DisburseListRepo.findAll());
 		return mav;
 	}
 
@@ -232,6 +232,7 @@ public class InventoryController<RequsitionList> {
 			RequisitionList.setBranchCode(BranchCode);
 			RequisitionList.setReqSL(MaxSL);
 			RequisitionList.setEntyBy(sessionParam.getValue("UserId").toString());
+			RequisitionList.setEntryOn(new java.sql.Date(new java.util.Date().getTime()));
 			List<Requisition> ReqList = new ArrayList<Requisition>();
 
 			Long id = template.execute(status -> {
@@ -248,6 +249,7 @@ public class InventoryController<RequsitionList> {
 				}
 				RequisitionRepo.saveAll(ReqList);
 				RequisitionList.setRequisitionGrid("");
+				RequisitionList.setRemarks("Requisition Approval Pending");
 				RequisitionListRepo.save(RequisitionList);
 				
 				return 1L;
@@ -268,6 +270,27 @@ public class InventoryController<RequsitionList> {
 	}
 	
 	
+
+	@GetMapping("/RejectByCreator")
+	public String RejectByCreator(@RequestParam String BranchCode, @RequestParam Date ReqDate,@RequestParam int ReqSL,HttpServletRequest request) {		
+		
+		HttpSession sessionParam = request.getSession();
+		String UserId=null;
+		try {
+			 UserId = sessionParam.getValue("UserId").toString();
+		}catch(Exception e) {
+			
+		}
+		
+		RequisitionList RequisitionList = RequisitionListRepo.findById(new RequisitionListId(BranchCode, ReqDate,ReqSL)).orElse(null);
+		RequisitionList.setRemarks("Rejected By Creator");
+		RequisitionList.setRejBy(UserId);
+		RequisitionList.setRejOn(new java.sql.Date(new java.util.Date().getTime()));
+		RequisitionListRepo.save(RequisitionList);
+		return "redirect:/RequisitionList";
+		
+	}
+	
 	@GetMapping("/BacktoPurchaseList")
 	public String BacktoPurchaseList(HttpServletRequest request){		
 		return "redirect:/RequisitionList";
@@ -277,15 +300,56 @@ public class InventoryController<RequsitionList> {
 	@GetMapping({ "/AprrovalRequisitionList" })
 	public ModelAndView AprrovalRequisitionList() {
 		ModelAndView mav = new ModelAndView("Inventory/Authorization/list-requisition-Approval");
-		mav.addObject("RequisitionList", RequisitionListRepo.FindAllbyQuery());
+		mav.addObject("RequisitionList", RequisitionListRepo.FindUnApproveList());
 		return mav;
 	}
+	
+	
 	
 	@GetMapping("/showUpdateRequisitionApprovalForm")
 	public ModelAndView showUpdateRequisitionApprovalForm(@RequestParam String BranchCode, @RequestParam Date ReqDate,@RequestParam int ReqSL) {		
 		ModelAndView mav = new ModelAndView("Inventory/Authorization/View-RequisitionDetails-Approval");			
 		mav.addObject("RequsitionDetailsList", RequisitionRepo.FindByRequisitionDetails(BranchCode, ReqDate, ReqSL));
 		return mav;
+	}
+	
+	
+
+	@GetMapping("/AuthorizeRequisitionApprovalForm")
+	public String AuthorizeRequisitionApprovalForm(@RequestParam String BranchCode, @RequestParam Date ReqDate,@RequestParam int ReqSL,HttpServletRequest request) {	
+		HttpSession sessionParam = request.getSession();
+		String UserId=null;
+		try {
+			 UserId = sessionParam.getValue("UserId").toString();
+		}catch(Exception e) {
+			
+		}
+		RequisitionList RequisitionList = RequisitionListRepo.findById(new RequisitionListId(BranchCode, ReqDate,ReqSL)).orElse(null);
+		RequisitionList.setRemarks("Approved: Pending For Order Generation");
+		RequisitionList.setApproveBy(UserId);
+		RequisitionList.setApproveOn(new java.sql.Date(new java.util.Date().getTime()));
+		RequisitionListRepo.save(RequisitionList);
+		return "redirect:/AprrovalRequisitionList";
+		
+	}
+	@GetMapping("/RejectByApprover")
+	public String RejectByApprover(@RequestParam String BranchCode, @RequestParam Date ReqDate,@RequestParam int ReqSL,HttpServletRequest request) {		
+		
+		HttpSession sessionParam = request.getSession();
+		String UserId=null;
+		try {
+			 UserId = sessionParam.getValue("UserId").toString();
+		}catch(Exception e) {
+			
+		}
+		
+		RequisitionList RequisitionList = RequisitionListRepo.findById(new RequisitionListId(BranchCode, ReqDate,ReqSL)).orElse(null);
+		RequisitionList.setRemarks("Rejected By Approver");
+		RequisitionList.setRejBy(UserId);
+		RequisitionList.setRejOn(new java.sql.Date(new java.util.Date().getTime()));
+		RequisitionListRepo.save(RequisitionList);
+		return "redirect:/AprrovalRequisitionList";
+		
 	}
 	
 	@GetMapping("/BacktoApprovePurchaseList")
@@ -297,9 +361,11 @@ public class InventoryController<RequsitionList> {
 	@GetMapping({ "/OrderGenerationList" })
 	public ModelAndView OrderGenerationList() {
 		ModelAndView mav = new ModelAndView("Inventory/Entry/list-order-generation");
-		mav.addObject("RequisitionList", RequisitionListRepo.FindAllbyQuery());
+		mav.addObject("RequisitionList", RequisitionListRepo.FindUnGeneratedRequisitionList());
 		return mav;
 	}
+	
+	
 	
 	@GetMapping("/showUpdateOrderApprovalForm")
 	public ModelAndView showUpdateOrderApprovalForm(@RequestParam String BranchCode, @RequestParam Date ReqDate,@RequestParam int ReqSL) {		
@@ -308,10 +374,74 @@ public class InventoryController<RequsitionList> {
 		return mav;
 	}
 	
+	
+	@GetMapping("/PurchaseOrderGenerate")
+	public String PurchaseOrderGenerate(@RequestParam String BranchCode, @RequestParam Date ReqDate,@RequestParam int ReqSL,HttpServletRequest request) {		
+		
+		HttpSession sessionParam = request.getSession();
+		String UserId=null;
+		try {
+			 UserId = sessionParam.getValue("UserId").toString();
+		}catch(Exception e) {
+			
+		}
+		
+		RequisitionList RequisitionList = RequisitionListRepo.findById(new RequisitionListId(BranchCode, ReqDate,ReqSL)).orElse(null);
+		RequisitionList.setRemarks("Purchase Order Generated");
+		RequisitionList.setOrdeBy(UserId);
+		RequisitionList.setOrderId("0018220001");
+		RequisitionList.setOrderOn(new java.sql.Date(new java.util.Date().getTime()));
+		RequisitionListRepo.save(RequisitionList);
+		return "redirect:/OrderGenerationList";
+		
+	}
+	
+	
+	
+	@GetMapping("/RejectedByGenerator")
+	public String RejectedByGenerator(@RequestParam String BranchCode, @RequestParam Date ReqDate,@RequestParam int ReqSL,HttpServletRequest request) {		
+		
+		HttpSession sessionParam = request.getSession();
+		String UserId=null;
+		try {
+			 UserId = sessionParam.getValue("UserId").toString();
+		}catch(Exception e) {
+			
+		}
+		
+		RequisitionList RequisitionList = RequisitionListRepo.findById(new RequisitionListId(BranchCode, ReqDate,ReqSL)).orElse(null);
+		RequisitionList.setRemarks("Rejected By Generator");
+		RequisitionList.setRejBy(UserId);
+		RequisitionList.setRejOn(new java.sql.Date(new java.util.Date().getTime()));
+		RequisitionListRepo.save(RequisitionList);
+		return "redirect:/OrderGenerationList";
+		
+	}
+	
+	
+	
 	@GetMapping("/BacktoOrderList")
 	public String BacktoOrderList(HttpServletRequest request){		
 		return "redirect:/OrderGenerationList";
 	}
+	
+	
+	@GetMapping({ "/ApprovalPurchaseList" })
+	public ModelAndView ApprovalPurchaseList() {		
+		ModelAndView mav = new ModelAndView("Inventory/Authorization/list-purchase-Approval");
+	    mav.addObject("PurchaseList", PurchaseListRepo.findAll());
+		return mav;
+	}
+	
+	@GetMapping({ "/ApprovalDisburseList" })
+	public ModelAndView ApprovalDisburseList() {
+		
+		ModelAndView mav = new ModelAndView("Inventory/Authorization/list-disburse-Approval");
+		mav.addObject("disburseList", DisburseListRepo.findAll());
+		return mav;
+	}
+	
+	
 	
 	
 }
