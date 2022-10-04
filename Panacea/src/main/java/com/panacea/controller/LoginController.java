@@ -15,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.panacea.model.hrm.LeaveRegister;
 import com.panacea.model.inventory.DropDownType;
 import com.panacea.model.inventory.InventoryUser;
 import com.panacea.model.login.UserMaster;
@@ -294,33 +295,47 @@ public class LoginController {
 
 	
 
+	@GetMapping("/AccountsInfo")
+	public ModelAndView AccountsInfo(@RequestParam String UserId,HttpServletRequest request) {
+		String EmpID=null;
+		
+		HttpSession sessionParam = request.getSession();
+		try {
+			EmpID = sessionParam.getAttribute("EmployeeId").toString();
+			
+		} catch (Exception e) {
+			EmpID= "NF";
+		}
+		
+		ModelAndView mav = new ModelAndView("Common/update-UserInfo");
+		mav.addObject("UserMaster", UserMasterRepo.getById(UserId));
+		mav.addObject("EmployeeList", ArmyEmployeeRepo.findById(EmpID).get());
+		return mav;
+	}
+	
+	
 	@PostMapping("/UpdateUserInfo")
-	public String UpdateUserInfo(@ModelAttribute InventoryUser inventoryUser) {
-		// eRepo.save(inventoryUser);
-		return "redirect:/Inventory";
+	public String UpdateUserInfo(@ModelAttribute("usermaster") UserMaster usermaster,HttpServletRequest request) {
+		if (UserMasterRepo.existsById(usermaster.getUserID())) {	
+			UserMaster UserMaster = UserMasterRepo.findById(usermaster.getUserID()).orElseThrow();
+			UserMaster.setUserPassword(AESEncrypt.encrypt(usermaster.getUserPassword()));
+			UserMaster.setUserMobile(usermaster.getUserMobile());
+			UserMaster.setUserEmailId(usermaster.getUserEmailId());
+			UserMaster.setUserName(usermaster.getUserName());
+			UserMasterRepo.save(UserMaster);
+		}
+		return "redirect:/UserHome";
 	}
-
-	@RequestMapping("/AccountsPassword")
-	public String AccountsPassword(Model model) {
-		return "accounts-password";
-	}
-
-	@GetMapping("/InventoryManagement")
-	public String InventoryManagement() {
-		return "InventoryManagement";
-	}
-
-	@GetMapping("/Inventory")
-	public String Inventory() {
-		return "Inventory/Inventory";
-	}
+	
+	
+	
 
 	@GetMapping("{tab}")
 	public String tab(@PathVariable String tab) {
 
 		if (Arrays.asList("tab1", "tab2", "tab3", "tab4", "tab5", "tab6", "tab7").contains(tab)) {
 
-			return "Inventory/_" + tab;
+			return "HRM/_" + tab;
 		}
 
 		return "Inventory/_empty";

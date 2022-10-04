@@ -33,6 +33,7 @@ import com.panacea.repository.hrm.EmployeeRepo;
 import com.panacea.repository.leave.LeaveDescriptionRepo;
 import com.panacea.repository.leave.LeaveRegisterRepo;
 import com.panacea.repository.leave.UserMaserRepo;
+import com.panacea.utils.AESEncrypt;
 
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
@@ -114,10 +115,17 @@ public class LeaveController {
 		model.addAttribute("CompanyList", ArmyCompayRepo.findAll());
 		return "HRM/add-Employee";
 	}
-
+	@Autowired
+	UserMaserRepo UserMasterRepo;
 	@PostMapping("/saveEmployee")
-	public String saveAccountsProduct(@ModelAttribute ArmyEmployee ArmyEmployee) {
+	public String saveEmployee(@ModelAttribute ArmyEmployee ArmyEmployee) {
 		ArmyEmployeeRepo.save(ArmyEmployee);
+		if (!UserMasterRepo.existsById(ArmyEmployee.getEmployeeId())) {			
+			UserMaster UserMaster=new UserMaster(ArmyEmployee.getEmployeeId(),ArmyEmployee.getEmployeeName(),AESEncrypt.encrypt(ArmyEmployee.getEmployeeId()),"0018","",ArmyEmployee.getMobileNo(),ArmyEmployee.getEmailAddress(),"LEAVE","E");
+			UserMaster.setEmployeeId(ArmyEmployee.getEmployeeId());			
+			UserMasterRepo.save(UserMaster);			
+		}
+		
 		return "redirect:/EmployeeList";
 	}
 
@@ -201,10 +209,16 @@ public class LeaveController {
 	LeaveDescriptionRepo LeaveDescriptionRepo;
 
 	@GetMapping("/AddEmployeeLeaveData")
-	public String AddEmployeeLeaveData(Model model) {
+	public String AddEmployeeLeaveData(Model model,HttpServletRequest request) {
+		String EmpID=null;
+		try {
+			 EmpID = request.getSession().getAttribute("EmployeeId").toString();
+		}catch(Exception e) {
+			
+		}
 		LeaveRegister LeaveRegister = new LeaveRegister();
 		model.addAttribute("LeaveRegister", LeaveRegister);
-		model.addAttribute("EmployeeList", ArmyEmployeeRepo.findAll());
+		model.addAttribute("EmployeeList", ArmyEmployeeRepo.findById(EmpID).get());
 		model.addAttribute("Leavelist", LeaveDescriptionRepo.findAll());
 		return "HRM/add-leave";
 	}
@@ -316,7 +330,7 @@ public class LeaveController {
 		LeaveRegister LeaveRegister = leaveregisterRepo.findById((LeaveID)).get();
 		model.addObject("LeaveRegister", LeaveRegister);
 		model.addObject("EmployeeList", ArmyEmployeeRepo.findAll());
-		model.addObject("Leavelist", LeaveDescriptionRepo.findAll());
+		model.addObject("Leavelist", LeaveDescriptionRepo.findById(LeaveRegister.getLeaveType()).get());
 
 		return model;
 	}
@@ -327,7 +341,7 @@ public class LeaveController {
 		LeaveRegister LeaveRegister = leaveregisterRepo.findById((LeaveID)).get();
 		model.addObject("LeaveRegister", LeaveRegister);
 		model.addObject("EmployeeList", ArmyEmployeeRepo.findAll());
-		model.addObject("Leavelist", LeaveDescriptionRepo.findAll());
+		model.addObject("Leavelist", LeaveDescriptionRepo.findById(LeaveRegister.getLeaveType()).get());
 
 		return model;
 	}
