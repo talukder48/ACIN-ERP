@@ -84,9 +84,11 @@ public class LeaveController {
 	@GetMapping("/AddNewEmployeeData")
 	public String addNewEmployee(Model model) {
 		List<DropDownType> typeList = new ArrayList<DropDownType>();
-		typeList.add(new DropDownType("O", "O-Officer"));
-		typeList.add(new DropDownType("S", "S-Staff"));
+		typeList.add(new DropDownType("OFFR", "Officer"));
+		typeList.add(new DropDownType("JCO", "JCO"));
+		typeList.add(new DropDownType("OR", "Others"));
 		List<DropDownType> LivingList = new ArrayList<DropDownType>();
+		LivingList.add(new DropDownType("N", "Not Applicable"));
 		LivingList.add(new DropDownType("L", "L-Line member"));
 		LivingList.add(new DropDownType("I", "I-In living family member"));
 		LivingList.add(new DropDownType("O", "O-Out living family member"));
@@ -121,8 +123,7 @@ public class LeaveController {
 	public String saveEmployee(@ModelAttribute ArmyEmployee ArmyEmployee) {
 		ArmyEmployeeRepo.save(ArmyEmployee);
 		if (!UserMasterRepo.existsById(ArmyEmployee.getEmployeeId())) {			
-			UserMaster UserMaster=new UserMaster(ArmyEmployee.getEmployeeId(),ArmyEmployee.getEmployeeName(),AESEncrypt.encrypt(ArmyEmployee.getEmployeeId()),"0018","",ArmyEmployee.getMobileNo(),ArmyEmployee.getEmailAddress(),"LEAVE","E");
-			UserMaster.setEmployeeId(ArmyEmployee.getEmployeeId());			
+			UserMaster UserMaster=new UserMaster(ArmyEmployee.getEmployeeId(),ArmyEmployee.getEmployeeName(),AESEncrypt.encrypt("admin"),"0018","",ArmyEmployee.getMobileNo(),ArmyEmployee.getEmailAddress(),"LEAVE","E",ArmyEmployee.getEmployeeId());
 			UserMasterRepo.save(UserMaster);			
 		}
 		
@@ -132,9 +133,11 @@ public class LeaveController {
 	@GetMapping("/showUpdateEmployeeForm")
 	public ModelAndView showUpdateAccountingProductForm(@RequestParam String EmployeeId) {
 		List<DropDownType> typeList = new ArrayList<DropDownType>();
-		typeList.add(new DropDownType("O", "O-Officer"));
-		typeList.add(new DropDownType("S", "S-Staff"));
+		typeList.add(new DropDownType("OFFR", "Officer"));
+		typeList.add(new DropDownType("JCO", "JCO"));
+		typeList.add(new DropDownType("OR", "Others"));
 		List<DropDownType> LivingList = new ArrayList<DropDownType>();
+		LivingList.add(new DropDownType("N", "Not Applicable"));
 		LivingList.add(new DropDownType("L", "L-Line member"));
 		LivingList.add(new DropDownType("I", "I-In living family member"));
 		LivingList.add(new DropDownType("O", "O-Out living family member"));
@@ -166,14 +169,26 @@ public class LeaveController {
 	}
 
 	@GetMapping({ "/LeaveDashBoard" })
-	public ModelAndView LeaveDashBoard() {
+	public ModelAndView LeaveDashBoard(HttpServletRequest request) {
 		ModelAndView mav = new ModelAndView("HRM/LeaveDashBoard");
+		ModelAndView index = new ModelAndView("index");
 		try {
-			
-			
-			mav.addObject("LeaveList", leaveregisterRepo.FindToBeRecomendedList());
-			
-			
+			HttpSession sessionParam = request.getSession();
+			String Rank=null;
+			try {
+				Rank=sessionParam.getValue("Rank").toString();
+			}catch(Exception e) {
+				Rank="NF";
+			}
+			if(Rank.startsWith("2")) {
+				mav.addObject("LeaveList", leaveregisterRepo.FindJCOToRecomended("3%"));
+			}
+			if(Rank.startsWith("1")) {
+				mav.addObject("LeaveList", leaveregisterRepo.FindOfficierToRecomended("3%"));
+			}
+			else {
+				return index;
+			}
 			
 		}catch(Exception e) {
 			
@@ -183,7 +198,7 @@ public class LeaveController {
 	}
 
 	@GetMapping({ "/LeaveAuthorization" })
-	public ModelAndView LeaveAuthorization() {
+	public ModelAndView LeaveAuthorization(HttpServletRequest request) {
 		ModelAndView mav = new ModelAndView("HRM/LeaveAuthorization");
 		mav.addObject("LeaveList", leaveregisterRepo.FindToBeApprovalList());
 		return mav;
@@ -194,14 +209,23 @@ public class LeaveController {
 	public ModelAndView getLeaveList(HttpServletRequest request) {
 		HttpSession sessionParam = request.getSession();
 		String EmployeeId=null;
+		String UserRole=null;
 		try {
 			EmployeeId=sessionParam.getValue("EmployeeId").toString();
+			UserRole=sessionParam.getValue("UserRole").toString();
 		}catch(Exception e) {
 			EmployeeId="NF";
+			UserRole="NF";
 		}
 		
 		ModelAndView mav = new ModelAndView("HRM/List-Leave");
-		mav.addObject("LeaveList", leaveregisterRepo.FindAppliedList(EmployeeId));
+		if(UserRole.equals("S")) {
+			mav.addObject("LeaveList", leaveregisterRepo.findAll());
+			
+		}
+		else {
+			mav.addObject("LeaveList", leaveregisterRepo.FindAppliedList(EmployeeId));
+		}
 		return mav;
 	}
 
@@ -229,14 +253,14 @@ public class LeaveController {
 		if (LeaveRegister.getLeaveID() == null) {
 			ArmyEmployee ArmyEmployee = ArmyEmployeeRepo.findById(LeaveRegister.getEmployeeId()).get();
 			LeaveRegister.setEmployeeName(ArmyEmployee.getEmployeeName());
+			LeaveRegister.setRankCode(ArmyEmployee.getRank());
 			LeaveRegister.setLeaveStatus("Recomendation Pending");
 			leaveregisterRepo.save(LeaveRegister);
 		} else {
 
 			if (leaveregisterRepo.existsById(LeaveRegister.getLeaveID())) {
-
-				LeaveRegister leaveregister = leaveregisterRepo.findById(LeaveRegister.getLeaveID()).orElseThrow();
 				ArmyEmployee ArmyEmployee = ArmyEmployeeRepo.findById(LeaveRegister.getEmployeeId()).get();
+				LeaveRegister leaveregister = leaveregisterRepo.findById(LeaveRegister.getLeaveID()).orElseThrow();
 				leaveregister.setEmployeeName(ArmyEmployee.getEmployeeName());
 				leaveregister.setEmployeeId(LeaveRegister.getEmployeeId());
 				leaveregister.setApplyDate(LeaveRegister.getApplyDate());
@@ -245,6 +269,7 @@ public class LeaveController {
 				leaveregister.setLeaveReason(LeaveRegister.getLeaveReason());
 				leaveregister.setLeaveType(LeaveRegister.getLeaveType());
 				leaveregister.setLeaveStatus(LeaveRegister.getLeaveStatus());
+				LeaveRegister.setRankCode(ArmyEmployee.getRank());
 				leaveregisterRepo.save(leaveregister);
 			} else {
 				ArmyEmployee ArmyEmployee = ArmyEmployeeRepo.findById(LeaveRegister.getEmployeeId()).get();
@@ -313,12 +338,19 @@ public class LeaveController {
 	
 
 	@GetMapping("/showUpdateLeaveForm")
-	public ModelAndView showUpdateLeaveForm(@RequestParam Long LeaveID) {
+	public ModelAndView showUpdateLeaveForm(@RequestParam Long LeaveID,HttpServletRequest request) {
 		System.out.println("showUpdateLeaveForm");
+		
+		String EmpID=null;
+		try {
+			 EmpID = request.getSession().getAttribute("EmployeeId").toString();
+		}catch(Exception e) {
+			
+		}
 		ModelAndView model = new ModelAndView("HRM/add-leave");
 		LeaveRegister LeaveRegister = leaveregisterRepo.findById((LeaveID)).get();
 		model.addObject("LeaveRegister", LeaveRegister);
-		model.addObject("EmployeeList", ArmyEmployeeRepo.findAll());
+		model.addObject("EmployeeList", ArmyEmployeeRepo.findById(EmpID).get());
 		model.addObject("Leavelist", LeaveDescriptionRepo.findAll());		
 		return model;
 	}

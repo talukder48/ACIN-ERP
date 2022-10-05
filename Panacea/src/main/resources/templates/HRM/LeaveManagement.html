@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Panacea@ Unit Leave Management System</title>
+    <title>ULMS @Unit Leave Management System</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 
 	<link th:rel="stylesheet" th:href="@{webjars/bootstrap/4.0.0-2/css/bootstrap.min.css} "/>
@@ -27,11 +27,13 @@
             <li class="nav-item active">
                 <a class="nav-link" th:href="@{/UserHome}">Home</a>
             </li>
-                        
- 
+            
+           
+            
             <li class="nav-item ">
                 <a class="nav-link" th:href="@{/LeaveDashBoard}"> Recommendation</a>
             </li>
+             
              
                                 
              
@@ -40,9 +42,13 @@
     
     <div class="dropdown">
 			  <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-			    Profile
+			     [[${session.UserName}]]
 			  </button>
 			  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+			  <li class="nav-item">
+                  User ID: [[${session.UserId}]]
+                </li>
+			  <hr>
 			     <li class="nav-item">
                    <a class="nav-link" th:href="@{/AccountsInfo(UserId=${session.UserId})}">User Info</a>
                 </li>

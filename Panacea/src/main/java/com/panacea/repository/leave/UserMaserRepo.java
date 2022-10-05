@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import com.panacea.model.login.UserMaster;
 
 public interface UserMaserRepo extends JpaRepository<UserMaster,String> {
-	@Query(value = "SELECT * FROM `user_master` u WHERE u.user_module=?1", nativeQuery = true)
+	@Query(value = "SELECT * FROM `user_master` u WHERE u.user_module=?1 and u.activation='A'", nativeQuery = true)
 	 List<UserMaster> FindUserListByModule(String Module);
 
 }

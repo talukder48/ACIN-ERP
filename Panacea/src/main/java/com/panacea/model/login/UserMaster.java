@@ -15,7 +15,7 @@ public class UserMaster {
 	private String UserName;
 	@Column(name = "EmployeeId", length = 20)
 	private String EmployeeId;
-	@Column(name = "UserPassword", length = 50)
+	@Column(name = "UserPassword", length = 100)
 	private String UserPassword;
 	@Column(name = "UserBranch", length = 10)
 	private String UserBranch;
@@ -29,8 +29,28 @@ public class UserMaster {
 	private String UserModule;
 	@Column(name = "UserRole", length = 5)
 	private String UserRole;
-    
+	@Column(name = "ConPassword", length = 100)
+	private String ConPassword;
+	@Column(name = "Activation", length = 2)
+	private String Activation;
 	
+	
+	public String getActivation() {
+		return Activation;
+	}
+
+	public void setActivation(String activation) {
+		Activation = activation;
+	}
+
+	public String getConPassword() {
+		return ConPassword;
+	}
+
+	public void setConPassword(String conPassword) {
+		ConPassword = conPassword;
+	}
+
 	public String getEmployeeId() {
 		return EmployeeId;
 	}
@@ -119,7 +139,7 @@ public class UserMaster {
 	}
 
 	public UserMaster(String userID, String userName, String userPassword, String userBranch, String userDept,
-			String userMobile, String userEmailId, String userModule, String userRole) {
+			String userMobile, String userEmailId, String userModule, String userRole,String EmployeeId) {
 		super();
 		UserID = userID;
 		UserName = userName;
@@ -130,6 +150,7 @@ public class UserMaster {
 		UserEmailId = userEmailId;
 		UserModule = userModule;
 		UserRole = userRole;
+		this.EmployeeId=EmployeeId;
 	}
 	
 	

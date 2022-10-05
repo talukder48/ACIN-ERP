@@ -15,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.panacea.model.hrm.ArmyEmployee;
 import com.panacea.model.hrm.LeaveRegister;
 import com.panacea.model.inventory.DropDownType;
 import com.panacea.model.inventory.InventoryUser;
@@ -34,7 +35,9 @@ public class LoginController {
 	private static final Logger LOGGER = LogManager.getLogger(LoginController.class);
 
 	@GetMapping("/LogOut")
-	public String LogOut() {
+	public String LogOut(HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		session.invalidate();
 		return "index";
 	}
 
@@ -61,6 +64,7 @@ public class LoginController {
 				sessionParam.setAttribute("UserRole", usermaster.getUserRole());
 				sessionParam.setAttribute("UserBranch", usermaster.getUserBranch());
 				sessionParam.setAttribute("EmployeeId", usermaster.getEmployeeId());
+				sessionParam.setAttribute("UserName", usermaster.getUserName());
 				if (usermaster.getUserModule().equals("ACCOUNTING")) {
 					if (usermaster.getUserRole().equals("S")) {
 						ViewName = "Accounting/Accounting";
@@ -73,6 +77,7 @@ public class LoginController {
 					}
 				} else if (usermaster.getUserModule().equals("INVENTORY")) {
 					{
+						
 						if (usermaster.getUserRole().equals("S")) {
 							ViewName = "Inventory/InventorySuper";
 						} 
@@ -86,6 +91,10 @@ public class LoginController {
 					}
 
 				} else if (usermaster.getUserModule().equals("LEAVE")) {
+					ArmyEmployee ArmyEmployee = ArmyEmployeeRepo.findById(usermaster.getEmployeeId()).get();
+					
+					sessionParam.setAttribute("Rank", ArmyEmployee.getRank());
+					
 					if (usermaster.getUserRole().equals("M")) {
 						ViewName = "HRM/LeaveManagement";
 					} else if (usermaster.getUserRole().equals("S")) {
@@ -202,6 +211,25 @@ public class LoginController {
 		}
 
 	}
+	
+	
+	@GetMapping({ "/ULMSuserList" })
+	public String ULMSuserList(HttpServletRequest request, Model model) {
+		HttpSession sessionParam = request.getSession();
+		try {
+			String Module = sessionParam.getAttribute("Module").toString();
+			if (Module == null || Module.equals("")) {
+				return "Index";
+			} else {
+
+				model.addAttribute("UserList", UserMasterRepo.FindUserListByModule(Module));
+				return "Common/List-User";
+			}
+		} catch (Exception e) {
+			return "redirect:/UserHome";
+		}
+
+	}
 
 	@RequestMapping("/AddNewSystemUser")
 	public ModelAndView AddNewSystemUser(Model model,HttpServletRequest request) {
@@ -226,8 +254,8 @@ public class LoginController {
 		
 		
 		List<DropDownType> UserRoleList = new ArrayList<DropDownType>();
-		UserRoleList.add(new DropDownType("S", "S-Super"));
-		UserRoleList.add(new DropDownType("M", "M-Management"));
+		UserRoleList.add(new DropDownType("S", "Super Admin"));
+		UserRoleList.add(new DropDownType("M", "Approver"));
 		UserRoleList.add(new DropDownType("E", "End User"));
 		UserRoleList.add(new DropDownType("G", "G-GatePost"));
 		
@@ -267,11 +295,10 @@ public class LoginController {
 		
 		
 		List<DropDownType> UserRoleList = new ArrayList<DropDownType>();
-		UserRoleList.add(new DropDownType("S", "S-Super"));
-		UserRoleList.add(new DropDownType("M", "M-Management"));
+		UserRoleList.add(new DropDownType("S", "Super Admin"));
+		UserRoleList.add(new DropDownType("M", "Approver"));
 		UserRoleList.add(new DropDownType("E", "End User"));
 		UserRoleList.add(new DropDownType("G", "G-GatePost"));
-		
 		
 		ModelAndView mav = new ModelAndView("Common/add-User");
 		UserMaster UserMaster = UserMasterRepo.findById(UserID).get();
@@ -288,12 +315,14 @@ public class LoginController {
 	public String saveNewSystemUser(@ModelAttribute("usermaster") UserMaster usermaster,HttpServletRequest request) {
 		usermaster.setUserPassword(AESEncrypt.encrypt(usermaster.getUserPassword()));
 		UserMasterRepo.save(usermaster);
-		return "redirect:erpUserList";
+		return "redirect:ULMSuserList";
 	}
 
 	@GetMapping("/DeleteUser/{UserID}")
 	public ModelAndView DeleteUser(@PathVariable String UserID,HttpServletRequest request) {
-		UserMasterRepo.deleteById(UserID);
+		UserMaster UserMaster = UserMasterRepo.findById(UserID).get();
+		UserMaster.setActivation("I");
+		UserMasterRepo.save(UserMaster);
 		String Module=null;
 		
 		HttpSession sessionParam = request.getSession();

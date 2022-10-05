@@ -32,7 +32,9 @@ public class AccountingController {
 	GLCodeRepo glcoderepository;
 	@Autowired
 	AccountsProductRepo ProductParamRepo;
-
+	@Autowired
+	ChargesRepo chargesRepo;
+	
 	@GetMapping("/Accounting")
 	public String Inventory() {
 		return "Accounting/Accounting";
@@ -135,8 +137,7 @@ public class AccountingController {
 		return "redirect:/LedgerParameterList";
 	}
 
-	@Autowired
-	ChargesRepo chargesRepo;
+
 
 	@GetMapping({ "/FeesAndChargesList" })
 	public ModelAndView getAllCharges() {

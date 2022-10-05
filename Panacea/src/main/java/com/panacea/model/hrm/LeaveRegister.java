@@ -55,6 +55,8 @@ public class LeaveRegister {
 	private String RejectBy;
 	@Column(name = "RejectOn", length = 20)
 	private String RejectOn;
+	@Column(name = "RankCode", length = 5)
+	private String RankCode;
 
 	public LeaveRegister() {
 		super();
@@ -62,7 +64,7 @@ public class LeaveRegister {
 	}
 
 	public LeaveRegister(Long leaveID, String employeeId, String employeeName, String leaveType, String location,
-			String startDate, String endDate, String leaveReason, String applyDate) {
+			String startDate, String endDate, String leaveReason, String applyDate,String RankCode) {
 		super();
 		LeaveID = leaveID;
 		EmployeeId = employeeId;
@@ -73,6 +75,15 @@ public class LeaveRegister {
 		EndDate = endDate;
 		LeaveReason = leaveReason;
 		ApplyDate = applyDate;
+		this.RankCode=RankCode;
+	}
+
+	public String getRankCode() {
+		return RankCode;
+	}
+
+	public void setRankCode(String rankCode) {
+		RankCode = rankCode;
 	}
 
 	public String getEmployeeName() {

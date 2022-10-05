@@ -53,16 +53,16 @@ public class DefaultController {
 	public String DefaultUserCreation() {
 		if (UserMasterRepo.count() == 0) {
 			List<UserMaster> UserList = new ArrayList<UserMaster>();
-			UserList.add(new UserMaster("10000", "Test", AESEncrypt.encrypt("admin"), "0018", "01", "01515240013","Test@gmail.com", "SYSTEM","S"));
-			UserList.add(new UserMaster("20001", "Test", AESEncrypt.encrypt("admin"), "0018", "01", "01515240013","Test@gmail.com", "INVENTORY","E"));
-			UserList.add(new UserMaster("20002", "Test", AESEncrypt.encrypt("admin"), "0018", "01", "01515240013","Test@gmail.com", "INVENTORY","S"));
-			UserList.add(new UserMaster("30001", "Test", AESEncrypt.encrypt("admin"), "0018", "01", "01515240013","Test@gmail.com","ACCOUNTING", "E"));
-			UserList.add(new UserMaster("30002", "Test", AESEncrypt.encrypt("admin"), "0018", "01", "01515240013","Test@gmail.com","ACCOUNTING", "S"));
-			UserList.add(new UserMaster("40001", "Test", AESEncrypt.encrypt("admin"), "0018", "01", "01515240013","Test@gmail.com", "LEAVE","M"));
-			UserList.add(new UserMaster("40002", "Test", AESEncrypt.encrypt("admin"), "0018", "01", "01515240013","Test@gmail.com", "LEAVE","E"));
-			UserList.add(new UserMaster("50001", "Test", AESEncrypt.encrypt("admin"), "0018", "01", "01515240013","Test@gmail.com", "HRM","S"));
-			UserList.add(new UserMaster("60001", "Test", AESEncrypt.encrypt("admin"), "0018", "01", "01515240013","Test@gmail.com", "TRACKER","S"));
-			UserList.add(new UserMaster("60002", "Test", AESEncrypt.encrypt("admin"), "0018", "01", "01515240013","Test@gmail.com", "TRACKER","E"));
+			UserList.add(new UserMaster("10000", "Test", AESEncrypt.encrypt("admin"), "0018", "01", "01515240013","Test@gmail.com", "SYSTEM","S",""));
+			UserList.add(new UserMaster("20001", "Test", AESEncrypt.encrypt("admin"), "0018", "01", "01515240013","Test@gmail.com", "INVENTORY","E",""));
+			UserList.add(new UserMaster("20002", "Test", AESEncrypt.encrypt("admin"), "0018", "01", "01515240013","Test@gmail.com", "INVENTORY","S",""));
+			UserList.add(new UserMaster("30001", "Test", AESEncrypt.encrypt("admin"), "0018", "01", "01515240013","Test@gmail.com","ACCOUNTING", "E",""));
+			UserList.add(new UserMaster("30002", "Test", AESEncrypt.encrypt("admin"), "0018", "01", "01515240013","Test@gmail.com","ACCOUNTING", "S",""));
+			UserList.add(new UserMaster("40001", "Test", AESEncrypt.encrypt("admin"), "0018", "01", "01515240013","Test@gmail.com", "LEAVE","M",""));
+			UserList.add(new UserMaster("40002", "Test", AESEncrypt.encrypt("admin"), "0018", "01", "01515240013","Test@gmail.com", "LEAVE","E",""));
+			UserList.add(new UserMaster("50001", "Test", AESEncrypt.encrypt("admin"), "0018", "01", "01515240013","Test@gmail.com", "HRM","S",""));
+			UserList.add(new UserMaster("60001", "Test", AESEncrypt.encrypt("admin"), "0018", "01", "01515240013","Test@gmail.com", "TRACKER","S",""));
+			UserList.add(new UserMaster("60002", "Test", AESEncrypt.encrypt("admin"), "0018", "01", "01515240013","Test@gmail.com", "TRACKER","E",""));
 			
 			UserMasterRepo.saveAll(UserList);
 		}
@@ -83,19 +83,7 @@ public class DefaultController {
 		}
 		return "index";
 	}
-	@GetMapping("/DefaultLeaveCreation")
-	public String DefaultLeaveCreation() {
-		if (leaveregisterRepo.count() == 0) {
-			List <LeaveRegister> LeaveList = new ArrayList<LeaveRegister>() ;
-			LeaveList.add(new LeaveRegister(10001L,"ID2020080002","","C","Dhaka","01-01-2022","03-01-2022","Personal","31-12-2021"));	
-			LeaveList.add(new LeaveRegister(10002L,"ID2020080001","","C","Dhaka","01-01-2022","03-01-2022","Medical","31-12-2021"));	
-			LeaveList.add(new LeaveRegister(10003L,"ID2020080003","","C","Dhaka","01-01-2022","03-01-2022","Maternity","31-12-2021"));	
-			LeaveList.add(new LeaveRegister(10004L,"ID2020080005","","C","Dhaka","01-01-2022","03-01-2022","Peternity","31-12-2021"));	
-			
-			leaveregisterRepo.saveAll(LeaveList);
-		}
-		return "index";
-	}
+	
 
     
     @GetMapping("/DefaultInventoryProductCreation")
@@ -214,6 +202,7 @@ public class DefaultController {
    	public String DefaultParameterCreation() {
    		if (ArmyCompayRepo.count() == 0) {
    			List <ArmyCompany> ArmyCompanyList = new ArrayList<ArmyCompany>() ;
+   			ArmyCompanyList.add(new ArmyCompany("000","Not Applicable"));
    			ArmyCompanyList.add(new ArmyCompany("101","BHQ"));	
    			ArmyCompanyList.add(new ArmyCompany("102","HQ Company"));	
    			ArmyCompanyList.add(new ArmyCompany("103","OP Company"));	
@@ -225,25 +214,27 @@ public class DefaultController {
    		}
    		if (ArmyRankRepo.count() == 0) {
    			List <ArmyRank> ArmyRankList = new ArrayList<ArmyRank>() ;
-   			ArmyRankList.add(new ArmyRank("101","Off","Second Lieutenant"));	
-   			ArmyRankList.add(new ArmyRank("102","Off","Lieutenant"));	
-   			ArmyRankList.add(new ArmyRank("103","Off","Captain"));	
-   			ArmyRankList.add(new ArmyRank("104","Off","Major"));	
-   			ArmyRankList.add(new ArmyRank("105","Off","Lieutenant Colonel"));	
-   			ArmyRankList.add(new ArmyRank("106","JCO","Honorary captain"));
-   			ArmyRankList.add(new ArmyRank("107","JCO","Second Lieutenant"));
-   			ArmyRankList.add(new ArmyRank("108","JCO","Honorary Lieutenant"));
-   			ArmyRankList.add(new ArmyRank("109","JCO","Master Warrant Officer"));
-   			ArmyRankList.add(new ArmyRank("110","JCO","Senior Warrant officer"));
-   			ArmyRankList.add(new ArmyRank("111","JCO","Warrant Officer"));
-   			ArmyRankList.add(new ArmyRank("112","OTH","Corporal"));
-   			ArmyRankList.add(new ArmyRank("113","OTH","Lance Corporal"));
-   			ArmyRankList.add(new ArmyRank("114","OTH","Sainik"));
-   			ArmyRankList.add(new ArmyRank("115","OTH","NC(E)"));
+   			ArmyRankList.add(new ArmyRank("101","OFFR","Second Lieutenant"));	
+   			ArmyRankList.add(new ArmyRank("102","OFFR","Lieutenant"));	
+   			ArmyRankList.add(new ArmyRank("103","OFFR","Captain"));	
+   			ArmyRankList.add(new ArmyRank("104","OFFR","Major"));	
+   			ArmyRankList.add(new ArmyRank("105","OFFR","Lieutenant Colonel"));	
+   			ArmyRankList.add(new ArmyRank("106","OFFR","Honorary captain"));
+   			
+   			ArmyRankList.add(new ArmyRank("201","JCO","Honorary Lieutenant"));
+   			ArmyRankList.add(new ArmyRank("202","JCO","Master Warrant Officer"));
+   			ArmyRankList.add(new ArmyRank("203","JCO","Senior Warrant officer"));
+   			ArmyRankList.add(new ArmyRank("204","JCO","Warrant Officer"));
+   			
+   			ArmyRankList.add(new ArmyRank("301","OR","Corporal"));
+   			ArmyRankList.add(new ArmyRank("302","OR","Lance Corporal"));
+   			ArmyRankList.add(new ArmyRank("303","OR","Sainik"));
+   			ArmyRankList.add(new ArmyRank("304","OR","NC(E)"));
    			ArmyRankRepo.saveAll(ArmyRankList);
    		}
    		if (ArmyTradeRepo.count() == 0) {
    			List <ArmyTrade> ArmyTradeList = new ArrayList<ArmyTrade>() ;
+   			ArmyTradeList.add(new ArmyTrade("000","Not Applicable"));	
    			ArmyTradeList.add(new ArmyTrade("101","Operator"));	
    			ArmyTradeList.add(new ArmyTrade("102","Technician"));	
    			ArmyTradeList.add(new ArmyTrade("103","W/S"));	
@@ -255,7 +246,8 @@ public class DefaultController {
    		}
 	   	 if (ArmyEmployeeRepo.count() == 0) {
 	 		List <ArmyEmployee> ArmyEmployeeList = new ArrayList<ArmyEmployee>() ;
-	 		ArmyEmployeeList.add(new ArmyEmployee("2022","Abu Tayab","Abdur Rahim","Amena Begum","101","101","101","O","A+","01-01-1991","M","test@gmail.com","017120908902","Barisal","10","Wirless Gate","M","01515222234","Abu Naser","01515222235"));	
+	 		ArmyEmployeeList.add(new ArmyEmployee("50001","Mr. Rubel","Abdur Rahim","Amena Begum","101","101","101","O","A+","01-01-1991","M","test@gmail.com","017120908902","Barisal","10","Wirless Gate","M","01515222234","Abu Naser","01515222235"));	
+
 	 		ArmyEmployeeRepo.saveAll(ArmyEmployeeList);
 	 	}
 	   	if (LeaveDescriptionRepo.count() == 0) {
@@ -270,12 +262,12 @@ public class DefaultController {
    		}
 	   	if (UserMasterRepo.count() == 0) {
 			List<UserMaster> UserList = new ArrayList<UserMaster>();
-			UserList.add(new UserMaster("40001", "Test", AESEncrypt.encrypt("admin"), "0018", "01", "01515240013","Test@gmail.com", "LEAVE","M"));
-			UserList.add(new UserMaster("40002", "Test", AESEncrypt.encrypt("admin"), "0018", "01", "01515240013","Test@gmail.com", "LEAVE","E"));
-			UserList.add(new UserMaster("50001", "Test", AESEncrypt.encrypt("admin"), "0018", "01", "01515240013","Test@gmail.com", "LEAVE","S"));
+			UserList.add(new UserMaster("50001", "Mr. Rubel", AESEncrypt.encrypt("admin"), "0018", "01", "01515240013","Test@gmail.com", "LEAVE","S","50001"));
 			
 			UserMasterRepo.saveAll(UserList);
 		}
+	   	
+	   	
 	   	 
    		return "index";
    	}   
