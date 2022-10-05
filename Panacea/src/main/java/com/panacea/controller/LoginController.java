@@ -62,7 +62,15 @@ public class LoginController {
 				sessionParam.setAttribute("UserBranch", usermaster.getUserBranch());
 				sessionParam.setAttribute("EmployeeId", usermaster.getEmployeeId());
 				if (usermaster.getUserModule().equals("ACCOUNTING")) {
-					ViewName = "Accounting/Accounting";
+					if (usermaster.getUserRole().equals("S")) {
+						ViewName = "Accounting/Accounting";
+					} 
+					else if (usermaster.getUserRole().equals("E")) {
+						ViewName = "Accounting/AccountingEndUser";
+					}
+					else {
+						ViewName = "Accounting/AccountingSuper";
+					}
 				} else if (usermaster.getUserModule().equals("INVENTORY")) {
 					{
 						if (usermaster.getUserRole().equals("S")) {
@@ -120,7 +128,15 @@ public class LoginController {
 					if (usermaster.getUserID().equals(UserID)) {
 
 						if (usermaster.getUserModule().equals("ACCOUNTING")) {
-							ViewName = "Accounting/Accounting";
+							if (usermaster.getUserRole().equals("S")) {
+								ViewName = "Accounting/Accounting";
+							} 
+							else if (usermaster.getUserRole().equals("E")) {
+								ViewName = "Accounting/AccountingEndUser";
+							}
+							else {
+								ViewName = "Accounting/AccountingSuper";
+							}
 						} else if (usermaster.getUserModule().equals("INVENTORY")) {
 							{
 								if (usermaster.getUserRole().equals("S")) {

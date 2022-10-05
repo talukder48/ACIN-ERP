@@ -23,10 +23,13 @@
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.25/datatables.min.js"></script>
 
 <script type="text/javascript">
+
 var JasonString="";
+var Cell="<cell>";
+var clause="<clause>";
 
 	var arrHead = new Array();	
-    arrHead = ['Activity','Transaction Head', 'Crdit_Amount', 'Debit_Amount','CQ/Adv._Date','CQ/Adv._No','Narration(Reference)'];
+    arrHead = ['Activity','Transaction Head', 'Crdit Amount', 'Debit Amount','CQ/Adv._Date','CQ/Adv._No','Narration'];
 
     // first create TABLE structure with the headers. 
     function createTable() {
@@ -78,6 +81,7 @@ var JasonString="";
 				button.setAttribute("class", "btn btn-danger ml-2");
 				button.setAttribute('type', 'button');
 				button.setAttribute('value', 'Remove');
+				
 
 				// add button's 'onclick' event.
 				button.setAttribute('onclick', 'removeRow(this)');
@@ -155,24 +159,13 @@ var JasonString="";
 		}
 	}
     function formJason(glCode,CrAmount,DrAmount,CHQ_ADV_NO,IssueDate,Narration){    	
-    	if(JasonString==null||JasonString==""){
-				JasonString=JasonString+"{'transactionHead':'"+glCode+"',"+
-    			"'CrAmount':'"+CrAmount+"',"+
-    			"'DrAmount':'"+DrAmount+"',"+
-    			"'CHQ_ADV_NO':'"+CHQ_ADV_NO+"',"+
-    			"'IssueDate':'"+IssueDate+"',"+
-    			"'Narration':'"+Narration+"'"+
-    			"}";
-			}
-			else{
-				JasonString=JasonString+",{'transactionHead':'"+glCode+"',"+
-    			"'CrAmount':'"+CrAmount+"',"+
-    			"'DrAmount':'"+DrAmount+"',"+
-    			"'CHQ_ADV_NO':'"+CHQ_ADV_NO+"',"+
-    			"'IssueDate':'"+IssueDate+"',"+
-    			"'Narration':'"+Narration+"'"+
-    			"}";
-			}								      	
+    	JasonString=JasonString+"{'transactionHead':'"+glCode+"',"+
+		"'CrAmount':'"+CrAmount+"',"+
+		"'DrAmount':'"+DrAmount+"',"+
+		"'CHQ_ADV_NO':'"+CHQ_ADV_NO+"',"+
+		"'IssueDate':'"+IssueDate+"',"+
+		"'Narration':'"+Narration+"'"+
+		"} <sentence> ";						      	
     }
    
     
@@ -226,54 +219,26 @@ var JasonString="";
         			document.getElementById("IssueDate").value="N/A";
         		}
         		
-    			
-        		if(JasonString==null||JasonString==""){
-
-        			if(document.getElementById("DrCrType").value=="D"){
-        				JasonString=JasonString+"{'transactionHead':'"+document.getElementById("transactionHead").value+"',"+
-            			"'CrAmount':'"+"0.00"+"',"+
-            			"'DrAmount':'"+document.getElementById("TransactionAmt").value+"',"+
-            			"'CHQ_ADV_NO':'"+document.getElementById("CHQ_ADV_NO").value+"',"+
-            			"'IssueDate':'"+document.getElementById("IssueDate").value+"',"+
-            			"'Narration':'"+document.getElementById("Narration").value+"'"+
-            			"}";
-        			}
-        			else{
-        				JasonString=JasonString+"{'transactionHead':'"+document.getElementById("transactionHead").value+"',"+
-            			"'CrAmount':'"+document.getElementById("TransactionAmt").value+"',"+
-            			"'DrAmount':'"+"0.00"+"',"+
-            			"'CHQ_ADV_NO':'"+document.getElementById("CHQ_ADV_NO").value+"',"+
-            			"'IssueDate':'"+document.getElementById("IssueDate").value+"',"+
-            			"'Narration':'"+document.getElementById("Narration").value+"'"+
-            			"}";
-        			}
-        								  
-        		}
-        		else{
-        			if(document.getElementById("DrCrType").value=="D"){
-        				JasonString=JasonString+",{'transactionHead':'"+document.getElementById("transactionHead").value+"',"+
-            			"'CrAmount':'"+"0.00"+"',"+
-            			"'DrAmount':'"+document.getElementById("TransactionAmt").value+"',"+
-            			"'CHQ_ADV_NO':'"+document.getElementById("CHQ_ADV_NO").value+"',"+
-            			"'IssueDate':'"+document.getElementById("IssueDate").value+"',"+
-            			"'Narration':'"+document.getElementById("Narration").value+"'"+
-            			"}";
-        			}
-        			else{
-        				JasonString=JasonString+",{'transactionHead':'"+document.getElementById("transactionHead").value+"',"+
-            			"'CrAmount':'"+document.getElementById("TransactionAmt").value+"',"+
-            			"'DrAmount':'"+"0.00"+"',"+
-            			"'CHQ_ADV_NO':'"+document.getElementById("CHQ_ADV_NO").value+"',"+
-            			"'IssueDate':'"+document.getElementById("IssueDate").value+"',"+
-            			"'Narration':'"+document.getElementById("Narration").value+"'"+
-            			"}";
-        			}
-        		}
+        		
         		if(document.getElementById("DrCrType").value=="D"){
+        			JasonString=JasonString+"{'transactionHead':'"+document.getElementById("transactionHead").value+"',"+
+        			"'CrAmount':'"+"0.00"+"',"+
+        			"'DrAmount':'"+document.getElementById("TransactionAmt").value+"',"+
+        			"'CHQ_ADV_NO':'"+document.getElementById("CHQ_ADV_NO").value+"',"+
+        			"'IssueDate':'"+document.getElementById("IssueDate").value+"',"+
+        			"'Narration':'"+document.getElementById("Narration").value+"'"+
+        			"} <sentence> ";
         			document.getElementById("TransactionAmtDr").value=parseFloat(parseFloat(document.getElementById("TransactionAmtDr").value)
     				+parseFloat(document.getElementById("TransactionAmt").value)).toFixed(2);
         		}
         		else{
+        			JasonString=JasonString+"{'transactionHead':'"+document.getElementById("transactionHead").value+"',"+
+        			"'CrAmount':'"+document.getElementById("TransactionAmt").value+"',"+
+        			"'DrAmount':'"+"0.00"+"',"+
+        			"'CHQ_ADV_NO':'"+document.getElementById("CHQ_ADV_NO").value+"',"+
+        			"'IssueDate':'"+document.getElementById("IssueDate").value+"',"+
+        			"'Narration':'"+document.getElementById("Narration").value+"'"+
+        			"} <sentence>";
         			document.getElementById("TransactionAmtCR").value=parseFloat(parseFloat(document.getElementById("TransactionAmtCR").value)
     				+parseFloat(document.getElementById("TransactionAmt").value)).toFixed(2);
         		}    	
@@ -294,6 +259,63 @@ var JasonString="";
     			
     		}	
     	}
+    }
+    
+    function NarrationKeyClick(event){
+    	 
+		
+		if (parseFloat(document.getElementById("TransactionAmt").value)>0 && document.getElementById("TransactionDate").value!=""){
+			
+			if(document.getElementById("Narration").value==""){
+    			document.getElementById("Narration").value="N/A";
+    		}
+    		if(document.getElementById("CHQ_ADV_NO").value==""){
+    			document.getElementById("CHQ_ADV_NO").value="N/A";
+    		}
+    		if(document.getElementById("IssueDate").value==""){
+    			document.getElementById("IssueDate").value="N/A";
+    		}
+    		
+    		
+    		if(document.getElementById("DrCrType").value=="D"){
+    			JasonString=JasonString+"{'transactionHead':'"+document.getElementById("transactionHead").value+"',"+
+    			"'CrAmount':'"+"0.00"+"',"+
+    			"'DrAmount':'"+document.getElementById("TransactionAmt").value+"',"+
+    			"'CHQ_ADV_NO':'"+document.getElementById("CHQ_ADV_NO").value+"',"+
+    			"'IssueDate':'"+document.getElementById("IssueDate").value+"',"+
+    			"'Narration':'"+document.getElementById("Narration").value+"'"+
+    			"} <sentence> ";
+    			document.getElementById("TransactionAmtDr").value=parseFloat(parseFloat(document.getElementById("TransactionAmtDr").value)
+				+parseFloat(document.getElementById("TransactionAmt").value)).toFixed(2);
+    		}
+    		else{
+    			JasonString=JasonString+"{'transactionHead':'"+document.getElementById("transactionHead").value+"',"+
+    			"'CrAmount':'"+document.getElementById("TransactionAmt").value+"',"+
+    			"'DrAmount':'"+"0.00"+"',"+
+    			"'CHQ_ADV_NO':'"+document.getElementById("CHQ_ADV_NO").value+"',"+
+    			"'IssueDate':'"+document.getElementById("IssueDate").value+"',"+
+    			"'Narration':'"+document.getElementById("Narration").value+"'"+
+    			"} <sentence>";
+    			document.getElementById("TransactionAmtCR").value=parseFloat(parseFloat(document.getElementById("TransactionAmtCR").value)
+				+parseFloat(document.getElementById("TransactionAmt").value)).toFixed(2);
+    		}    	
+    			
+    		addTransaction();
+    		RowClear();
+    		document.getElementById("TransactionGrid").value=JasonString;
+		}
+		else{
+			if (parseFloat(document.getElementById("TransactionAmt").value)<=0){
+				alert("Transaction Amount Can not be Zero !!");
+    			document.getElementById("TransactionAmt").focus();
+			}
+			else{
+				alert("Transaction Date Should Not be Blank !!");
+    			document.getElementById("TransactionDate").focus();
+			}
+			
+		}	
+	
     }
     
     
@@ -435,6 +457,12 @@ var JasonString="";
 						<input type="text" class="form-control col-8 mb-4" placeholder=" Reference " name="Narration" onkeydown="NarrationKeyPress(event)" id="Narration" />
 					</div>
 					
+					<div class="col">
+					<input type="button" class="btn btn-success" value="Add Row"
+						onclick="NarrationKeyClick(event)">
+
+				</div>
+					
 				</div>
 			<hr />		
 			<table id="gridContainer" class="table table-bordered table-striped"></table>		
@@ -449,6 +477,7 @@ var JasonString="";
 				<div class="col">
 					Total Debit <input type="text" th:field="*{debitAmt}" id="TransactionAmtDr"  class="form-control col-8 mb-8" placeholder="Debit Amount" />
 				</div>
+				
 				<div class="col"></div>
 				
 			</div>

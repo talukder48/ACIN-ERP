@@ -1,6 +1,7 @@
 package com.panacea.model.acounting;
 
 import java.io.Serializable;
+import java.sql.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -21,7 +22,7 @@ public class Transaction implements Serializable {
 	private String tran_branch;
 	@Id
 	@Column(name = "tran_date", length = 20)
-	private String tran_date;
+	private Date tran_date;
 	@Id
 	@Column(name = "tran_batch", length = 6)
 	private int tran_batch;
@@ -47,7 +48,7 @@ public class Transaction implements Serializable {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Transaction(int entity_num, int tran_sl, String tran_branch, String tran_date, int tran_batch, String glcode,
+	public Transaction(int entity_num, int tran_sl, String tran_branch, Date tran_date, int tran_batch, String glcode,
 			double debit_amt, double credit_amt, String narration, String chq_number, String chq_date) {
 		super();
 		this.entity_num = entity_num;
@@ -79,11 +80,11 @@ public class Transaction implements Serializable {
 		this.tran_branch = tran_branch;
 	}
 
-	public String getTran_date() {
+	public Date getTran_date() {
 		return tran_date;
 	}
 
-	public void setTran_date(String tran_date) {
+	public void setTran_date(Date tran_date) {
 		this.tran_date = tran_date;
 	}
 

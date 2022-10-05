@@ -1,10 +1,11 @@
 package com.panacea.model.key;
 import java.io.Serializable;
+import java.sql.Date;
 public class TransactionId implements Serializable{
 	
 	private int entity_num;
 	private String tran_branch;
-	private String tran_date;
+	private Date tran_date;
 	private int tran_batch;
 	private int tran_sl;
 	public int getEntity_num() {
@@ -19,10 +20,10 @@ public class TransactionId implements Serializable{
 	public void setTran_branch(String tran_branch) {
 		this.tran_branch = tran_branch;
 	}
-	public String getTran_date() {
+	public Date getTran_date() {
 		return tran_date;
 	}
-	public void setTran_date(String tran_date) {
+	public void setTran_date(Date tran_date) {
 		this.tran_date = tran_date;
 	}
 	public int getTran_batch() {
@@ -41,7 +42,7 @@ public class TransactionId implements Serializable{
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public TransactionId(int entity_num, String tran_branch, String tran_date, int tran_batch, int tran_sl) {
+	public TransactionId(int entity_num, String tran_branch, Date tran_date, int tran_batch, int tran_sl) {
 		super();
 		this.entity_num = entity_num;
 		this.tran_branch = tran_branch;

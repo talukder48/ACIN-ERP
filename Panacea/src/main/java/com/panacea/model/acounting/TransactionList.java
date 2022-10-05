@@ -19,7 +19,7 @@ public class TransactionList implements Serializable {
 	private String tran_branch;
 	@Id
 	@Column(name="tran_date",length=10)
-	private String tran_date;
+	private Date tran_date;
 	@Id
 	@Column(name="tran_batch",length=6)
 	private int tran_batch;
@@ -48,7 +48,7 @@ public class TransactionList implements Serializable {
     @Column(name="CreditAmt",columnDefinition="Decimal(18,2)")
     private Double CreditAmt;
     
-	public TransactionList( String tran_branch, String tran_date, int tran_batch, String tran_remarks) {
+	public TransactionList( String tran_branch, Date tran_date, int tran_batch, String tran_remarks) {
 		super();
 		this.tran_branch = tran_branch;
 		this.tran_date = tran_date;
@@ -95,11 +95,11 @@ public class TransactionList implements Serializable {
 		this.tran_branch = tran_branch;
 	}
 
-	public String getTran_date() {
+	public Date getTran_date() {
 		return tran_date;
 	}
 
-	public void setTran_date(String tran_date) {
+	public void setTran_date(Date tran_date) {
 		this.tran_date = tran_date;
 	}
 
