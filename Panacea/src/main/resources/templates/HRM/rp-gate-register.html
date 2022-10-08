@@ -14,7 +14,7 @@
 		
 		
 		<div class="container my-3 bg-light">
-			<h3 class="col-md-12 text-center">Authorized Leave List</h3>
+			<h3 class="col-md-12 text-center">RP NOC Register</h3>
 			</div>
 			
 			<div class="container my-3 bg-light">
@@ -27,27 +27,27 @@
 			
 				<thead>
 					<tr>
-						<th>SL No:</th>
+						<th>SL No</th>
 						<th>Army No</th>
 						<th>Name</th>
 						<th>Rank</th>
-						<th>Check-Out/Check-In Date</th>					
-						<th>Actions</th>
+						<th>Check-Out/Check-In Date</th>
+						<th>Status</th>	
+						<th>return date</th>	
+						<th>Staying Location</th>					
+					
 					</tr>
 				</thead>
 				<tbody>
 					<tr th:each="register: ${RpGateRegister}">
-						<td th:text="${leave.LeaveID}" />
-						<td th:text="${leave.EmployeeId}" />
-						<td th:text="${leave.EmployeeName}" />
-						<td th:text="${leave.RankName}" />						
-						<td th:text="${leave.CheckOutStatus}" />
-						<td>
-							<a th:href="@{/AddInRegister(LeaveID=${leave.LeaveID})}" class="btn btn-info">IN </a>
-							<a th:href="@{/AddOutRegister(LeaveID=${leave.LeaveID})}" class="btn btn-danger">OUT</a>
-							<a th:href="@{/ViewRegister(LeaveID=${leave.LeaveID})}" class="btn btn-info">Register </a>
-							
-						</td>
+						<td th:text="${register.RegisterId}" />
+						<td th:text="${register.EmployeeId}" />
+						<td th:text="${register.EmployeeName}" />
+						<td th:text="${register.RankName}" />						
+						<td th:text="${register.LeaveDate}" />
+						<td th:text="${register.CheckOutType}" />
+						<td th:text="${register.ReturnDate}" />
+						<td th:text="${register.Place}+','+${register.Vill}+','+${register.Post}+','+${register.PoliceStation}+','+${register.District}" />
 					</tr>
 				</tbody>
 				

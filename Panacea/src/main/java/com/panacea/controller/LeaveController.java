@@ -309,6 +309,7 @@ public class LeaveController {
 				leaveregister.setLeaveType(LeaveRegister.getLeaveType());
 				leaveregister.setRecomendRemarks(LeaveRegister.getRecomendRemarks());
 				leaveregister.setRecomendBy(sessionParam.getValue("UserId").toString());
+				leaveregister.setRecomendOn(new java.sql.Date(new java.util.Date().getTime())+"");
 				leaveregister.setLeaveStatus("Approval Pending");
 				leaveregisterRepo.save(leaveregister);
 			} 
@@ -336,6 +337,8 @@ public class LeaveController {
 				leaveregister.setRecomendRemarks(LeaveRegister.getRecomendRemarks());
 				leaveregister.setApprovedRemarks(LeaveRegister.getApprovedRemarks());
 				leaveregister.setApproveBy(sessionParam.getValue("UserId").toString());
+				leaveregister.setApproveOn(new java.sql.Date(new java.util.Date().getTime())+"");
+				
 				leaveregister.setLeaveStatus("Approved");
 				leaveregister.setCheckOutStatus("Not Checked Out");
 				leaveregisterRepo.save(leaveregister);
@@ -401,6 +404,7 @@ public class LeaveController {
 		if(leaveregisterRepo.existsById(LeaveID)) {
 			LeaveRegister leaveregister = leaveregisterRepo.findById(LeaveID).orElseThrow();
 			leaveregister.setRejectBy(UserId);
+			leaveregister.setRejectOn(new java.sql.Date(new java.util.Date().getTime())+"");
 			leaveregister.setLeaveStatus("Rejected");
 			leaveregisterRepo.save(leaveregister);
 		}
@@ -467,11 +471,15 @@ public class LeaveController {
 			return "index";
 		} else {
 			
+			
 			LeaveRegister LeaveRegister = leaveregisterRepo.findById((RpRegister.getLeaveID())).get();	
 			LeaveRegister.setCheckOutStatus("Returned From Leave");
+			RpRegister.setRegisterId(RpRegisterRepo.maxinsertnumber());
 			RpRegister.setCheckOutType("IN");
 			RpRegister.setEntyBy(UserId);
 			RpRegister.setEntyOn(new java.sql.Date(new java.util.Date().getTime())+"");
+			
+			RpRegister.setEmployeeName(LeaveRegister.getEmployeeName());
 			leaveregisterRepo.save(LeaveRegister);
 			RpRegisterRepo.save(RpRegister);
 			return "redirect:/AuthorizedLeaveList";
@@ -494,7 +502,7 @@ public class LeaveController {
 		RpRegister.setDistrict(LeaveRegister.getDistrict());
 		RpRegister.setStartDate(LeaveRegister.getStartDate());
 		RpRegister.setEndDate(LeaveRegister.getEndDate());
-		RpRegister.setCheckOutType("OT");
+		RpRegister.setCheckOutType("OUT");
 		RpRegister.setVill(LeaveRegister.getVill());
 		
 		
@@ -505,13 +513,6 @@ public class LeaveController {
 	}
 	
 	
-	@GetMapping({ "/ViewRPGateRegister" })
-	public ModelAndView ViewRPGateRegister(HttpServletRequest request) {
-		ModelAndView mav = new ModelAndView("HRM/rp-gate-register");
-		mav.addObject("RpGateRegister", RpRegisterRepo.findAll());
-		return mav;
-
-	}
 	
 	
 	@Autowired
@@ -530,19 +531,26 @@ public class LeaveController {
 		if (UserId.equals("NF")) {
 			return "index";
 		} else {
-			RpRegister.setCheckOutType("OT");
+			RpRegister.setCheckOutType("OUT");
 			RpRegister.setEntyBy(UserId);
 			RpRegister.setEntyOn(new java.sql.Date(new java.util.Date().getTime())+"");
-			
+			RpRegister.setRegisterId(RpRegisterRepo.maxinsertnumber());
 			LeaveRegister LeaveRegister = leaveregisterRepo.findById((RpRegister.getLeaveID())).get();	
 			LeaveRegister.setCheckOutStatus("Checked Out For Leave");
-			
+			RpRegister.setEmployeeName(LeaveRegister.getEmployeeName());
 			leaveregisterRepo.save(LeaveRegister);
 			RpRegisterRepo.save(RpRegister);
 			return "redirect:/AuthorizedLeaveList";
 		}
 	}
 	
+	@GetMapping({ "/ViewRPGateRegister" })
+	public ModelAndView ViewRPGateRegister(HttpServletRequest request) {
+		ModelAndView mav = new ModelAndView("HRM/rp-gate-register");
+		mav.addObject("RpGateRegister", RpRegisterRepo.findAll());
+		return mav;
+
+	}
 	
 	
 	

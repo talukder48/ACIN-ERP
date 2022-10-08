@@ -2,8 +2,6 @@ package com.panacea.model.hrm;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.sql.Date;
@@ -13,15 +11,18 @@ import java.sql.Date;
 public class RpRegister {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	@Column(name = "RegisterId", length = 10)
 	Long RegisterId;
 	@Column(name = "EmployeeId", length = 20)
 	private String EmployeeId;
+	
+	@Column(name = "EmployeeName", length = 20)
+	private String EmployeeName;
+	
 	@Column(name = "LeaveID", length = 20)
 	private Long LeaveID;
 	@Column(name = "LeaveDate", length = 20)
-	private Date LeaveDate;
+	private String LeaveDate;
 	@Column(name = "ReturnDate", length = 20)
 	private String ReturnDate;
 	@Column(name = "Remarks", length = 200)
@@ -42,7 +43,7 @@ public class RpRegister {
 	private String Place;
 	@Column(name = "RankName", length = 80)
 	private String RankName;
-	@Column(name = "CheckOutType", length = 2)
+	@Column(name = "CheckOutType", length = 5)
 	private String CheckOutType;
 	@Column(name = "EntyBy", length = 20)
 	private String EntyBy;
@@ -57,6 +58,16 @@ public class RpRegister {
 	}
 	
 	
+	public String getEmployeeName() {
+		return EmployeeName;
+	}
+
+
+	public void setEmployeeName(String employeeName) {
+		EmployeeName = employeeName;
+	}
+
+
 	public String getEntyBy() {
 		return EntyBy;
 	}
@@ -185,10 +196,10 @@ public class RpRegister {
 	public void setLeaveID(Long leaveID) {
 		LeaveID = leaveID;
 	}
-	public Date getLeaveDate() {
+	public String getLeaveDate() {
 		return LeaveDate;
 	}
-	public void setLeaveDate(Date leaveDate) {
+	public void setLeaveDate(String leaveDate) {
 		LeaveDate = leaveDate;
 	}
 	public String getReturnDate() {
