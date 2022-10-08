@@ -100,7 +100,9 @@ public class LoginController {
 					} else if (usermaster.getUserRole().equals("S")) {
 						ViewName = "HRM/HRSuperUser";
 					}
-
+					 else if (usermaster.getUserRole().equals("G")) {
+							ViewName = "HRM/RPNoc";
+						}
 					else {
 						ViewName = "HRM/LeaveEndUser";
 					}
@@ -161,12 +163,15 @@ public class LoginController {
 							}
 
 						} else if (usermaster.getUserModule().equals("LEAVE")) {
+														
 							if (usermaster.getUserRole().equals("M")) {
 								ViewName = "HRM/LeaveManagement";
 							} else if (usermaster.getUserRole().equals("S")) {
 								ViewName = "HRM/HRSuperUser";
 							}
-
+							 else if (usermaster.getUserRole().equals("G")) {
+									ViewName = "HRM/RPNoc";
+								}
 							else {
 								ViewName = "HRM/LeaveEndUser";
 							}

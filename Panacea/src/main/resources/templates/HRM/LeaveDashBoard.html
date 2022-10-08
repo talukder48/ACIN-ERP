@@ -28,22 +28,24 @@
 			
 				<thead>
 					<tr>
-						<th>LeaveID</th>
-						<th>EmployeeId</th>
-						<th>Employee Name</th>	
-						<th>Reason for Leave</th>						
+						<th>Leave ID</th>
+						<th>Army No</th>
+						<th>Employee Name</th>
+						<th>Rank</th>
+						<th>Status</th>						
 						<th>Actions</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:each="transaction: ${LeaveList}">
-						<td th:text="${transaction.LeaveID}" />
-						<td th:text="${transaction.EmployeeId}" />
-						<td th:text="${transaction.EmployeeName}" />
-						<td th:text="${transaction.leaveReason}" />
+					<tr th:each="leave: ${LeaveList}">
+						<td th:text="${leave.LeaveID}" />
+						<td th:text="${leave.EmployeeId}" />
+						<td th:text="${leave.EmployeeName}" />
+						<td th:text="${leave.RankName}" />						
+						<td th:text="${leave.leaveStatus}" />
 						<td>
-							<a th:href="@{/showUpdateLeaveRecomendation(LeaveID=${transaction.LeaveID})}" class="btn btn-info">Recommendation </a>
-							<a th:href="@{/PrintLeaveForm(LeaveID=${transaction.LeaveID})}" class="btn btn-info">Download</a>
+							<a th:href="@{/showUpdateLeaveRecomendation(LeaveID=${leave.LeaveID})}" class="btn btn-info">Recommendation </a>
+							<a th:href="@{/PrintLeaveForm(LeaveID=${leave.LeaveID})}" class="btn btn-info">Download</a>
 							
 						</td>
 					</tr>

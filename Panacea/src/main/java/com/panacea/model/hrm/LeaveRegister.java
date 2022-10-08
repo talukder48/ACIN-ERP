@@ -57,6 +57,79 @@ public class LeaveRegister {
 	private String RejectOn;
 	@Column(name = "RankCode", length = 5)
 	private String RankCode;
+	
+	@Column(name = "Vill", length = 100)
+	private String Vill;
+	@Column(name = "Post", length = 100)
+	private String Post;
+	@Column(name = "PoliceStation", length = 100)
+	private String PoliceStation;
+	@Column(name = "District", length = 50)
+	private String District;
+	@Column(name = "Place", length = 100)
+	private String Place;
+	@Column(name = "RankName", length = 80)
+	private String RankName;
+	@Column(name = "CheckOutStatus", length = 80)
+	private String CheckOutStatus;
+	
+	
+
+	public String getCheckOutStatus() {
+		return CheckOutStatus;
+	}
+
+	public void setCheckOutStatus(String checkOutStatus) {
+		CheckOutStatus = checkOutStatus;
+	}
+
+	public String getVill() {
+		return Vill;
+	}
+
+	public void setVill(String vill) {
+		Vill = vill;
+	}
+
+	public String getPost() {
+		return Post;
+	}
+
+	public void setPost(String post) {
+		Post = post;
+	}
+
+	public String getPoliceStation() {
+		return PoliceStation;
+	}
+
+	public void setPoliceStation(String policeStation) {
+		PoliceStation = policeStation;
+	}
+
+	public String getDistrict() {
+		return District;
+	}
+
+	public void setDistrict(String district) {
+		District = district;
+	}
+
+	public String getPlace() {
+		return Place;
+	}
+
+	public void setPlace(String place) {
+		Place = place;
+	}
+
+	public String getRankName() {
+		return RankName;
+	}
+
+	public void setRankName(String rankName) {
+		RankName = rankName;
+	}
 
 	public LeaveRegister() {
 		super();

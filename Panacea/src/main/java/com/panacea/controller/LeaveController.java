@@ -23,6 +23,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.panacea.model.hrm.ArmyEmployee;
 import com.panacea.model.hrm.LeaveRegister;
+import com.panacea.model.hrm.RpRegister;
 import com.panacea.model.inventory.DropDownType;
 import com.panacea.model.login.UserMaster;
 import com.panacea.repository.hrm.ArmyCompayRepo;
@@ -32,6 +33,7 @@ import com.panacea.repository.hrm.ArmyTradeRepo;
 import com.panacea.repository.hrm.EmployeeRepo;
 import com.panacea.repository.leave.LeaveDescriptionRepo;
 import com.panacea.repository.leave.LeaveRegisterRepo;
+import com.panacea.repository.leave.RpRegisterRepo;
 import com.panacea.repository.leave.UserMaserRepo;
 import com.panacea.utils.AESEncrypt;
 
@@ -123,7 +125,7 @@ public class LeaveController {
 	public String saveEmployee(@ModelAttribute ArmyEmployee ArmyEmployee) {
 		ArmyEmployeeRepo.save(ArmyEmployee);
 		if (!UserMasterRepo.existsById(ArmyEmployee.getEmployeeId())) {			
-			UserMaster UserMaster=new UserMaster(ArmyEmployee.getEmployeeId(),ArmyEmployee.getEmployeeName(),AESEncrypt.encrypt("admin"),"0018","",ArmyEmployee.getMobileNo(),ArmyEmployee.getEmailAddress(),"LEAVE","E",ArmyEmployee.getEmployeeId());
+			UserMaster UserMaster=new UserMaster(ArmyEmployee.getEmployeeId(),ArmyEmployee.getEmployeeName(),AESEncrypt.encrypt("admin"),"0018","",ArmyEmployee.getMobileNo(),ArmyEmployee.getEmailAddress(),"LEAVE","E",ArmyEmployee.getEmployeeId(),"A");
 			UserMasterRepo.save(UserMaster);			
 		}
 		
@@ -183,7 +185,7 @@ public class LeaveController {
 			if(Rank.startsWith("2")) {
 				mav.addObject("LeaveList", leaveregisterRepo.FindJCOToRecomended("3%"));
 			}
-			if(Rank.startsWith("1")) {
+			else if(Rank.startsWith("1")) {
 				mav.addObject("LeaveList", leaveregisterRepo.FindOfficierToRecomended("3%"));
 			}
 			else {
@@ -196,15 +198,10 @@ public class LeaveController {
 		return mav;
 
 	}
+	
+	
 
-	@GetMapping({ "/LeaveAuthorization" })
-	public ModelAndView LeaveAuthorization(HttpServletRequest request) {
-		ModelAndView mav = new ModelAndView("HRM/LeaveAuthorization");
-		mav.addObject("LeaveList", leaveregisterRepo.FindToBeApprovalList());
-		return mav;
-
-	}
-
+	
 	@GetMapping({ "/LeaveList" })
 	public ModelAndView getLeaveList(HttpServletRequest request) {
 		HttpSession sessionParam = request.getSession();
@@ -254,6 +251,7 @@ public class LeaveController {
 			ArmyEmployee ArmyEmployee = ArmyEmployeeRepo.findById(LeaveRegister.getEmployeeId()).get();
 			LeaveRegister.setEmployeeName(ArmyEmployee.getEmployeeName());
 			LeaveRegister.setRankCode(ArmyEmployee.getRank());
+			LeaveRegister.setRankName(ArmyRankRepo.FindRank(ArmyEmployee.getRank()));
 			LeaveRegister.setLeaveStatus("Recomendation Pending");
 			leaveregisterRepo.save(LeaveRegister);
 		} else {
@@ -269,7 +267,17 @@ public class LeaveController {
 				leaveregister.setLeaveReason(LeaveRegister.getLeaveReason());
 				leaveregister.setLeaveType(LeaveRegister.getLeaveType());
 				leaveregister.setLeaveStatus(LeaveRegister.getLeaveStatus());
-				LeaveRegister.setRankCode(ArmyEmployee.getRank());
+				leaveregister.setRankCode(ArmyEmployee.getRank());
+				leaveregister.setRankCode(ArmyRankRepo.FindRank(ArmyEmployee.getRank()));
+				leaveregister.setVill(LeaveRegister.getVill());
+				leaveregister.setPost(LeaveRegister.getPost());
+				leaveregister.setPlace(LeaveRegister.getPlace());
+				leaveregister.setPoliceStation(LeaveRegister.getPoliceStation());
+				leaveregister.setDistrict(LeaveRegister.getDistrict());
+				
+				
+				
+				
 				leaveregisterRepo.save(leaveregister);
 			} else {
 				ArmyEmployee ArmyEmployee = ArmyEmployeeRepo.findById(LeaveRegister.getEmployeeId()).get();
@@ -329,6 +337,7 @@ public class LeaveController {
 				leaveregister.setApprovedRemarks(LeaveRegister.getApprovedRemarks());
 				leaveregister.setApproveBy(sessionParam.getValue("UserId").toString());
 				leaveregister.setLeaveStatus("Approved");
+				leaveregister.setCheckOutStatus("Not Checked Out");
 				leaveregisterRepo.save(leaveregister);
 			} 
 			return "redirect:/LeaveAuthorization";
@@ -401,6 +410,141 @@ public class LeaveController {
 	return mav;
 	}
 
+	
+	
+	@GetMapping({ "/LeaveAuthorization" })
+	public ModelAndView LeaveAuthorization(HttpServletRequest request) {
+		ModelAndView mav = new ModelAndView("HRM/LeaveAuthorization");
+		mav.addObject("LeaveList", leaveregisterRepo.FindToBeApprovalList());
+		return mav;
+
+	}
+	
+	
+	
+	@GetMapping({ "/AuthorizedLeaveList" })
+	public ModelAndView AuthorizedLeaveList(HttpServletRequest request) {
+		ModelAndView mav = new ModelAndView("HRM/List-AuthorizedLeave");
+		mav.addObject("LeaveList", leaveregisterRepo.AuthorizedList());
+		return mav;
+
+	}
+
+
+	@GetMapping("/AddInRegister")
+	public ModelAndView AddInRegister(@RequestParam Long LeaveID) {
+		ModelAndView model = new ModelAndView("HRM/AddInRegister");
+		RpRegister RpRegister=new RpRegister();
+		RpRegister.setLeaveID(LeaveID);
+		LeaveRegister LeaveRegister = leaveregisterRepo.findById((LeaveID)).get();
+		RpRegister.setRankName(LeaveRegister.getRankName());
+		RpRegister.setPost(LeaveRegister.getPost());
+		RpRegister.setPoliceStation(LeaveRegister.getPoliceStation());
+		RpRegister.setPlace(LeaveRegister.getPlace());
+		RpRegister.setDistrict(LeaveRegister.getDistrict());
+		RpRegister.setStartDate(LeaveRegister.getStartDate());
+		RpRegister.setEndDate(LeaveRegister.getEndDate());
+		RpRegister.setCheckOutType("IN");
+		RpRegister.setVill(LeaveRegister.getVill());
+		
+		
+		model.addObject("EmployeeList", ArmyEmployeeRepo.SingleEmployee(LeaveRegister.getEmployeeId()));
+		model.addObject("RpRegister", RpRegister);
+
+		return model;
+	}
+	@PostMapping("/saveInRegister")
+	public String saveInRegister(@ModelAttribute RpRegister RpRegister,HttpServletRequest request) {
+		HttpSession sessionParam = request.getSession();
+		String UserId;
+		try {
+			UserId=sessionParam.getValue("UserId").toString();
+		}catch(Exception e) {
+			UserId="NF";
+		}
+		
+		if (UserId.equals("NF")) {
+			return "index";
+		} else {
+			
+			LeaveRegister LeaveRegister = leaveregisterRepo.findById((RpRegister.getLeaveID())).get();	
+			LeaveRegister.setCheckOutStatus("Returned From Leave");
+			RpRegister.setCheckOutType("IN");
+			RpRegister.setEntyBy(UserId);
+			RpRegister.setEntyOn(new java.sql.Date(new java.util.Date().getTime())+"");
+			leaveregisterRepo.save(LeaveRegister);
+			RpRegisterRepo.save(RpRegister);
+			return "redirect:/AuthorizedLeaveList";
+		}
+	}
+	
+	
+	
+	
+	@GetMapping("/AddOutRegister")
+	public ModelAndView AddOutRegister(@RequestParam Long LeaveID) {
+		ModelAndView model = new ModelAndView("HRM/AddOutRegister");
+		RpRegister RpRegister=new RpRegister();
+		RpRegister.setLeaveID(LeaveID);
+		LeaveRegister LeaveRegister = leaveregisterRepo.findById((LeaveID)).get();
+		RpRegister.setRankName(LeaveRegister.getRankName());
+		RpRegister.setPost(LeaveRegister.getPost());
+		RpRegister.setPoliceStation(LeaveRegister.getPoliceStation());
+		RpRegister.setPlace(LeaveRegister.getPlace());
+		RpRegister.setDistrict(LeaveRegister.getDistrict());
+		RpRegister.setStartDate(LeaveRegister.getStartDate());
+		RpRegister.setEndDate(LeaveRegister.getEndDate());
+		RpRegister.setCheckOutType("OT");
+		RpRegister.setVill(LeaveRegister.getVill());
+		
+		
+		model.addObject("EmployeeList", ArmyEmployeeRepo.SingleEmployee(LeaveRegister.getEmployeeId()));
+		model.addObject("RpRegister", RpRegister);
+
+		return model;
+	}
+	
+	
+	@GetMapping({ "/ViewRPGateRegister" })
+	public ModelAndView ViewRPGateRegister(HttpServletRequest request) {
+		ModelAndView mav = new ModelAndView("HRM/rp-gate-register");
+		mav.addObject("RpGateRegister", RpRegisterRepo.findAll());
+		return mav;
+
+	}
+	
+	
+	@Autowired
+	RpRegisterRepo RpRegisterRepo;
+	
+	@PostMapping("/saveOutRegister")
+	public String saveOutRegister(@ModelAttribute RpRegister RpRegister,HttpServletRequest request) {
+		HttpSession sessionParam = request.getSession();
+		String UserId;
+		try {
+			UserId=sessionParam.getValue("UserId").toString();
+		}catch(Exception e) {
+			UserId="NF";
+		}
+		
+		if (UserId.equals("NF")) {
+			return "index";
+		} else {
+			RpRegister.setCheckOutType("OT");
+			RpRegister.setEntyBy(UserId);
+			RpRegister.setEntyOn(new java.sql.Date(new java.util.Date().getTime())+"");
+			
+			LeaveRegister LeaveRegister = leaveregisterRepo.findById((RpRegister.getLeaveID())).get();	
+			LeaveRegister.setCheckOutStatus("Checked Out For Leave");
+			
+			leaveregisterRepo.save(LeaveRegister);
+			RpRegisterRepo.save(RpRegister);
+			return "redirect:/AuthorizedLeaveList";
+		}
+	}
+	
+	
+	
 	
 	/*Leave Report Controller*/
 	

@@ -139,7 +139,7 @@ public class UserMaster {
 	}
 
 	public UserMaster(String userID, String userName, String userPassword, String userBranch, String userDept,
-			String userMobile, String userEmailId, String userModule, String userRole,String EmployeeId) {
+			String userMobile, String userEmailId, String userModule, String userRole,String EmployeeId,String Activation) {
 		super();
 		UserID = userID;
 		UserName = userName;
@@ -151,6 +151,7 @@ public class UserMaster {
 		UserModule = userModule;
 		UserRole = userRole;
 		this.EmployeeId=EmployeeId;
+		this.Activation=Activation;
 	}
 	
 	

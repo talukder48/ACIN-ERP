@@ -24,14 +24,15 @@
 	<div class="container">
 		<hr />
 		<div class="container my-3 bg-light">
-			<h3 class="col-md-12 text-center">Add or Modify Leave Information</h3>
+			<h3 class="col-md-12 text-center">RP NOC Gate Register:: Check Out</h3>
 		</div>
 		<hr />
 
-		<form th:action="@{/saveLeaveData}" th:object="${LeaveRegister}" method="POST">
+		<form th:action="@{/saveOutRegister}" th:object="${RpRegister}" method="POST">
 		
 		<div class="row">
 				
+				<div class="col">
 				<div class="col-md-12 text-center" >
 				Army No:
 					<select class="selectpicker"   data-live-search="true" th:field="*{EmployeeId}" style="width: 650px;">
@@ -41,103 +42,120 @@
 					</select>
 
 				</div>
+				
+				</div>
+				
+			<div class="col">
+					Leave ID <input type="text" th:field="*{LeaveID}"
+						class="form-control col-8 mb-8" placeholder="Leave ID" readonly/>
+	
+				</div>
+				
+				
+				<div class="col">
+					Rank: <input type="text" th:field="*{RankName}"
+						class="form-control col-8 mb-8" readonly />
+	
+				</div>
+				
 
 				
 			</div>
 		
 			<hr>
 			<br>
+			
+			
 			<div class="row">
 			
 			<div class="col">
-					Leave Type: <select th:field="*{LeaveType}"
-						class="form-control col-8 mb-8">
-						<option th:each="optionType : ${Leavelist}"
-							th:value="${optionType.LeaveCode}"
-							th:text="${optionType.LeaveDescription}" class="form-control col-4 mb-4">
-					</select>
-
-				</div>
-			
-			<div class="col">
-					Apply Date: <input type="date" th:field="*{ApplyDate}"
-						class="form-control col-8 mb-8" placeholder="Apply Date" />
+					leave Start Date: <input type="text" th:field="*{StartDate}"
+						class="form-control col-8 mb-8" readonly />
 	
 				</div>
 				
 				
 				<div class="col">
-					Start Date: <input type="date" th:field="*{StartDate}"
-						class="form-control col-8 mb-8" placeholder="Start Date" />
+					Leave End  Date: <input type="text" th:field="*{EndDate}"
+						class="form-control col-8 mb-8" readonly />
 	
 				</div>
+			
+			<div class="col">
+					Village(Staying) <input type="text" th:field="*{Vill}"
+						class="form-control col-8 mb-8"  readonly/>
+	
+				</div>
+			
+			
 				
+				
+			
+			</div>
+			
+			
+			<div class="row">
+			
+			
+			
+				
+			<div class="col">
+					Place(Staying) <input type="text" th:field="*{Place}"
+						class="form-control col-8 mb-8"  readonly/>
+	
+				</div>
 				
 				
 				<div class="col">
-					End Date: <input type="date" th:field="*{EndDate}"
-						class="form-control col-8 mb-8" placeholder="End Date" />
-	
-				</div>
-			
-			</div>
-			
-
-			
-			<div class="row">
-			
-			<div class="col">
-					Leave Reason: <input type="text" th:field="*{LeaveReason}"
-						class="form-control col-8 mb-8" placeholder="Reasons for Leave" />
-	
-			</div>
-			
-			<div class="col">
-					Place : <input type="text" th:field="*{Place}"
-						class="form-control col-8 mb-8" placeholder="Place" />
-	
-				</div>
-			
-			
-			</div>
-			
-			
-			
-			<div class="row">
-			
-			<div class="col">
-					Village : <input type="text" th:field="*{Vill}"
-						class="form-control col-8 mb-8" placeholder="Village" />
-	
-				</div>
-			
-			<div class="col">
-					Post office <input type="text" th:field="*{Post}"
-						class="form-control col-8 mb-8" placeholder="Post Office" />
+					Post Office: <input type="text" th:field="*{Post}"
+						class="form-control col-8 mb-8" readonly />
 	
 				</div>
 				
 				
 				<div class="col">
 					Police Station: <input type="text" th:field="*{PoliceStation}"
-						class="form-control col-8 mb-8" placeholder="Police Station" />
+						class="form-control col-8 mb-8" readonly />
+	
+				</div>
+			
+			</div>
+			
+			<hr>
+
+			
+			<div class="row">
+			
+			<div class="col">
+					Check Out Date: <input type="date" th:field="*{LeaveDate}"
+						class="form-control col-8 mb-8" placeholder="Leave Date" />
 	
 				</div>
 				
 				
 				
 				<div class="col">
-					District: <input type="text" th:field="*{District}"
-						class="form-control col-8 mb-8" placeholder="District" />
+					Return Date: <input type="date" th:field="*{ReturnDate}"
+						class="form-control col-8 mb-8" placeholder="Return Date" />
 	
 				</div>
-				
-				
-				
+			
+			<div class="col">
+					Remarks: <input type="text" th:field="*{Remarks}"
+						class="form-control col-8 mb-8" placeholder="Remarks" />
+	
+			</div>
+			
+			
+			
 			
 			</div>
 			
-             <input type="hidden" id="TransactionGrid" th:field="*{LeaveID}"  >
+			
+			
+			
+			
+             <input type="hidden" th:field="*{RegisterId}"  >
 			
 			<hr />
 
@@ -146,7 +164,7 @@
 			<div class="container my-3 bg-light">
 				<div class="col-md-12 text-center">
 					<button type="submit" class="btn btn-primary">Submit</button>
-					<a th:href="@{/LeaveList}" class="btn btn-warning">Cancel</a>
+					<a th:href="@{/AuthorizedLeaveList}" class="btn btn-warning">Cancel</a>
 				</div>
 			</div>
 

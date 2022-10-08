@@ -53,16 +53,16 @@ public class DefaultController {
 	public String DefaultUserCreation() {
 		if (UserMasterRepo.count() == 0) {
 			List<UserMaster> UserList = new ArrayList<UserMaster>();
-			UserList.add(new UserMaster("10000", "Test", AESEncrypt.encrypt("admin"), "0018", "01", "01515240013","Test@gmail.com", "SYSTEM","S",""));
-			UserList.add(new UserMaster("20001", "Test", AESEncrypt.encrypt("admin"), "0018", "01", "01515240013","Test@gmail.com", "INVENTORY","E",""));
-			UserList.add(new UserMaster("20002", "Test", AESEncrypt.encrypt("admin"), "0018", "01", "01515240013","Test@gmail.com", "INVENTORY","S",""));
-			UserList.add(new UserMaster("30001", "Test", AESEncrypt.encrypt("admin"), "0018", "01", "01515240013","Test@gmail.com","ACCOUNTING", "E",""));
-			UserList.add(new UserMaster("30002", "Test", AESEncrypt.encrypt("admin"), "0018", "01", "01515240013","Test@gmail.com","ACCOUNTING", "S",""));
-			UserList.add(new UserMaster("40001", "Test", AESEncrypt.encrypt("admin"), "0018", "01", "01515240013","Test@gmail.com", "LEAVE","M",""));
-			UserList.add(new UserMaster("40002", "Test", AESEncrypt.encrypt("admin"), "0018", "01", "01515240013","Test@gmail.com", "LEAVE","E",""));
-			UserList.add(new UserMaster("50001", "Test", AESEncrypt.encrypt("admin"), "0018", "01", "01515240013","Test@gmail.com", "HRM","S",""));
-			UserList.add(new UserMaster("60001", "Test", AESEncrypt.encrypt("admin"), "0018", "01", "01515240013","Test@gmail.com", "TRACKER","S",""));
-			UserList.add(new UserMaster("60002", "Test", AESEncrypt.encrypt("admin"), "0018", "01", "01515240013","Test@gmail.com", "TRACKER","E",""));
+			UserList.add(new UserMaster("10000", "Test", AESEncrypt.encrypt("admin"), "0018", "01", "01515240013","Test@gmail.com", "SYSTEM","S","","A"));
+			UserList.add(new UserMaster("20001", "Test", AESEncrypt.encrypt("admin"), "0018", "01", "01515240013","Test@gmail.com", "INVENTORY","E","","A"));
+			UserList.add(new UserMaster("20002", "Test", AESEncrypt.encrypt("admin"), "0018", "01", "01515240013","Test@gmail.com", "INVENTORY","S","","A"));
+			UserList.add(new UserMaster("30001", "Test", AESEncrypt.encrypt("admin"), "0018", "01", "01515240013","Test@gmail.com","ACCOUNTING", "E","","A"));
+			UserList.add(new UserMaster("30002", "Test", AESEncrypt.encrypt("admin"), "0018", "01", "01515240013","Test@gmail.com","ACCOUNTING", "S","","A"));
+			UserList.add(new UserMaster("40001", "Test", AESEncrypt.encrypt("admin"), "0018", "01", "01515240013","Test@gmail.com", "LEAVE","M","","A"));
+			UserList.add(new UserMaster("40002", "Test", AESEncrypt.encrypt("admin"), "0018", "01", "01515240013","Test@gmail.com", "LEAVE","E","","A"));
+			UserList.add(new UserMaster("50001", "Test", AESEncrypt.encrypt("admin"), "0018", "01", "01515240013","Test@gmail.com", "HRM","S","","A"));
+			UserList.add(new UserMaster("60001", "Test", AESEncrypt.encrypt("admin"), "0018", "01", "01515240013","Test@gmail.com", "TRACKER","S","","A"));
+			UserList.add(new UserMaster("60002", "Test", AESEncrypt.encrypt("admin"), "0018", "01", "01515240013","Test@gmail.com", "TRACKER","E","","A"));
 			
 			UserMasterRepo.saveAll(UserList);
 		}
@@ -262,7 +262,7 @@ public class DefaultController {
    		}
 	   	if (UserMasterRepo.count() == 0) {
 			List<UserMaster> UserList = new ArrayList<UserMaster>();
-			UserList.add(new UserMaster("50001", "Mr. Rubel", AESEncrypt.encrypt("admin"), "0018", "01", "01515240013","Test@gmail.com", "LEAVE","S","50001"));
+			UserList.add(new UserMaster("50001", "Mr. Rubel", AESEncrypt.encrypt("admin"), "0018", "01", "01515240013","Test@gmail.com", "LEAVE","S","50001","A"));
 			
 			UserMasterRepo.saveAll(UserList);
 		}
