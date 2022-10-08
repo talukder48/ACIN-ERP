@@ -43,8 +43,8 @@
 						<td th:text="${leave.RankName}" />						
 						<td th:text="${leave.CheckOutStatus}" />
 						<td>
-							<a th:href="@{/AddInRegister(LeaveID=${leave.LeaveID})}" class="btn btn-info">IN </a>
-							<a th:href="@{/AddOutRegister(LeaveID=${leave.LeaveID})}" class="btn btn-danger">OUT</a>
+							<a th:href="@{/AddInRegister(LeaveID=${leave.LeaveID})}" class="btn btn-info">Check In </a>
+							<a th:href="@{/AddOutRegister(LeaveID=${leave.LeaveID})}" class="btn btn-danger">Check Out</a>
 							
 						</td>
 					</tr>
