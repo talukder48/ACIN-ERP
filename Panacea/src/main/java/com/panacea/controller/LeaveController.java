@@ -478,7 +478,7 @@ public class LeaveController {
 			RpRegister.setCheckOutType("IN");
 			RpRegister.setEntyBy(UserId);
 			RpRegister.setEntyOn(new java.sql.Date(new java.util.Date().getTime())+"");
-			
+			RpRegister.setDistrict(LeaveRegister.getDistrict());
 			RpRegister.setEmployeeName(LeaveRegister.getEmployeeName());
 			leaveregisterRepo.save(LeaveRegister);
 			RpRegisterRepo.save(RpRegister);
@@ -538,6 +538,7 @@ public class LeaveController {
 			LeaveRegister LeaveRegister = leaveregisterRepo.findById((RpRegister.getLeaveID())).get();	
 			LeaveRegister.setCheckOutStatus("Checked Out For Leave");
 			RpRegister.setEmployeeName(LeaveRegister.getEmployeeName());
+			RpRegister.setDistrict(LeaveRegister.getDistrict());
 			leaveregisterRepo.save(LeaveRegister);
 			RpRegisterRepo.save(RpRegister);
 			return "redirect:/AuthorizedLeaveList";
@@ -580,6 +581,8 @@ public class LeaveController {
 	}
 	
 	
+
+	
 	@GetMapping("/PrintPersonalInfo")
 	public ResponseEntity<byte[]> PrintPersonalInfo(@RequestParam String EmployeeId) {		
 		Map<String, Object> parameter = new HashMap<String, Object>();	
@@ -591,6 +594,45 @@ public class LeaveController {
 			//set the PDF format
 			headers.setContentType(MediaType.APPLICATION_PDF);
 			headers.setContentDispositionFormData("filename", "Personal Info- ID#"+EmployeeId+".pdf");
+			//create the report in PDF format
+			return new ResponseEntity<byte[]>(JasperExportManager.exportReportToPdf(empReport), headers, HttpStatus.OK);
+			
+		} catch(Exception e) {
+			return new ResponseEntity<byte[]>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}		
+	}
+	
+	
+
+	@GetMapping("/PrintArmyList")
+	public ResponseEntity<byte[]> PrintArmyList() {		
+		Map<String, Object> parameter = new HashMap<String, Object>();	
+		try {
+			
+			JasperPrint empReport =JasperFillManager.fillReport(JasperCompileManager.compileReport(ResourceUtils.getFile("classpath:templates/report-templates/ULMS/LeaveCard.jrxml").getAbsolutePath()) , parameter , dataSource.getConnection());
+			HttpHeaders headers = new HttpHeaders();
+			//set the PDF format
+			headers.setContentType(MediaType.APPLICATION_PDF);
+			headers.setContentDispositionFormData("filename", "PrintArmyList #"+new java.util.Date().getDay()+".pdf");
+			//create the report in PDF format
+			return new ResponseEntity<byte[]>(JasperExportManager.exportReportToPdf(empReport), headers, HttpStatus.OK);
+			
+		} catch(Exception e) {
+			return new ResponseEntity<byte[]>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}		
+	}
+	
+	
+	@GetMapping("/PrintRPNCOREGISTER")
+	public ResponseEntity<byte[]> PrintRPNCOREGISTER() {		
+		Map<String, Object> parameter = new HashMap<String, Object>();	
+		try {
+			
+			JasperPrint empReport =JasperFillManager.fillReport(JasperCompileManager.compileReport(ResourceUtils.getFile("classpath:templates/report-templates/ULMS/RPNCO.jrxml").getAbsolutePath()) , parameter , dataSource.getConnection());
+			HttpHeaders headers = new HttpHeaders();
+			//set the PDF format
+			headers.setContentType(MediaType.APPLICATION_PDF);
+			headers.setContentDispositionFormData("filename", "RPNCOREGISTER #"+new java.util.Date().getDay()+".pdf");
 			//create the report in PDF format
 			return new ResponseEntity<byte[]>(JasperExportManager.exportReportToPdf(empReport), headers, HttpStatus.OK);
 			
