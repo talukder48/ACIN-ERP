@@ -18,7 +18,6 @@ import com.panacea.model.hrm.ArmyRank;
 import com.panacea.model.hrm.ArmyTrade;
 import com.panacea.model.hrm.Employee;
 import com.panacea.model.hrm.LeaveDescription;
-import com.panacea.model.hrm.LeaveRegister;
 import com.panacea.model.inventory.InventoryProduct;
 import com.panacea.model.inventory.Requisition;
 import com.panacea.model.inventory.RequisitionList;
