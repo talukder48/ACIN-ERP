@@ -320,6 +320,7 @@ public class LoginController {
 	@PostMapping("/saveNewSystemUser")
 	public String saveNewSystemUser(@ModelAttribute("usermaster") UserMaster usermaster,HttpServletRequest request) {
 		usermaster.setUserPassword(AESEncrypt.encrypt(usermaster.getUserPassword()));
+		usermaster.setActivation("A");
 		UserMasterRepo.save(usermaster);
 		return "redirect:ULMSuserList";
 	}
@@ -373,6 +374,7 @@ public class LoginController {
 			UserMaster.setUserMobile(usermaster.getUserMobile());
 			UserMaster.setUserEmailId(usermaster.getUserEmailId());
 			UserMaster.setUserName(usermaster.getUserName());
+			UserMaster.setActivation("A");
 			UserMasterRepo.save(UserMaster);
 		}
 		return "redirect:/UserHome";
