@@ -32,6 +32,11 @@ public class Transaction implements Serializable {
 
 	@Column(name = "glcode", length = 10)
 	private String glcode;
+	
+	@Column(name = "headName", length = 200)
+	private String headName;
+	
+	
 	@Column(name = "debit_amt", columnDefinition = "Decimal(18,2)")
 	private double debit_amt;
 	@Column(name = "credit_amt", columnDefinition = "Decimal(18,2)")
@@ -48,7 +53,7 @@ public class Transaction implements Serializable {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Transaction(int entity_num, int tran_sl, String tran_branch, Date tran_date, int tran_batch, String glcode,
+	public Transaction(int entity_num, int tran_sl, String tran_branch, Date tran_date, int tran_batch, String glcode,String headName,
 			double debit_amt, double credit_amt, String narration, String chq_number, String chq_date) {
 		super();
 		this.entity_num = entity_num;
@@ -57,6 +62,7 @@ public class Transaction implements Serializable {
 		this.tran_date = tran_date;
 		this.tran_batch = tran_batch;
 		this.glcode = glcode;
+		this.headName=headName;
 		this.debit_amt = debit_amt;
 		this.credit_amt = credit_amt;
 		this.narration = narration;
@@ -152,4 +158,13 @@ public class Transaction implements Serializable {
 		this.chq_date = chq_date;
 	}
 
+	public String getHeadName() {
+		return headName;
+	}
+
+	public void setHeadName(String headName) {
+		this.headName = headName;
+	}
+
+	
 }

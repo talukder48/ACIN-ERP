@@ -9,4 +9,8 @@ import com.panacea.model.acounting.GLCode;
 public interface GLCodeRepo extends JpaRepository <GLCode,String> {
 	@Query(value = "SELECT * FROM `as_glcode` where `gl_level`='L'", nativeQuery = true)
 	 List<GLCode> FindTransactionGL();
+	
+	@Query(value = "SELECT `gl_name` FROM `as_glcode` WHERE `gl_code`=?1", nativeQuery = true)
+	 String TransactionHead(String TransactionHead);
+	
 }

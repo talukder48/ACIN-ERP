@@ -398,6 +398,8 @@ var clause="<clause>";
 			<h3 class="col-md-12 text-center">Add New Voucher </h3>
 		</div>
 		<hr />
+		<!-- <div th:if="${message}"> <h2 th:text="${message}"/></div> -->
+		 
 
 		<form th:action="@{/saveTransaction}" th:object="${Transaction}" method="POST" onkeydown="return event.key != 'Enter';">
 
@@ -440,7 +442,7 @@ var clause="<clause>";
 						<input type="text" class="form-control col-8 mb-4" placeholder="Cheque/Advice No" name="CHQ_ADV_NO" id="CHQ_ADV_NO" onkeydown="ValidateCQNumber(event)"/>
 					</div>
 					<div class="col">
-						<input type="text" class="form-control col-8 mb-4" placeholder="Issue Date" name="IssueDate" id="IssueDate" onkeydown="ValidateIssueDate(event)"/>
+						<input type="date" class="form-control col-8 mb-4" placeholder="Issue Date" name="IssueDate" id="IssueDate" onkeydown="ValidateIssueDate(event)"/>
 					</div>
 					
 					

@@ -63,6 +63,7 @@ public class LoginController {
 				sessionParam.setAttribute("Module", usermaster.getUserModule());
 				sessionParam.setAttribute("UserRole", usermaster.getUserRole());
 				sessionParam.setAttribute("UserBranch", usermaster.getUserBranch());
+				sessionParam.setAttribute("BranchName", "Head Office");
 				sessionParam.setAttribute("EmployeeId", usermaster.getEmployeeId());
 				sessionParam.setAttribute("UserName", usermaster.getUserName());
 				if (usermaster.getUserModule().equals("ACCOUNTING")) {

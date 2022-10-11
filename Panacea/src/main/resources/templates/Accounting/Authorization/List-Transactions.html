@@ -10,12 +10,19 @@
 	<body>
 		
 		<div class="container">
-		
-			<h3>Transaction Lists</h3>
+					
+			<div class="container my-3 bg-light">
+			<h3 class="col-md-12 text-center">Authorization Pending  List:General Accounts </h3>
+			</div>
 			
-			<hr/>
-			<a th:href="@{/Accounting}" class="btn btn-primary">Main Menu</a>
-			<br/><br/>
+			<div class="container my-3 bg-light">
+		        <div class="col-md-12 text-center">
+		            <a th:href="@{/UserHome}" class="btn btn-warning">Back Home</a>
+		        </div>
+		    </div>
+			
+			
+			
 			<table class="table table-bordered table-striped" id="productTable">
 			
 				<thead>
@@ -23,6 +30,7 @@
 						<th>Transaction Branch</th>
 						<th>Transaction Date</th>
 						<th>Transaction Batch</th>	
+						<th>Transaction Amount</th>	
 						<th>Remarks</th>						
 						<th>Actions</th>
 					</tr>
@@ -32,9 +40,10 @@
 						<td th:text="${transaction.tran_branch}" />
 						<td th:text="${transaction.tran_date}" />
 						<td th:text="${transaction.tran_batch}" />
+						<td th:text="${transaction.debitAmt}" />
 						<td th:text="${transaction.tran_remarks}" />
 						<td>
-							<a th:href="@{/showUpdateTransactionForm(tran_branch=${transaction.tran_branch},tran_date=${transaction.tran_date},tran_batch=${transaction.tran_batch})}" class="btn btn-info">View </a>
+							<a th:href="@{/showUnauthorizedVoucherDetailsForm(tran_branch=${transaction.tran_branch},tran_date=${transaction.tran_date},tran_batch=${transaction.tran_batch})}" class="btn btn-info">View </a>
 							<a th:href="@{/RejectTransaction(tran_branch=${transaction.tran_branch},tran_date=${transaction.tran_date},tran_batch=${transaction.tran_batch})}" class="btn btn-danger">Rejection</a>
 							
 						</td>
@@ -43,7 +52,7 @@
 				
 			</table>
 		</div>
-		
+		<div id="footer" th:replace="Inventory/footer :: footer">&copy; </div>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 		<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.25/datatables.min.js"></script>
 		<script>

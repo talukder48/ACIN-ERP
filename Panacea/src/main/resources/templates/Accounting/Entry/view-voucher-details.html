@@ -18,13 +18,13 @@
 			
 			<div class="container my-3 bg-light">
 		        <div class="col-md-12 text-center">
-		            <a th:href="@{/OnlyAuthorizableList}" class="btn btn-warning">Transaction List</a>
+		            <a th:href="@{/GetVoucherList}" class="btn btn-warning">Transaction List</a>
 		        </div>
 		    </div>
 			
 			
 			<hr/>
-			<form th:action="@{/AuthorizeVoucher}" th:object="${TransactionList}" method="POST">
+			<form th:action="@{/AuthorizeSingleTransaction}" th:object="${TransactionList}" method="POST">
 			<div class="row">
 			  <div class="col">
 			    <input type="text" th:field="*{tran_branch}" class="form-control col-8 mb-4" readonly />		

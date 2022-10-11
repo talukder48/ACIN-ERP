@@ -18,13 +18,13 @@
 			
 			<div class="container my-3 bg-light">
 		        <div class="col-md-12 text-center">
-		            <a th:href="@{/OnlyAuthorizableList}" class="btn btn-warning">Transaction List</a>
+		            <a th:href="@{/GetAUthorizedVoucherList}" class="btn btn-warning">Authorized Transaction List</a>
 		        </div>
 		    </div>
 			
 			
 			<hr/>
-			<form th:action="@{/AuthorizeVoucher}" th:object="${TransactionList}" method="POST">
+			<form  th:object="${TransactionList}" method="POST">
 			<div class="row">
 			  <div class="col">
 			    <input type="text" th:field="*{tran_branch}" class="form-control col-8 mb-4" readonly />		
@@ -72,14 +72,7 @@
 				</tbody>
 				
 			</table>
-			   
-			<div class="row">
-			   <div class="col"></div>
-			  <div class="col">
-			    <button type="submit" class="btn btn-success col-8">Authorize</button>
-			  </div>
-			   <div class="col"></div>
-			</div>
+			
 			
 			</form>
 			
