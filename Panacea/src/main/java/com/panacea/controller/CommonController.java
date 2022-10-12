@@ -13,26 +13,28 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.panacea.model.common.*;
 import com.panacea.model.hrm.ArmyEmployee;
-import com.panacea.model.hrm.LeaveRegister;
 import com.panacea.model.inventory.DropDownType;
-import com.panacea.model.inventory.InventoryUser;
-import com.panacea.model.login.UserMaster;
-import com.panacea.repository.leave.UserMaserRepo;
+import com.panacea.repository.common.*;
 import com.panacea.repository.hrm.*;
 import com.panacea.utils.AESDecrypt;
 import com.panacea.utils.AESEncrypt;
 
 @Controller
 @RequestMapping({ "/", "/login" })
-public class LoginController {
+public class CommonController {
 	@Autowired
 	UserMaserRepo UserMasterRepo;
 	@Autowired
 	ArmyEmployeeRepo ArmyEmployeeRepo;
-	private static final Logger LOGGER = LogManager.getLogger(LoginController.class);
+	@Autowired
+	MasterBranchRepo MasterBranchRepo;
+	private static final Logger LOGGER = LogManager.getLogger(CommonController.class);
 
 	@GetMapping("/LogOut")
 	public String LogOut(HttpServletRequest request) {
@@ -43,6 +45,11 @@ public class LoginController {
 
 	@GetMapping("/")
 	public String index() {
+		return "index";
+	}
+	
+	@GetMapping("/login")
+	public String login() {
 		return "index";
 	}
 
@@ -380,8 +387,69 @@ public class LoginController {
 		return "redirect:/UserHome";
 	}
 	
+	@GetMapping({ "/GetBranchList" })
+	public ModelAndView TransactionAuthorization() {
+		ModelAndView mav = new ModelAndView("Common/List-Branch");
+		mav.addObject("BranchList", MasterBranchRepo.findAll());
+		return mav;
+	}
+	
+	@RequestMapping("/AddBranch")
+	public ModelAndView AddBranch(Model model,HttpServletRequest request) {
+	
+		List<DropDownType> BranchTypeList = new ArrayList<DropDownType>();
+		BranchTypeList.add(new DropDownType("H", "Head Office"));
+		BranchTypeList.add(new DropDownType("B", "Branch Office"));
+		BranchTypeList.add(new DropDownType("R", "Regional Office"));
+		BranchTypeList.add(new DropDownType("Z", "Zonal Office"));
+		BranchTypeList.add(new DropDownType("P", "Principal Offcie"));
+		
+		ModelAndView mav = new ModelAndView("Common/add-Branch");
+		MasterBranch MasterBranch = new MasterBranch();
+		mav.addObject("MasterBranch", MasterBranch);
+		mav.addObject("BranchTypeList", BranchTypeList);
+		return mav;
+	}
+	
+	@RequestMapping("/showUpdateBranchForm")
+	public ModelAndView showUpdateBranchForm(@RequestParam String BranchCode,HttpServletRequest request) {
+	
+		List<DropDownType> BranchTypeList = new ArrayList<DropDownType>();
+		BranchTypeList.add(new DropDownType("H", "Head Office"));
+		BranchTypeList.add(new DropDownType("B", "Branch Office"));
+		BranchTypeList.add(new DropDownType("R", "Regional Office"));
+		BranchTypeList.add(new DropDownType("Z", "Zonal Office"));
+		BranchTypeList.add(new DropDownType("P", "Principal Offcie"));
+		
+		ModelAndView mav = new ModelAndView("Common/add-Branch");
+		MasterBranch MasterBranch = MasterBranchRepo.getById(BranchCode);
+		mav.addObject("MasterBranch", MasterBranch);
+		mav.addObject("BranchTypeList", BranchTypeList);
+		return mav;
+	}
 	
 	
+
+	@PostMapping("/SaveBranchInfo")
+	public String SaveBranchInfo(@ModelAttribute("masterbranch") MasterBranch masterbranch,HttpServletRequest request) {
+		MasterBranchRepo.save(masterbranch);
+		return "redirect:GetBranchList";
+	}
+	
+	
+	@GetMapping({ "/GetSystemConfig" })
+    public ModelAndView GetSystemConfig() {
+		ModelAndView mav = new ModelAndView("Common/addSystemConfiguration");
+        return mav;
+    }
+	
+	
+	 @PostMapping("/PostSystemConfig")
+	    public String upload(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
+	        redirectAttributes.addFlashAttribute("message", "You successfully uploaded " + file.getOriginalFilename() + "!");
+
+	        return "redirect:/GetSystemConfig";
+	    }
 
 	@GetMapping("{tab}")
 	public String tab(@PathVariable String tab) {

@@ -1,4 +1,4 @@
-package com.panacea.model.login;
+package com.panacea.model.common;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
