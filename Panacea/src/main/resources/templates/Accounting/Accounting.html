@@ -6,103 +6,18 @@
 
     <link th:rel="stylesheet" th:href="@{webjars/bootstrap/4.0.0-2/css/bootstrap.min.css} "/>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+	<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+	<script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
+	<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
 </head>
 
 
 
 <body>
 
-<!-- Navigation -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="background-color: #33cccc;">
-  <a class="navbar-brand" href="/UserHome">[[${session.BranchName}]]</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
+<div th:replace="Accounting/fragments/SuperNavbar">This content will be gone</div>
 
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto">
-    
-     <li></li>
-     
-     
-     
-      <li class="nav-item dropdown">
-         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown3" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-           [[${session.UserName}]]
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown3">
-            <a class="dropdown-item"  th:href="@{/AccountsInfo(UserId=${session.UserId})}">User Info </a>
-        	<a class="dropdown-item"  th:href="@{/LogOut}">Logout </a>
-         
-        </div>
-      </li>
-      
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown0" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-         Parameter Setup
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown0">
-          <a class="dropdown-item" th:href="@{/ProductParameterList}">Product Setup</a>
-          <a class="dropdown-item" th:href="@{/LedgerParameterList}">General Ledger</a>
-          <a class="dropdown-item" th:href="@{/FeesAndChargesList}">Fees & Charges</a>
-          <a class="dropdown-item" th:href="@{/ProductLedgerMappingList}">Product Mapping</a>
-          <a class="dropdown-item" th:href="@{/erpUserList}">User Setup</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">System Setup</a>
-        </div>
-      </li>
-      
-      
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-           Entry Page
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown1">
-          <a class="dropdown-item"  th:href="@{/AccountsCreationForm}">Accounts Creation</a>
-          <a class="dropdown-item" th:href="@{/GetVoucherList}" >Voucher Entry</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" th:href="@{/GetAUthorizedVoucherList}" >Voucher Print</a>
-        </div>
-      </li>
-      
-       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Authorization
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown2">
-          <a class="dropdown-item"  th:href="@{/OnlyAuthorizableList}">Transaction </a>
-        </div>
-      </li>
-      
-       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown4" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Report
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown4">
-          <a class="dropdown-item"  th:href="@{/GetAUthorizedVoucherList}">Voucher Print </a>
-        </div>
-      </li>
-      
-     
-     
-    </ul>
-    
-    <form class="form-inline my-2 my-lg-0">
-      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-    </form>
-    
-    
-  </div>
-</nav>
-
-
-
-
-<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
-<script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
-<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
 
 <div id="footer" th:replace="Inventory/footer :: footer">&copy; </div>
 

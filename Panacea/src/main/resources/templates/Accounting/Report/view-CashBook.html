@@ -14,65 +14,57 @@
 		<div class="container">
 		    <hr/>
 		    <div class="container my-3 bg-light">
-			<h3 class="col-md-12 text-center">Add or Modify General Ledger to Chart of Accounts </h3>
+			<h3 class="col-md-12 text-center">View CashBook </h3>
 			</div>
 			<hr/>
 			
-			<form th:action="@{/saveGeneralLedger}" th:object="${glcodeModel}" method="POST">
+			<form th:action="@{/ViewCashBook}"  method="POST">
 			
 			
 			<div class="row">
+			<div class="col"></div>
+			       <div class="col">From Transaction Date</div>
 					<div class="col">
-						GL Code:	<input type="text" th:field="*{glCode}" class="form-control col-8 mb-8" placeholder="GL Code" />
+						<input type="date" name="FromDate" class="form-control col-8 mb-8"  />
 					</div>
-					<div class="col">
-						GL Name:	<input type="text" th:field="*{glName}" class="form-control col-8 mb-8" placeholder="GL Name" />
-							</div>
-					<div class="col">
-						GL Type: <select th:field="*{glType}" class="form-control col-8 mb-8">
-						            <option th:each="optionType : ${typeList}" th:value="${optionType.typeKey}"  th:text="${optionType.typeValue}" class="form-control col-4 mb-4">
-						        </select>
-
-					</div>
+					
+					<div class="col"></div>
 				</div>
 			
 			
-				<div class="row">
+			  <div class="row">
+			  <div class="col"></div>
+			       <div class="col">To Transaction Date</div>
 					<div class="col">
-						GL Type: <select th:field="*{glLevel}" class="form-control col-8 mb-8" >
-						            <option th:each="optionType : ${levelList}" th:value="${optionType.typeKey}"  th:text="${optionType.typeValue}" class="form-control col-4 mb-4">
-						        </select>
-
+						<input type="date" name="ToDate" class="form-control col-8 mb-8"  />
 					</div>
-					<div class="col">
-						Prime GL:	<input type="text" th:field="*{primeGL}" class="form-control col-8 mb-8" placeholder="Purchase GL" />
-					</div>
-					<div class="col">
-					</div>
+					<div class="col"></div>
 					
 				</div>
 			
 				<div class="row">
-					
-										
+				<div class="col"></div>
+				 <div class="col">Report Type</div>
+				<div class="col">
+						 <select  name="ReportType" class="form-control col-8 mb-8">
+						            <option th:each="optionType : ${ReportType}" th:value="${optionType.typeKey}"  th:text="${optionType.typeValue}" class="form-control col-4 mb-4">
+			 			 </select>
+
 				</div>
+				<div class="col"></div>
+				</div>
+			
 			
 			<hr/>
-			<br>
 									
 			
 			<div class="container my-3 bg-light">
 		        <div class="col-md-12 text-center">
-		            <button type="submit" class="btn btn-primary">Submit</button>
-		            <a th:href="@{/LedgerParameterList}" class="btn btn-warning">Cancel</a>
+		            <button type="submit" class="btn btn-primary">Download</button>
+		            <a th:href="@{/UserHome}" class="btn btn-warning">Cancel</a>
 		        </div>
 		    </div>
-			
-			
-			
-			
-				
-				
+
 								
 				
 			</form>
