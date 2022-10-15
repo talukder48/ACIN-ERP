@@ -1,7 +1,5 @@
 package com.panacea.controller;
 
-import java.sql.Date;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,8 +56,6 @@ public class DefaultController {
 			UserList.add(new UserMaster("20002", "Test", AESEncrypt.encrypt("admin"), "0018", "01", "01515240013","Test@gmail.com", "INVENTORY","S","","A"));
 			UserList.add(new UserMaster("30001", "Test", AESEncrypt.encrypt("admin"), "0018", "01", "01515240013","Test@gmail.com","ACCOUNTING", "E","","A"));
 			UserList.add(new UserMaster("30002", "Test", AESEncrypt.encrypt("admin"), "0018", "01", "01515240013","Test@gmail.com","ACCOUNTING", "S","","A"));
-			UserList.add(new UserMaster("40001", "Test", AESEncrypt.encrypt("admin"), "0018", "01", "01515240013","Test@gmail.com", "LEAVE","M","","A"));
-			UserList.add(new UserMaster("40002", "Test", AESEncrypt.encrypt("admin"), "0018", "01", "01515240013","Test@gmail.com", "LEAVE","E","","A"));
 			UserList.add(new UserMaster("50001", "Test", AESEncrypt.encrypt("admin"), "0018", "01", "01515240013","Test@gmail.com", "HRM","S","","A"));
 			UserList.add(new UserMaster("60001", "Test", AESEncrypt.encrypt("admin"), "0018", "01", "01515240013","Test@gmail.com", "TRACKER","S","","A"));
 			UserList.add(new UserMaster("60002", "Test", AESEncrypt.encrypt("admin"), "0018", "01", "01515240013","Test@gmail.com", "TRACKER","E","","A"));
@@ -69,10 +65,21 @@ public class DefaultController {
 		return "index";
 	}
 
-	
-	@GetMapping("/DefaultEmployeeInsert")
-	public String DefaultEmployeeInsert() {
-		
+
+	@GetMapping("/DefaultSetup")
+	public String DefaultSetup() {
+		if (UserMasterRepo.count() == 0) {
+			List<UserMaster> UserList = new ArrayList<UserMaster>();
+			UserList.add(new UserMaster("10000", "Test", AESEncrypt.encrypt("admin"), "0018", "01", "01515240013","Test@gmail.com", "SYSTEM","S","","A"));
+			UserList.add(new UserMaster("20001", "Test", AESEncrypt.encrypt("admin"), "0018", "01", "01515240013","Test@gmail.com", "INVENTORY","E","","A"));
+			UserList.add(new UserMaster("20002", "Test", AESEncrypt.encrypt("admin"), "0018", "01", "01515240013","Test@gmail.com", "INVENTORY","S","","A"));
+			UserList.add(new UserMaster("30001", "Test", AESEncrypt.encrypt("admin"), "0018", "01", "01515240013","Test@gmail.com","ACCOUNTING", "E","","A"));
+			UserList.add(new UserMaster("30002", "Test", AESEncrypt.encrypt("admin"), "0018", "01", "01515240013","Test@gmail.com","ACCOUNTING", "S","","A"));
+			UserList.add(new UserMaster("60001", "Test", AESEncrypt.encrypt("admin"), "0018", "01", "01515240013","Test@gmail.com", "TRACKER","S","","A"));
+			UserList.add(new UserMaster("60002", "Test", AESEncrypt.encrypt("admin"), "0018", "01", "01515240013","Test@gmail.com", "TRACKER","E","","A"));
+			
+			UserMasterRepo.saveAll(UserList);
+		}
 		if (employeeRepo.count() == 0) {
 			List <Employee> EmployeeList = new ArrayList<Employee>() ;
 			EmployeeList.add(new Employee("ID2020080002","Abu Tayab","Abdur Rahim","Amena Begum","199210000001","1098234567","M","test@gmail.com","017120908902","Barisal","01-01-2009","20"));	
@@ -81,13 +88,7 @@ public class DefaultController {
 			EmployeeList.add(new Employee("ID2020080005","Habibur Rahman","Aminur Rahmna","Maymuna Begum","199210080001","4098234567","M","test@gmail.com","017120908902","Dhaka","01-01-2009","17"));	
 			employeeRepo.saveAll(EmployeeList);
 		}
-		return "index";
-	}
-	
-
-    
-    @GetMapping("/DefaultInventoryProductCreation")
-	public String DefaultInventoryProductCreation() {
+		
 		if (inventoryProductRepo.count() == 0) {
 			List<InventoryProduct> productList = new ArrayList<InventoryProduct>();
 			productList.add(new InventoryProduct("101","Printer","H","401101101","501101101","601101101"));
@@ -100,11 +101,6 @@ public class DefaultController {
 			productList.add(new InventoryProduct("108","Portable Hard disk","H","401101101","501101101","601101101"));		
 			inventoryProductRepo.saveAll(productList);
 		}
-		return "index";
-	}   
-    
-    @GetMapping("/DefaultGLCodeCreation")
-	public String DefaultGLCodeCreation() {
 		if (glcoderepository.count() == 0) {
 			List<GLCode> glcodelist = new ArrayList<GLCode>();
 			glcodelist.add(new GLCode("101000000","Non- Current Assets","A","P",""));
@@ -126,13 +122,17 @@ public class DefaultController {
 			
 			glcoderepository.saveAll(glcodelist);
 		}
-		return "index";
-	} 
-    
-    
-    @GetMapping("/DefaultAccountingProductCreation")
-   	public String DefaultAccountingProductCreation() {
-   		if (ProductParamRepo.count() == 0) {
+		
+		if (chargesRepo.count() == 0) {
+   			List <Charges> ChargesList = new ArrayList<Charges>() ;
+   			ChargesList.add(new Charges("101","Maintainance Fee","A","Y","Y","301302","401401"));	
+			ChargesList.add(new Charges("102","SMS Fee","A","Y","Y","301303","401401"));	
+			ChargesList.add(new Charges("103","Late Payment Fee","M","Y","Y","301304","401401"));
+			ChargesList.add(new Charges("104","Application Fee","R","N","Y","301304",""));
+			chargesRepo.saveAll(ChargesList);
+   		}
+		
+		if (ProductParamRepo.count() == 0) {
    			List <ProductParam> productList = new ArrayList<ProductParam>() ;
 			productList.add(new ProductParam("100","Savings","D","Y"));
 			productList.add(new ProductParam("101","Current","D","Y"));
@@ -143,20 +143,28 @@ public class DefaultController {
 			productList.add(new ProductParam("203","Marrage Loan","L","Y"));
 			ProductParamRepo.saveAll(productList);
    		}
-   		return "index";
-   	}   
-    @GetMapping("/DefaultChargesCreation")
-   	public String DefaultChargesCreation() {
-   		if (chargesRepo.count() == 0) {
-   			List <Charges> ChargesList = new ArrayList<Charges>() ;
-   			ChargesList.add(new Charges("101","Maintainance Fee","A","Y","Y","301302","401401"));	
-			ChargesList.add(new Charges("102","SMS Fee","A","Y","Y","301303","401401"));	
-			ChargesList.add(new Charges("103","Late Payment Fee","M","Y","Y","301304","401401"));
-			ChargesList.add(new Charges("104","Application Fee","R","N","Y","301304",""));
-			chargesRepo.saveAll(ChargesList);
+		
+		if (RequisitionRepo.count() == 0) {
+   			List <Requisition> Requisition = new ArrayList<Requisition>() ;
+   			//Requisition.add(new Requisition("00018",LocalDate.parse("2022-09-20"),1,"102",3,"Test Narration"));	
+   			//Requisition.add(new Requisition("00018",LocalDate.parse("2022-09-20"),1,"103",4,"Test Narration"));	
+   			//Requisition.add(new Requisition("00018",LocalDate.parse("2022-09-20"),1,"105",2,"Test Narration"));
+   			//Requisition.add(new Requisition("00018",LocalDate.parse("2022-09-20"),2,"102",3,"Test Narration"));	
+   			//Requisition.add(new Requisition("00018",LocalDate.parse("2022-09-20"),2,"106",2,"Test Narration"));
+   			RequisitionRepo.saveAll(Requisition);
    		}
-   		return "index";
-   	}   
+   		
+   		if (RequisitionListRepo.count() == 0) {
+   			List <RequisitionList> RequisitionList = new ArrayList<RequisitionList>() ;
+   			//RequisitionList.add(new RequisitionList("00018","2022-09-20",1,"Test Remarks"));	
+   		//	RequisitionList.add(new RequisitionList("00018","2022-09-20",2,"Test Remarks"));
+   			RequisitionListRepo.saveAll(RequisitionList);
+   		}
+		
+		return "index";
+	}
+	
+	
     
     @Autowired
     ArmyCompayRepo ArmyCompayRepo;
@@ -173,30 +181,7 @@ public class DefaultController {
     @Autowired
     RequisitionListRepo RequisitionListRepo;
     
-    @GetMapping("/DefaultPurchaseCreation")
-   	public String DefaultPurchaseCreation() {
-   		if (RequisitionRepo.count() == 0) {
-   			List <Requisition> Requisition = new ArrayList<Requisition>() ;
-   			//Requisition.add(new Requisition("00018",LocalDate.parse("2022-09-20"),1,"102",3,"Test Narration"));	
-   			//Requisition.add(new Requisition("00018",LocalDate.parse("2022-09-20"),1,"103",4,"Test Narration"));	
-   			//Requisition.add(new Requisition("00018",LocalDate.parse("2022-09-20"),1,"105",2,"Test Narration"));
-   			//Requisition.add(new Requisition("00018",LocalDate.parse("2022-09-20"),2,"102",3,"Test Narration"));	
-   			//Requisition.add(new Requisition("00018",LocalDate.parse("2022-09-20"),2,"106",2,"Test Narration"));
-   			RequisitionRepo.saveAll(Requisition);
-   		}
-   		
-   		if (RequisitionListRepo.count() == 0) {
-   			List <RequisitionList> RequisitionList = new ArrayList<RequisitionList>() ;
-   			//RequisitionList.add(new RequisitionList("00018","2022-09-20",1,"Test Remarks"));	
-   		//	RequisitionList.add(new RequisitionList("00018","2022-09-20",2,"Test Remarks"));
-   			RequisitionListRepo.saveAll(RequisitionList);
-   		}
-   		
-   		return "index";
-   	}   
-    
-    
-    
+
     
     @GetMapping("/DefaultLeaveParameterCreation")
    	public String DefaultParameterCreation() {
