@@ -23,6 +23,7 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.activation.*;
 
+
 public class GmailSMTPService {
 	Properties emailProperties;
 	Session mailSession;
