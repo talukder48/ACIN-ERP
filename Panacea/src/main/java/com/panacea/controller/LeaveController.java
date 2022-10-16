@@ -21,11 +21,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.panacea.model.common.DropDownType;
 import com.panacea.model.common.UserMaster;
 import com.panacea.model.hrm.ArmyEmployee;
 import com.panacea.model.hrm.LeaveRegister;
 import com.panacea.model.hrm.RpRegister;
-import com.panacea.model.inventory.DropDownType;
 import com.panacea.repository.common.UserMaserRepo;
 import com.panacea.repository.hrm.ArmyCompayRepo;
 import com.panacea.repository.hrm.ArmyEmployeeRepo;

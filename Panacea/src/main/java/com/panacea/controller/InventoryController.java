@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-
+import com.panacea.model.common.DropDownType;
 import com.panacea.model.inventory.*;
 import com.panacea.model.key.RequisitionListId;
 import com.panacea.repository.Accounting.GLCodeRepo;
@@ -216,7 +216,8 @@ public class InventoryController<RequsitionList> {
 		model.addAttribute("ProductList", inventoryProductRepo.findAll());
 		return "Inventory/Entry/add-requisition";
 	}
-
+@Autowired
+InventoryProductRepo InventoryProductRepo;
 
 	@SuppressWarnings({ "deprecation", "unchecked" })
 	@PostMapping("/saveRequisition")
@@ -244,7 +245,7 @@ public class InventoryController<RequsitionList> {
 					DataList = (Map<String, String>) it.next();
 					System.out.println(DataList);
 					if(DataList!=null) {
-						ReqList.add(new Requisition(BranchCode, RequisitionList.getReqDate(), MaxSL,DataList.get("ProductCode"), Integer.parseInt(DataList.get("NoofItem")),DataList.get("Narration"), DataList.get("Purpose")));
+						ReqList.add(new Requisition(BranchCode, RequisitionList.getReqDate(), MaxSL,DataList.get("ProductCode"), InventoryProductRepo.GetProductName(DataList.get("ProductCode")),Integer.parseInt(DataList.get("NoofItem")),DataList.get("Narration"), DataList.get("Purpose")));
 					}
 				}
 				RequisitionRepo.saveAll(ReqList);
@@ -389,7 +390,7 @@ public class InventoryController<RequsitionList> {
 		RequisitionList RequisitionList = RequisitionListRepo.findById(new RequisitionListId(BranchCode, ReqDate,ReqSL)).orElse(null);
 		RequisitionList.setRemarks("Purchase Order Generated");
 		RequisitionList.setOrdeBy(UserId);
-		RequisitionList.setOrderId("0018220001");
+		RequisitionList.setOrderId(RequisitionListRepo.GetOrderID(BranchCode, ReqDate, ReqSL));
 		RequisitionList.setOrderOn(new java.sql.Date(new java.util.Date().getTime()));
 		RequisitionListRepo.save(RequisitionList);
 		return "redirect:/OrderGenerationList";

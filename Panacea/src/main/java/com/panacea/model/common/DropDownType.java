@@ -1,4 +1,4 @@
-package com.panacea.model.inventory;
+package com.panacea.model.common;
 
 public class DropDownType {
 private String typeKey;

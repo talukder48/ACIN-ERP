@@ -19,7 +19,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.panacea.model.common.*;
 import com.panacea.model.hrm.ArmyEmployee;
-import com.panacea.model.inventory.DropDownType;
 import com.panacea.repository.common.*;
 import com.panacea.repository.hrm.*;
 import com.panacea.utils.AESDecrypt;

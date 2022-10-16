@@ -34,6 +34,7 @@
 				<thead>
 					<tr>
 						<th>Product</th>
+						<th>Product Name</th>
 						<th>No of Item</th>
 						<th>Purpose</th>	
 						<th>Narration</th>						
@@ -43,6 +44,7 @@
 				<tbody>
 					<tr th:each="Requisition: ${RequsitionDetailsList}">
 						<td th:text="${Requisition.ProductCode}" />
+						<td th:text="${Requisition.ProductName}" />
 						<td th:text="${Requisition.NoOfItem}" />
 						<td th:text="${Requisition.Purpose}" />
 						<td th:text="${Requisition.Narration}" />

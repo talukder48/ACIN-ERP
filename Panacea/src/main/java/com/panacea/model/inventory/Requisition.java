@@ -25,6 +25,8 @@ public class Requisition {
 	private int ReqSL;
 	@Column(name = "ProductCode", length = 10)
 	private String ProductCode;
+	@Column(name = "ProductName", length = 100)
+	private String ProductName;
 	@Column(name = "NoOfItem", length = 8)
 	private int NoOfItem;
 	@Column(name = "Narration", length = 200)
@@ -33,7 +35,7 @@ public class Requisition {
 	private String Purpose;
 	
 	
-	public Requisition(String branchCode, Date reqDate, int reqSL, String productCode, int noOfItem, String narration,String purpose) {
+	public Requisition(String branchCode, Date reqDate, int reqSL, String productCode,String ProductName, int noOfItem, String narration,String purpose) {
 		super();
 		BranchCode = branchCode;
 		ReqDate = reqDate;
@@ -42,6 +44,17 @@ public class Requisition {
 		NoOfItem = noOfItem;
 		Narration = narration;
 		Purpose = purpose;
+		this.ProductName=ProductName;
+	}
+
+
+	public String getProductName() {
+		return ProductName;
+	}
+
+
+	public void setProductName(String productName) {
+		ProductName = productName;
 	}
 
 

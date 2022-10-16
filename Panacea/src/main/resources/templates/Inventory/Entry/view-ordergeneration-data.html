@@ -14,7 +14,7 @@
 		<div th:replace="Inventory/fragments/SuperNavbar">This content will be gone</div>
 		
 			<div class="container my-3 bg-light">
-			<h3 class="col-md-12 text-center">Order  Details  </h3>
+			<h3 class="col-md-12 text-center">Order Generation Details  </h3>
 			</div>
 			
 			<div class="container my-3 bg-light">
@@ -34,24 +34,20 @@
 				<thead>
 					<tr>
 						<th>Product</th>
+						<th>Product Name</th>
 						<th>No of Item</th>
 						<th>Purpose</th>	
 						<th>Narration</th>						
-						<th>Edit</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr th:each="Requisition: ${RequsitionDetailsList}">
 						<td th:text="${Requisition.ProductCode}" />
+						<td th:text="${Requisition.ProductName}" />
 						<td th:text="${Requisition.NoOfItem}" />
 						<td th:text="${Requisition.Purpose}" />
 						<td th:text="${Requisition.Narration}" />
 						
-						<td>
-							<a th:href="@{/ViewFromRequisitionList(BranchCode=${Requisition.BranchCode},ReqDate=${Requisition.ReqDate},ReqSL=${Requisition.ReqSL},ProductCode=${Requisition.ProductCode})}" class="btn btn-info">View </a>
-							<a th:href="@{/RemoveFromRequisitionList(BranchCode=${Requisition.BranchCode},ReqDate=${Requisition.ReqDate},ReqSL=${Requisition.ReqSL},ProductCode=${Requisition.ProductCode})}" class="btn btn-info">Remove </a>
-							
-						</td>
 					</tr>
 				</tbody>
 				

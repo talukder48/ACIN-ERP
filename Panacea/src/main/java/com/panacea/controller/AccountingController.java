@@ -20,7 +20,7 @@ import com.panacea.model.acounting.GLCode;
 import com.panacea.model.acounting.ProductParam;
 import com.panacea.model.acounting.Transaction;
 import com.panacea.model.acounting.TransactionList;
-import com.panacea.model.inventory.DropDownType;
+import com.panacea.model.common.DropDownType;
 import com.panacea.repository.Accounting.AccountsProductRepo;
 import com.panacea.repository.Accounting.ChargesRepo;
 import com.panacea.repository.Accounting.GLCodeRepo;
