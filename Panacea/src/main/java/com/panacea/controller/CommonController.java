@@ -25,6 +25,8 @@ import com.panacea.repository.hrm.*;
 import com.panacea.utils.AESDecrypt;
 import com.panacea.utils.AESEncrypt;
 
+
+
 @Controller
 @RequestMapping({ "/", "/login" })
 public class CommonController {
