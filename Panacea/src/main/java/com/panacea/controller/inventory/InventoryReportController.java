@@ -1,4 +1,4 @@
-package com.panacea.controller;
+package com.panacea.controller.inventory;
 
 
 import java.io.File;

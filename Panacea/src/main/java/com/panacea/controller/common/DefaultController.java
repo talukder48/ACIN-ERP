@@ -1,4 +1,4 @@
-package com.panacea.controller;
+package com.panacea.controller.common;
 
 import java.util.ArrayList;
 import java.util.List;

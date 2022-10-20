@@ -1,4 +1,4 @@
-package com.panacea.controller;
+package com.panacea.controller.hrm;
 
 import java.util.ArrayList;
 import java.util.HashMap;

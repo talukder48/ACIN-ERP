@@ -1,4 +1,4 @@
-package com.panacea.controller;
+package com.panacea.controller.accounting;
 
 import java.sql.Date;
 import java.util.ArrayList;

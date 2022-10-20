@@ -1,4 +1,4 @@
-package com.panacea.controller;
+package com.panacea.controller.inventory;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -23,10 +23,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.panacea.model.acounting.Transaction;
 import com.panacea.model.common.DropDownType;
+import com.panacea.model.common.UserMaster;
 import com.panacea.model.inventory.*;
 import com.panacea.model.key.RequisitionListId;
 import com.panacea.repository.Accounting.GLCodeRepo;
+import com.panacea.repository.common.*;
 import com.panacea.repository.inventory.*;
 
 
@@ -374,25 +377,56 @@ InventoryProductRepo InventoryProductRepo;
 		mav.addObject("RequsitionDetailsList", RequisitionRepo.FindByRequisitionDetails(BranchCode, ReqDate, ReqSL));
 		return mav;
 	}
-	
-	
+	@Autowired
+	OrderListRepo OrderListRepo;
+	@Autowired
+	OrderDetailsRepo OrderDetailsRepo;
+	@Autowired
+	MasterBranchRepo MasterBranchRepo;
 	@GetMapping("/PurchaseOrderGenerate")
 	public String PurchaseOrderGenerate(@RequestParam String BranchCode, @RequestParam Date ReqDate,@RequestParam int ReqSL,HttpServletRequest request) {		
 		
 		HttpSession sessionParam = request.getSession();
-		String UserId=null;
-		try {
-			 UserId = sessionParam.getValue("UserId").toString();
-		}catch(Exception e) {
-			
-		}
 		
-		RequisitionList RequisitionList = RequisitionListRepo.findById(new RequisitionListId(BranchCode, ReqDate,ReqSL)).orElse(null);
-		RequisitionList.setRemarks("Purchase Order Generated");
-		RequisitionList.setOrdeBy(UserId);
-		RequisitionList.setOrderId(RequisitionListRepo.GetOrderID(BranchCode, ReqDate, ReqSL));
-		RequisitionList.setOrderOn(new java.sql.Date(new java.util.Date().getTime()));
-		RequisitionListRepo.save(RequisitionList);
+	Long id = template.execute(status -> {
+			String UserId=null;
+			try {
+				 UserId = sessionParam.getValue("UserId").toString();
+			}catch(Exception e) {
+				
+			}
+			
+			RequisitionList RequisitionList = RequisitionListRepo.findById(new RequisitionListId(BranchCode, ReqDate,ReqSL)).orElse(null);
+			RequisitionList.setRemarks("Purchase Order Generated");
+			RequisitionList.setOrdeBy(UserId);
+			RequisitionList.setOrderId(RequisitionListRepo.GetOrderID(BranchCode, ReqDate, ReqSL));
+			RequisitionList.setOrderOn(new java.sql.Date(new java.util.Date().getTime()));
+			RequisitionListRepo.save(RequisitionList);
+			
+			OrderList OrderList=new OrderList(RequisitionListRepo.GetOrderID(BranchCode, ReqDate, ReqSL),BranchCode,MasterBranchRepo.GetBranchName(BranchCode),ReqDate,ReqSL);
+			OrderListRepo.save(OrderList);
+			
+		    List<Requisition> Reqlist=RequisitionRepo.FindByRequisitionDetails(BranchCode, ReqDate, ReqSL);
+		    List<OrderDetails> OrderDetailsList =new ArrayList<OrderDetails>();
+		    Iterator it = Reqlist.iterator();
+		    while (it.hasNext()) {
+		    	 Requisition reqitem=(Requisition) it.next();
+		    	 OrderDetailsList.add(new OrderDetails(
+		    			 RequisitionListRepo.GetOrderID(BranchCode, ReqDate, ReqSL),reqitem.getProductCode(),
+		    			 reqitem.getProductName(),
+		    			 reqitem.getNoOfItem(),0,0,0,0,0,"Not Selected"
+		    			 ));
+		    	 
+		    	 
+		    }
+		    
+		    OrderDetailsRepo.saveAll(OrderDetailsList);
+		    
+			
+			return 1L;
+		});
+		
+		
 		return "redirect:/OrderGenerationList";
 		
 	}
