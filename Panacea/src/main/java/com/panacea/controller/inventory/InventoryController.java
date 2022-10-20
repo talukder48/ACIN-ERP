@@ -27,6 +27,7 @@ import com.panacea.model.acounting.Transaction;
 import com.panacea.model.common.DropDownType;
 import com.panacea.model.common.UserMaster;
 import com.panacea.model.inventory.*;
+import com.panacea.model.key.OrderDetailsId;
 import com.panacea.model.key.RequisitionListId;
 import com.panacea.repository.Accounting.GLCodeRepo;
 import com.panacea.repository.common.*;
@@ -476,7 +477,59 @@ InventoryProductRepo InventoryProductRepo;
 		return mav;
 	}
 	
+	@GetMapping({ "/GetGeneratedOrderList" })
+	public ModelAndView GetGeneratedOrderList() {
+		
+		ModelAndView mav = new ModelAndView("Inventory/Entry/list-generated-order");
+		mav.addObject("GeneratedOrderList", OrderListRepo.findAll());
+		return mav;
+	}
 	
+	@GetMapping("/ViewOrderItemList")
+	public ModelAndView ViewOrderItemList(@RequestParam String OrderId,HttpServletRequest request) {		
+		ModelAndView mav = new ModelAndView("Inventory/Entry/view-generated-order-details");
+		mav.addObject("OrderID", "Order Number: "+OrderId+"   ");
+		mav.addObject("GeneratedOrderDetailsDescription", OrderDetailsRepo.findAll());
+		return mav;
+	}
+	
+	@GetMapping("/SelectGeneratedProduct")
+	public ModelAndView SelectGeneratedProduct(@RequestParam String OrderId,@RequestParam String ProductCode,HttpServletRequest request) {		
+		HttpSession sessionParam = request.getSession();
+		String UserId=null;
+		try {
+			 UserId = sessionParam.getValue("UserId").toString();
+		}catch(Exception e) {
+			
+		}
+		OrderDetails OrderDetails = OrderDetailsRepo.findById(new OrderDetailsId(OrderId, ProductCode)).orElseThrow();
+		OrderDetails.setStatus("Selected");
+		OrderDetailsRepo.save(OrderDetails);
+		ModelAndView mav = new ModelAndView("Inventory/Entry/view-generated-order-details");
+		mav.addObject("OrderID", "Order Number: "+OrderId+"   ");
+		mav.addObject("GeneratedOrderDetailsDescription", OrderDetailsRepo.findAll());
+		
+		return mav;
+		
+	}
+	@GetMapping("/DeSelectGeneratedProduct")
+	public ModelAndView DeSelectGeneratedProduct(@RequestParam String OrderId,@RequestParam String ProductCode,HttpServletRequest request) {		
+		HttpSession sessionParam = request.getSession();
+		String UserId=null;
+		try {
+			 UserId = sessionParam.getValue("UserId").toString();
+		}catch(Exception e) {
+			
+		}
+		OrderDetails OrderDetails = OrderDetailsRepo.findById(new OrderDetailsId(OrderId, ProductCode)).orElseThrow();
+		OrderDetails.setStatus("De-Selected");
+		OrderDetailsRepo.save(OrderDetails);
+		ModelAndView mav = new ModelAndView("Inventory/Entry/view-generated-order-details");
+		mav.addObject("GeneratedOrderDetailsDescription", OrderDetailsRepo.findAll());
+		mav.addObject("OrderID", "Order Number: "+OrderId+"   ");
+		return mav;
+		
+	}
 	
 	
 }

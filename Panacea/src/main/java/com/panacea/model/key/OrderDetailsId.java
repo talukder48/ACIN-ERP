@@ -48,5 +48,15 @@ public class OrderDetailsId implements Serializable {
 			return false;
 		return true;
 	}
+	public OrderDetailsId(String orderId, String productCode) {
+		super();
+		OrderId = orderId;
+		ProductCode = productCode;
+	}
+	public OrderDetailsId() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	
 	
 }
