@@ -531,5 +531,33 @@ InventoryProductRepo InventoryProductRepo;
 		
 	}
 	
+	@GetMapping("/UpdateGeneratedProduct")
+	public ModelAndView UpdateGeneratedProduct(@RequestParam String OrderId,@RequestParam String ProductCode,HttpServletRequest request) {		
+		HttpSession sessionParam = request.getSession();
+		String UserId=null;
+		try {
+			 UserId = sessionParam.getValue("UserId").toString();
+		}catch(Exception e) {
+			
+		}
+		OrderDetails OrderDetails = OrderDetailsRepo.findById(new OrderDetailsId(OrderId, ProductCode)).orElseThrow();
+		ModelAndView mav = new ModelAndView("Inventory/Entry/update-product-materials");
+		mav.addObject("OrderDetails",OrderDetails);
+		return mav;
+		
+	}
 	
+	
+	@PostMapping("/saveOrderDetails")
+	public ModelAndView saveOrderDetails(@ModelAttribute 		OrderDetails OrderDetails) {
+		
+		OrderDetails.setTotalAmount(OrderDetails.getActualUnitPrice()*OrderDetails.getOrderedNoOfItem());
+		OrderDetails.setStatus("Updated");
+		OrderDetailsRepo.save(OrderDetails);
+		
+		ModelAndView mav = new ModelAndView("Inventory/Entry/view-generated-order-details");
+		mav.addObject("GeneratedOrderDetailsDescription", OrderDetailsRepo.findAll());
+		mav.addObject("OrderID", "Order Number: "+OrderDetails.getOrderId()+"   ");
+		return mav;
+	}
 }
