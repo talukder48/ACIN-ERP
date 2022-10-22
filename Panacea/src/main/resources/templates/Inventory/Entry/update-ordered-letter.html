@@ -1,0 +1,94 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<title>Panacea @Inventory Management System</title>
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.25/datatables.min.css" />
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+		integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous" />
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+		crossorigin="anonymous"></script>
+	<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+	<script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
+	<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+</head>
+
+<body>
+	<div th:replace="Inventory/fragments/SuperNavbar">This content will be gone</div>
+
+	<div class="container">
+		<hr />
+		<div class="container my-3 bg-light">
+			<h3 class="col-md-12 text-center">Create Letter for Supplier</h3>
+		</div>
+		<hr />
+
+		<form th:action="@{/saveIssuedLetter}" th:object="${OrderList}" method="POST">
+
+
+			<div class="row">
+
+
+				<div class="col">
+					Order ID: <input type="text" th:field="*{OrderId}" class="form-control col-8 mb-8" readonly />
+				</div>
+
+				<div class="col">
+					Branch Code <input type="text" th:field="*{OrderedBranch}" class="form-control col-8 mb-8"
+						readonly />
+				</div>
+
+				<div class="col">
+					Branch Name <input type="text" th:field="*{OrderedBranchName}" class="form-control col-8 mb-8"
+						readonly />
+				</div>
+
+			</div>
+
+<hr/>
+
+			<div class="row">
+				<div class="col">
+					Supplier Name <input type="text" th:field="*{ToCompany}" class="form-control col-8 mb-8"  />
+				</div>
+			</div>
+
+
+			<div class="row">
+				<div class="col">
+					Subject <input type="text" th:field="*{Subject}" class="form-control col-8 mb-8"  />
+				</div>
+			</div>
+
+			<div class="row">
+			<div class="col">
+				Body
+				
+				<textarea class="form-control" id="exampleFormControlTextarea1" th:field="*{Body}" rows="3"></textarea>
+				
+				
+			</div>
+			</div>
+
+
+			
+			<br>
+
+
+			<div class="container my-3 bg-light">
+				<div class="col-md-12 text-center">
+					<button type="submit" class="btn btn-primary">Submit</button>
+					<a th:href="@{/GetGeneratedOrderList}" class="btn btn-warning">Cancel</a>
+				</div>
+			</div>
+
+
+		</form>
+		<hr />
+
+	</div>
+
+	<div th:replace="Inventory/footer :: footer">&copy; </div>
+</body>
+
+</html>

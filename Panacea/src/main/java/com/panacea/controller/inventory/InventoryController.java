@@ -531,6 +531,41 @@ InventoryProductRepo InventoryProductRepo;
 		
 	}
 	
+	@GetMapping("/IssueOrderLetter")
+	public ModelAndView IssueOrderLetter(@RequestParam String OrderId,HttpServletRequest request) {		
+		HttpSession sessionParam = request.getSession();
+		String UserId=null;
+		try {
+			 UserId = sessionParam.getValue("UserId").toString();
+		}catch(Exception e) {
+			
+		}
+		OrderList OrderList = OrderListRepo.findById(OrderId).orElseThrow();
+		ModelAndView mav = new ModelAndView("Inventory/Entry/update-ordered-letter");
+		mav.addObject("OrderList",OrderList);
+		return mav;
+		
+	}
+	
+	
+	@PostMapping("/saveIssuedLetter")
+	public String saveIssuedLetter(@ModelAttribute 		OrderList OrderList,HttpServletRequest request) {		
+		HttpSession sessionParam = request.getSession();
+		String UserId=null;
+		try {
+			 UserId = sessionParam.getValue("UserId").toString();
+		}catch(Exception e) {
+			
+		}
+		OrderList ExistOrderList = OrderListRepo.findById(OrderList.getOrderId()).orElseThrow();
+		ExistOrderList.setToCompany(OrderList.getToCompany());
+		ExistOrderList.setBody(OrderList.getBody());
+		ExistOrderList.setSubject(OrderList.getSubject());
+		OrderListRepo.save(ExistOrderList);
+	    return "redirect:/GetGeneratedOrderList";
+		
+	}
+	
 	@GetMapping("/UpdateGeneratedProduct")
 	public ModelAndView UpdateGeneratedProduct(@RequestParam String OrderId,@RequestParam String ProductCode,HttpServletRequest request) {		
 		HttpSession sessionParam = request.getSession();

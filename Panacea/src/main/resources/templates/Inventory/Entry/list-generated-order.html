@@ -41,8 +41,9 @@
 						<td th:text="${Order.OrderedBranchName}" />
 						<td>
 							<a th:href="@{/ViewOrderItemList(OrderId=${Order.OrderId})}" class="btn btn-info ml-2">View Item List</a>
-							<a th:href="@{/IssueOrderLetter(OrderId=${Order.OrderId})}" class="btn btn-success">Write Letter</a>
-							<a th:href="@{/IssueOrderLetter(OrderId=${Order.OrderId})}" class="btn btn-primary">Issue Letter</a>
+							<a th:href="@{/IssueOrderLetter(OrderId=${Order.OrderId})}" class="btn btn-success">Create Letter</a>
+							<a th:href="@{/GenerateInvoice(OrderId=${Order.OrderId})}" class="btn btn-primary">Generate Invoice</a>
+
 						</td>
 					</tr>
 				</tbody>

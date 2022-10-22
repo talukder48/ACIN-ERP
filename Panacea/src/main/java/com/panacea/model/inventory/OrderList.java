@@ -21,6 +21,35 @@ public class OrderList {
 	private Date ReqDate;
 	@Column(name="ReqSL",length=5)
 	private int ReqSL;
+	
+	@Column(name="ToCompany",length=100)
+	private String ToCompany;
+	@Column(name="Subject",length=400)
+	private String Subject;
+	@Column(name="Body",length=800)
+	private String Body;
+	
+	
+	
+	
+	public String getToCompany() {
+		return ToCompany;
+	}
+	public void setToCompany(String toCompany) {
+		ToCompany = toCompany;
+	}
+	public String getSubject() {
+		return Subject;
+	}
+	public void setSubject(String subject) {
+		Subject = subject;
+	}
+	public String getBody() {
+		return Body;
+	}
+	public void setBody(String body) {
+		Body = body;
+	}
 	public String getOrderId() {
 		return OrderId;
 	}
