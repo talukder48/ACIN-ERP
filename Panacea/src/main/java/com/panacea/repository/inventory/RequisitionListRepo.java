@@ -31,6 +31,8 @@ public interface RequisitionListRepo extends JpaRepository <RequisitionList,Requ
 	 @Query(value = "SELECT concat(lpad(`branch_code`,4,'0'),YEAR(`req_date`) ,lpad(MONTH(`req_date`),2,'0'),lpad(DAY(`req_date`),2,'0'),lpad(`reqsl`,4,'0'))as OrderID FROM `in_requisition_list` WHERE `branch_code`=?1 and `req_date`=?2 and `reqsl`=?3", nativeQuery = true)
 	 String GetOrderID(String BranchCode,Date ReqDate,int ReqSL);
 	 
+	 @Query(value = "SELECT * FROM `in_requisition_list` WHERE `approve_on` is not null and `rej_on` is null", nativeQuery = true)
+	 List<RequisitionList> GetAuthorizedRequisition();
 	
 }
 

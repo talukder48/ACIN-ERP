@@ -39,6 +39,10 @@ public class OrderDetails {
 	private String Status;
 	
 
+	public OrderDetails() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 	public int getOrderedNoOfItem() {
 		return OrderedNoOfItem;
 	}

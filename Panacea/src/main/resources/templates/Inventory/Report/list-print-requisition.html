@@ -14,7 +14,7 @@
 		<div th:replace="Inventory/fragments/SuperNavbar">This content will be gone</div>
 		<div class="container">
 			<div class="container my-3 bg-light">
-			<h3 class="col-md-12 text-center">Generated Order for Purchase :Inventor Management System</h3>
+			<h3 class="col-md-12 text-center">Approved Requisition:Inventor Management System</h3>
 			</div>
 			
 			<div class="container my-3 bg-light">
@@ -28,22 +28,21 @@
 			
 				<thead>
 					<tr>
-						<th>Order ID</th>
-						<th>Order Branch</th>
-						<th>Branch Name</th>
+						<th>Offcie Code</th>
+						<th>Requisition Date</th>
+						<th>Requisition SL</th>
+						<th>Comments</th>
 						<th>Actions</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:each="Order: ${GeneratedOrderList}">
-						<td th:text="${Order.OrderId}" />
-						<td th:text="${Order.OrderedBranch}" />
-						<td th:text="${Order.OrderedBranchName}" />
+					<tr th:each="Requisition: ${RequisitionList}">
+						<td th:text="${Requisition.BranchCode}" />
+						<td th:text="${Requisition.ReqDate}" />
+						<td th:text="${Requisition.ReqSL}" />
+						<td th:text="${Requisition.Remarks}" />
 						<td>
-							<a th:href="@{/ViewOrderItemList(OrderId=${Order.OrderId})}" class="btn btn-info ml-2">View Item List</a>
-							<a th:href="@{/IssueOrderLetter(OrderId=${Order.OrderId})}" class="btn btn-success">Create Letter</a>
-							<a th:href="@{/GenerateOrderInvoice(OrderId=${Order.OrderId})}" class="btn btn-primary">Generate Invoice</a>
-
+							<a th:href="@{/DownloadReqisition(BranchCode=${Requisition.BranchCode},ReqDate=${Requisition.ReqDate},ReqSL=${Requisition.ReqSL})}" class="btn btn-info ml-2">Download</a>
 						</td>
 					</tr>
 				</tbody>
@@ -64,7 +63,7 @@
 			})
 		</script>
 		<div th:replace="Inventory/footer :: footer">&copy; </div>
+		
 	</body>
-	
 	
 </html>
