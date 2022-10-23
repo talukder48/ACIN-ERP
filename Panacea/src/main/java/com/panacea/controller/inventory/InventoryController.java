@@ -595,4 +595,21 @@ InventoryProductRepo InventoryProductRepo;
 		mav.addObject("OrderID", "Order Number: "+OrderDetails.getOrderId()+"   ");
 		return mav;
 	}
+	
+	@Autowired
+	InvoiceOrderRepo InvoiceOrderRepo;
+	@Autowired 
+	InvoiceOrderDetailsRepo InvoiceOrderDetailsRepo;
+	
+	
+	@GetMapping("/GenerateOrderInvoice")
+	public ModelAndView GenerateOrderInvoice(@RequestParam String OrderId,HttpServletRequest request) {		
+		ModelAndView mav = new ModelAndView("Inventory/Entry/view-generated-order-details");
+		mav.addObject("OrderID", "Order Number: "+OrderId+"   ");
+		mav.addObject("GeneratedOrderDetailsDescription", OrderDetailsRepo.findAll());
+		return mav;
+	}
+	
+	
+	
 }

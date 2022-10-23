@@ -8,6 +8,9 @@ import javax.persistence.Table;
 
 import com.panacea.model.key.OrderDetailsId;
 
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
 @Entity
 @Table(name="IN_ORDER_DETAILS")
 @IdClass(OrderDetailsId.class)
@@ -35,10 +38,7 @@ public class OrderDetails {
 	@Column(name = "Status", length = 20)
 	private String Status;
 	
-	
-	
-	
-	
+
 	public int getOrderedNoOfItem() {
 		return OrderedNoOfItem;
 	}
@@ -99,10 +99,7 @@ public class OrderDetails {
 	public void setNoOfItem(int noOfItem) {
 		NoOfItem = noOfItem;
 	}
-	public OrderDetails() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+	
 	public OrderDetails(String orderId, String productCode, String productName, int noOfItem, int orderedNoOfItem,
 			double unitPrice, double discount, double actualUnitPrice, double totalAmount, String status) {
 		super();
