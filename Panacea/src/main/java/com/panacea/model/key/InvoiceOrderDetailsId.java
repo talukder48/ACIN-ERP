@@ -12,7 +12,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class InvoiceOrderDetailsKey implements Serializable {
+public class InvoiceOrderDetailsId implements Serializable {
 	private String OrderId;
 	private int InvoiceNo;
 	private String ProductCode;
@@ -28,7 +28,7 @@ public class InvoiceOrderDetailsKey implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		InvoiceOrderDetailsKey other = (InvoiceOrderDetailsKey) obj;
+		InvoiceOrderDetailsId other = (InvoiceOrderDetailsId) obj;
 		return InvoiceNo == other.InvoiceNo && Objects.equals(OrderId, other.OrderId)
 				&& Objects.equals(ProductCode, other.ProductCode);
 	}

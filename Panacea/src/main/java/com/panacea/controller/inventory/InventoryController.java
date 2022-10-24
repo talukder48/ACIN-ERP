@@ -27,7 +27,7 @@ import com.panacea.model.acounting.Transaction;
 import com.panacea.model.common.DropDownType;
 import com.panacea.model.common.UserMaster;
 import com.panacea.model.inventory.*;
-import com.panacea.model.key.InvoiceOrderKey;
+import com.panacea.model.key.InvoiceOrderId;
 import com.panacea.model.key.OrderDetailsId;
 import com.panacea.model.key.RequisitionListId;
 import com.panacea.repository.Accounting.GLCodeRepo;
@@ -99,15 +99,31 @@ public class InventoryController<RequsitionList> {
 	}
 
 	@GetMapping("/addPurchaseForm")
-	public ModelAndView addPurchaseForm() {
-		ModelAndView mav = new ModelAndView("Inventory/Entry/add-purchase-form");
-
-		return mav;
+	public String addPurchaseForm(Model model) {
+		PurchaseList PurchaseList = new PurchaseList();
+		model.addAttribute("PurchaseList", PurchaseList);
+		model.addAttribute("ProductList", inventoryProductRepo.findAll());
+		return "Inventory/Entry/add-purchase-form";
 	}
 
-	@PostMapping("/savePurchase")
-	public String savePurchase(@ModelAttribute PurchaseList purchase) {
-		// eRepo.save(employee);
+	@PostMapping("/SavePurchaseInfo")
+	public String SavePurchaseInfo(@ModelAttribute PurchaseList purchase) {
+		
+		LinkedList<Map> GridData = new LinkedList<Map>();
+		GridData = ProjectUtils.GridtoLinkedList(purchase.getPurchaseGrid());
+		Iterator it = GridData.iterator();
+		while (it.hasNext()) {
+			Map<String, String> DataList = new HashMap<String, String>();
+			DataList = (Map<String, String>) it.next();
+			System.out.println(DataList);
+			if (DataList != null) {
+				
+			}
+		}
+		
+		System.out.println(purchase.getPurchaseGrid());
+		System.out.println(purchase.getOrderdate());
+		
 		return "redirect:/PurchaseList";
 	}
 
@@ -651,7 +667,7 @@ public class InventoryController<RequsitionList> {
 		} catch (Exception e) {
 
 		}
-		InvoiceOrder InvoiceOrder=InvoiceOrderRepo.getById(new InvoiceOrderKey(OrderId,InvoiceNo));
+		InvoiceOrder InvoiceOrder=InvoiceOrderRepo.getById(new InvoiceOrderId(OrderId,InvoiceNo));
 		ModelAndView mav = new ModelAndView("Inventory/Authorization/view-order-invoice-details");
 		mav.addObject("InvoiceOrder", InvoiceOrder);
 		mav.addObject("InvoiceOrderDetails", InvoiceOrderDetailsRepo.GetInvoiceOrderDetails(OrderId, InvoiceNo));
@@ -669,7 +685,7 @@ public class InventoryController<RequsitionList> {
 		} catch (Exception e) {
 
 		}
-		InvoiceOrder ExistInvoiceOrder=InvoiceOrderRepo.getById(new InvoiceOrderKey(InvoiceOrder.getOrderId(),InvoiceOrder.getInvoiceNo()));
+		InvoiceOrder ExistInvoiceOrder=InvoiceOrderRepo.getById(new InvoiceOrderId(InvoiceOrder.getOrderId(),InvoiceOrder.getInvoiceNo()));
 		ExistInvoiceOrder.setAuthBy(UserId);
 		ExistInvoiceOrder.setStatus("Authorized");
 		ExistInvoiceOrder.setAuthOn(new java.sql.Date(new java.util.Date().getTime()));
@@ -688,7 +704,7 @@ public class InventoryController<RequsitionList> {
 		} catch (Exception e) {
 
 		}
-		InvoiceOrder InvoiceOrder=InvoiceOrderRepo.getById(new InvoiceOrderKey(OrderId,InvoiceNo));
+		InvoiceOrder InvoiceOrder=InvoiceOrderRepo.getById(new InvoiceOrderId(OrderId,InvoiceNo));
 		InvoiceOrder.setAuthBy(UserId);
 		InvoiceOrder.setStatus("Authorized");
 		InvoiceOrder.setAuthOn(new java.sql.Date(new java.util.Date().getTime()));
@@ -707,7 +723,7 @@ public class InventoryController<RequsitionList> {
 		} catch (Exception e) {
 
 		}
-		InvoiceOrder InvoiceOrder=InvoiceOrderRepo.getById(new InvoiceOrderKey(OrderId,InvoiceNo));
+		InvoiceOrder InvoiceOrder=InvoiceOrderRepo.getById(new InvoiceOrderId(OrderId,InvoiceNo));
 		InvoiceOrder.setRejBy(UserId);
 		InvoiceOrder.setStatus("Rejected");
 		InvoiceOrder.setRejOn(new java.sql.Date(new java.util.Date().getTime()));

@@ -317,7 +317,7 @@ var clause="<clause>";
 					<select class="selectpicker" data-live-search="true"
 						id="ProductCode" onkeydown="ValidateTransactonHead(event)">
 						<option th:each="optionType : ${ProductList}"
-							th:value="${optionType.ProductCode}"
+							th:value="${optionType.ProductCode}+'#'+${optionType.ProductName}"
 							th:text="${optionType.ProductCode}+'-'+${optionType.ProductName}"
 							class="selectpicker" data-live-search="true">
 					</select>

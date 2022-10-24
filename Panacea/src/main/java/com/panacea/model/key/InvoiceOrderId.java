@@ -3,7 +3,7 @@ package com.panacea.model.key;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class InvoiceOrderKey implements Serializable {
+public class InvoiceOrderId implements Serializable {
 	private String OrderId;
 	private int InvoiceNo;
 	public String getOrderId() {
@@ -30,14 +30,14 @@ public class InvoiceOrderKey implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		InvoiceOrderKey other = (InvoiceOrderKey) obj;
+		InvoiceOrderId other = (InvoiceOrderId) obj;
 		return InvoiceNo == other.InvoiceNo && Objects.equals(OrderId, other.OrderId);
 	}
-	public InvoiceOrderKey() {
+	public InvoiceOrderId() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public InvoiceOrderKey(String orderId, int invoiceNo) {
+	public InvoiceOrderId(String orderId, int invoiceNo) {
 		super();
 		OrderId = orderId;
 		InvoiceNo = invoiceNo;

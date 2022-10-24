@@ -12,8 +12,10 @@ public class DisburseList {
 	@Id
 	@Column(name = "DisburseId", length = 20)
 	private String DisburseId;
-	@Column(name = "Orderdate", length = 20)
-	private Date Orderdate;
+	@Column(name = "DisburseSL", length = 8)
+	private int DisburseSL;
+	@Column(name = "DisburseDate", length = 20)
+	private Date DisburseDate;
 	@Column(name = "Remarks", length = 200)
 	private String Remarks;
 	@Column(name = "Comments", length = 200)
@@ -40,25 +42,23 @@ public class DisburseList {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	
-	
-	public DisburseList(String disburseId, Date orderdate, String remarks) {
-		super();
-		DisburseId = disburseId;
-		Orderdate = orderdate;
-		Remarks = remarks;
-	}
 	public String getDisburseId() {
 		return DisburseId;
 	}
 	public void setDisburseId(String disburseId) {
 		DisburseId = disburseId;
 	}
-	public Date getOrderdate() {
-		return Orderdate;
+	public int getDisburseSL() {
+		return DisburseSL;
 	}
-	public void setOrderdate(Date orderdate) {
-		Orderdate = orderdate;
+	public void setDisburseSL(int disburseSL) {
+		DisburseSL = disburseSL;
+	}
+	public Date getDisburseDate() {
+		return DisburseDate;
+	}
+	public void setDisburseDate(Date disburseDate) {
+		DisburseDate = disburseDate;
 	}
 	public String getRemarks() {
 		return Remarks;
@@ -102,6 +102,15 @@ public class DisburseList {
 	public void setRejOn(Date rejOn) {
 		RejOn = rejOn;
 	}
+	public DisburseList(String disburseId, int disburseSL, Date disburseDate, String remarks, String comments) {
+		super();
+		DisburseId = disburseId;
+		DisburseSL = disburseSL;
+		DisburseDate = disburseDate;
+		Remarks = remarks;
+		Comments = comments;
+	}
+	
 	
 
 }

@@ -12,12 +12,46 @@ public class PurchaseList {
 	@Id
 	@Column(name = "PurchaseId", length = 20)
 	private String PurchaseId;
+	@Column(name = "PurchaseSL", length =8)
+	private int PurchaseSL;
+	@Column(name = "BranchCode", length = 10)
+	private String BranchCode;
 	@Column(name = "Orderdate", length = 20)
 	private Date Orderdate;
 	@Column(name = "Remarks", length = 200)
 	private String Remarks;
 	@Column(name = "Comments", length = 200)
 	private String Comments;
+	@Column(name = "OrderRef", length = 30)
+	private String OrderRef;
+	
+	private String PurchaseGrid;
+	
+	
+	public String getPurchaseGrid() {
+		return PurchaseGrid;
+	}
+	public void setPurchaseGrid(String purchaseGrid) {
+		PurchaseGrid = purchaseGrid;
+	}
+	public String getOrderRef() {
+		return OrderRef;
+	}
+	public void setOrderRef(String orderRef) {
+		OrderRef = orderRef;
+	}
+	public int getPurchaseSL() {
+		return PurchaseSL;
+	}
+	public void setPurchaseSL(int purchaseSL) {
+		PurchaseSL = purchaseSL;
+	}
+	public String getBranchCode() {
+		return BranchCode;
+	}
+	public void setBranchCode(String branchCode) {
+		BranchCode = branchCode;
+	}
 	public String getComments() {
 		return Comments;
 	}
@@ -40,11 +74,13 @@ public class PurchaseList {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public PurchaseList(String purchaseId, Date orderdate, String remarks) {
+	public PurchaseList(String purchaseId,int PurchaseSL,String BranchCode, Date orderdate, String remarks) {
 		super();
 		PurchaseId = purchaseId;
+		this.PurchaseSL=PurchaseSL;
 		Orderdate = orderdate;
 		Remarks = remarks;
+		this.BranchCode= BranchCode;
 	}
 	public String getPurchaseId() {
 		return PurchaseId;

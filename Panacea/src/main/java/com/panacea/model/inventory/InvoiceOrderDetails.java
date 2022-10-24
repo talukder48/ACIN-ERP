@@ -6,7 +6,7 @@ import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
 
-import com.panacea.model.key.InvoiceOrderDetailsKey;
+import com.panacea.model.key.InvoiceOrderDetailsId;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,7 +15,7 @@ import lombok.Setter;
 
 @Entity
 @Table(name="IN_INVOICE_ORDER_DETAILS")
-@IdClass(InvoiceOrderDetailsKey.class)
+@IdClass(InvoiceOrderDetailsId.class)
 public class InvoiceOrderDetails {
 	@Id
 	@Column(name="OrderId",length=16)
