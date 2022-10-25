@@ -20,21 +20,24 @@ public class ProjectUtils {
 	@SuppressWarnings({ "rawtypes" })
 	public static LinkedList GridtoLinkedList(String JasonGridData) {
 		LinkedList<Map> transactionclause = new LinkedList<Map>();
-		String[] sentance = JasonGridData.split("<sentence>"); 
-	    for (String clause : sentance) {
-	    	
-	    	Map<String, String> map = new HashMap<String, String>(); 
-	    	try {
-				map=JasonStringToHashMap(clause);
-				transactionclause.add(map);  	
+		String[] sentance = JasonGridData.split("<sentence>");
+		for (int index = 0; index < sentance.length; index++) {
+			String clause = sentance[index];
+			Map<String, String> map = new HashMap<String, String>();
+			try {
+				map = JasonStringToHashMap(clause);
+				transactionclause.add(map);
+
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-	    	
-	       
-	    	
-	    }   
-	    return transactionclause;
+
+		}
+		return transactionclause;
 	}
+	
+	public static String GetCode(String JasonGridData) {
+		String[] sentance = JasonGridData.split("#");
+		return sentance[0];
+	}	
 }

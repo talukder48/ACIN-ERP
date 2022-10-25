@@ -155,7 +155,7 @@ var clause="<clause>";
 		"'CHQ_ADV_NO':'"+CHQ_ADV_NO+"',"+
 		"'IssueDate':'"+IssueDate+"',"+
 		"'Narration':'"+Narration+"'"+
-		"} <sentence> ";						      	
+		"}<sentence>";						      	
     }
    
     
@@ -217,7 +217,7 @@ var clause="<clause>";
         			"'CHQ_ADV_NO':'"+document.getElementById("CHQ_ADV_NO").value+"',"+
         			"'IssueDate':'"+document.getElementById("IssueDate").value+"',"+
         			"'Narration':'"+document.getElementById("Narration").value+"'"+
-        			"} <sentence> ";
+        			"}<sentence>";
         			document.getElementById("TransactionAmtDr").value=parseFloat(parseFloat(document.getElementById("TransactionAmtDr").value)
     				+parseFloat(document.getElementById("TransactionAmt").value)).toFixed(2);
         		}
@@ -228,7 +228,7 @@ var clause="<clause>";
         			"'CHQ_ADV_NO':'"+document.getElementById("CHQ_ADV_NO").value+"',"+
         			"'IssueDate':'"+document.getElementById("IssueDate").value+"',"+
         			"'Narration':'"+document.getElementById("Narration").value+"'"+
-        			"} <sentence>";
+        			"}<sentence>";
         			document.getElementById("TransactionAmtCR").value=parseFloat(parseFloat(document.getElementById("TransactionAmtCR").value)
     				+parseFloat(document.getElementById("TransactionAmt").value)).toFixed(2);
         		}    	
@@ -274,7 +274,7 @@ var clause="<clause>";
     			"'CHQ_ADV_NO':'"+document.getElementById("CHQ_ADV_NO").value+"',"+
     			"'IssueDate':'"+document.getElementById("IssueDate").value+"',"+
     			"'Narration':'"+document.getElementById("Narration").value+"'"+
-    			"} <sentence> ";
+    			"}<sentence>";
     			document.getElementById("TransactionAmtDr").value=parseFloat(parseFloat(document.getElementById("TransactionAmtDr").value)
 				+parseFloat(document.getElementById("TransactionAmt").value)).toFixed(2);
     		}
@@ -285,7 +285,7 @@ var clause="<clause>";
     			"'CHQ_ADV_NO':'"+document.getElementById("CHQ_ADV_NO").value+"',"+
     			"'IssueDate':'"+document.getElementById("IssueDate").value+"',"+
     			"'Narration':'"+document.getElementById("Narration").value+"'"+
-    			"} <sentence>";
+    			"}<sentence>";
     			document.getElementById("TransactionAmtCR").value=parseFloat(parseFloat(document.getElementById("TransactionAmtCR").value)
 				+parseFloat(document.getElementById("TransactionAmt").value)).toFixed(2);
     		}    	
@@ -399,7 +399,7 @@ var clause="<clause>";
 					<div class="col">
 					<select class="selectpicker" data-live-search="true" id="transactionHead" onkeydown="ValidateTransactonHead(event)">
 						<option th:each="optionType : ${gllist}"
-							th:value="${optionType.glCode}"
+							th:value="${optionType.glCode}+'#'+${optionType.glName}"
 							th:text="${optionType.glCode}+'-'+${optionType.glName}" class="selectpicker"  data-live-search="true">
 					</select>
 

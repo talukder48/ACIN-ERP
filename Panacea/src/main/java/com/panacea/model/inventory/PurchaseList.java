@@ -40,12 +40,12 @@ public class PurchaseList {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public PurchaseList(String purchaseId,int PurchaseSL,String BranchCode, Date orderdate, String remarks) {
+	public PurchaseList(String purchaseId,int PurchaseSL,String BranchCode, Date orderdate, String Comments) {
 		super();
 		PurchaseId = purchaseId;
 		this.PurchaseSL=PurchaseSL;
 		Orderdate = orderdate;
-		Remarks = remarks;
+		this.Comments = Comments;
 		this.BranchCode= BranchCode;
 	}
 	public String getPurchaseId() {

@@ -159,10 +159,19 @@ public class TransactionController {
 				while (it.hasNext()) {
 					Map<String, String> DataList = new HashMap<String, String>();
 					DataList = (Map<String, String>) it.next();
-					System.out.println(DataList);
-					if (DataList != null) {
-						TransactionData.add(new Transaction(1, BatchSL, UserBranch, TransactionList.getTran_date(), BatchNumber,DataList.get("transactionHead"),glcoderepository.TransactionHead(DataList.get("transactionHead")), Double.parseDouble(DataList.get("DrAmount")),Double.parseDouble(DataList.get("CrAmount")), DataList.get("Narration"),DataList.get("CHQ_ADV_NO"), DataList.get("IssueDate")));
-					}
+						TransactionData.add(new Transaction(1, 
+								BatchSL, 
+								UserBranch, 
+								TransactionList.getTran_date(), 
+								BatchNumber,
+								ProjectUtils.GetCode(DataList.get("transactionHead")),
+								glcoderepository.TransactionHead(ProjectUtils.GetCode(DataList.get("transactionHead"))),
+								Double.parseDouble(DataList.get("DrAmount")),
+								Double.parseDouble(DataList.get("CrAmount")),
+								DataList.get("Narration"),
+								DataList.get("CHQ_ADV_NO"),
+								DataList.get("IssueDate")));
+					
 					BatchSL++;
 				}
 				TransactionList.setDataGrid("");
@@ -176,7 +185,7 @@ public class TransactionController {
 		}
         redirectAttributes.addFlashAttribute("message", "Voucher Sucessfully Done ");
 
-		return "redirect:/VoucherEntryFormNew";
+		return "redirect:/GetVoucherList";
 	}
 
 	

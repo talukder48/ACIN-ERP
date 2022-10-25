@@ -46,7 +46,8 @@ public class InventoryController<RequsitionList> {
 	PurchaseListRepo PurchaseListRepo;
 	@Autowired
 	DisburseListRepo DisburseListRepo;
-
+	@Autowired
+	PurchaseDetailsRepo PurchaseDetailsRepo;
 	@GetMapping({ "/ProductList" })
 	public ModelAndView getAllProducts() {
 		ModelAndView mav = new ModelAndView("Inventory/Parameter/list-products");
@@ -107,24 +108,45 @@ public class InventoryController<RequsitionList> {
 	}
 
 	@PostMapping("/SavePurchaseInfo")
-	public String SavePurchaseInfo(@ModelAttribute PurchaseList purchase) {
+	public String SavePurchaseInfo(@ModelAttribute PurchaseList purchase,Model model,HttpServletRequest request) {
 		
-		LinkedList<Map> GridData = new LinkedList<Map>();
-		GridData = ProjectUtils.GridtoLinkedList(purchase.getPurchaseGrid());
-		Iterator it = GridData.iterator();
-		while (it.hasNext()) {
-			Map<String, String> DataList = new HashMap<String, String>();
-			DataList = (Map<String, String>) it.next();
-			System.out.println(DataList);
-			if (DataList != null) {
+		HttpSession sessionParam = request.getSession();
+		String BranchCode = sessionParam.getValue("UserBranch").toString();
+		if (BranchCode == null || BranchCode.equals("")) {
+			model.addAttribute("error", "User Session Timeout.");
+			return "index";
+		} else {
+			
+			Long id = template.execute(status -> {
 				
-			}
-		}
-		
-		System.out.println(purchase.getPurchaseGrid());
-		System.out.println(purchase.getOrderdate());
-		
-		return "redirect:/PurchaseList";
+				int purchaseSL =PurchaseListRepo.GetPurchaseOrderSL(BranchCode, purchase.getOrderdate());
+				String PurchaseID=PurchaseListRepo.GetPurchaseOrder(BranchCode, purchase.getOrderdate(), purchase.getOrderdate(), purchase.getOrderdate(), purchaseSL);
+				PurchaseList PurchaseList=new PurchaseList(PurchaseID,purchaseSL,BranchCode,purchase.getOrderdate(),"Un-Authorized");
+				List<PurchaseDetails> PurchaseDetailsList=new ArrayList();
+				LinkedList<Map> GridData = new LinkedList<Map>();
+				GridData = ProjectUtils.GridtoLinkedList(purchase.getPurchaseGrid());
+				Iterator it = GridData.iterator();
+				while (it.hasNext()) {
+					Map<String, String> DataList = new HashMap<String, String>();
+					DataList = (Map<String, String>) it.next();
+					
+					PurchaseDetailsList.add(new PurchaseDetails(PurchaseID,
+							ProjectUtils.GetCode(DataList.get("ProductCode")),
+							InventoryProductRepo.GetProductName(ProjectUtils.GetCode(DataList.get("ProductCode"))),
+							Integer.parseInt(DataList.get("NoofItem")),
+							Double.parseDouble(DataList.get("Rate")) ,
+							Integer.parseInt(DataList.get("NoofItem"))*Double.parseDouble(DataList.get("Rate"))
+							));
+					
+				}
+				PurchaseListRepo.save(PurchaseList);
+				PurchaseDetailsRepo.saveAll(PurchaseDetailsList);
+				
+				return 1L;
+			});
+						
+			return "redirect:/PurchaseList";
+		}		
 	}
 
 	@GetMapping("/showUpdatePurchaseForm")
