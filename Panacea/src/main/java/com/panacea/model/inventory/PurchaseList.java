@@ -24,40 +24,6 @@ public class PurchaseList {
 	private String Comments;
 	@Column(name = "OrderRef", length = 30)
 	private String OrderRef;
-	
-	private String PurchaseGrid;
-	
-	
-	public String getPurchaseGrid() {
-		return PurchaseGrid;
-	}
-	public void setPurchaseGrid(String purchaseGrid) {
-		PurchaseGrid = purchaseGrid;
-	}
-	public String getOrderRef() {
-		return OrderRef;
-	}
-	public void setOrderRef(String orderRef) {
-		OrderRef = orderRef;
-	}
-	public int getPurchaseSL() {
-		return PurchaseSL;
-	}
-	public void setPurchaseSL(int purchaseSL) {
-		PurchaseSL = purchaseSL;
-	}
-	public String getBranchCode() {
-		return BranchCode;
-	}
-	public void setBranchCode(String branchCode) {
-		BranchCode = branchCode;
-	}
-	public String getComments() {
-		return Comments;
-	}
-	public void setComments(String comments) {
-		Comments = comments;
-	}
 	@Column(name = "EntyBy", length = 20)
 	private String EntyBy;
 	@Column(name = "EntryOn")
@@ -136,6 +102,38 @@ public class PurchaseList {
 	public void setRejOn(Date rejOn) {
 		RejOn = rejOn;
 	}
+private String PurchaseGrid;
 	
+	
+	public String getPurchaseGrid() {
+		return PurchaseGrid;
+	}
+	public void setPurchaseGrid(String purchaseGrid) {
+		PurchaseGrid = purchaseGrid;
+	}
+	public String getOrderRef() {
+		return OrderRef;
+	}
+	public void setOrderRef(String orderRef) {
+		OrderRef = orderRef;
+	}
+	public int getPurchaseSL() {
+		return PurchaseSL;
+	}
+	public void setPurchaseSL(int purchaseSL) {
+		PurchaseSL = purchaseSL;
+	}
+	public String getBranchCode() {
+		return BranchCode;
+	}
+	public void setBranchCode(String branchCode) {
+		BranchCode = branchCode;
+	}
+	public String getComments() {
+		return Comments;
+	}
+	public void setComments(String comments) {
+		Comments = comments;
+	}
 
 }
