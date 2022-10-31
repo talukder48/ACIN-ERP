@@ -45,6 +45,7 @@
 							<a th:href="@{/PurchaseOrderGenerate(BranchCode=${Requisition.BranchCode},ReqDate=${Requisition.ReqDate},ReqSL=${Requisition.ReqSL})}" class="btn btn-success">Generate</a>
 							<a th:href="@{/RejectedByGenerator(BranchCode=${Requisition.BranchCode},ReqDate=${Requisition.ReqDate},ReqSL=${Requisition.ReqSL})}" class="btn btn-danger ml-2">Reject</a>
 							<a th:href="@{/showUpdateOrderApprovalForm(BranchCode=${Requisition.BranchCode},ReqDate=${Requisition.ReqDate},ReqSL=${Requisition.ReqSL})}" class="btn btn-info ml-2">View</a>
+
 						</td>
 					</tr>
 				</tbody>

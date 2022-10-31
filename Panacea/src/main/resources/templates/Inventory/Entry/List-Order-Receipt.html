@@ -1,7 +1,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 	
 	<head>
-		<title>Panacea@ Inventory Product List</title>
+		<title>Panacea@ Inventory System</title>
 		<link rel="stylesheet"  type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.25/datatables.min.css" />
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"  integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l"  crossorigin="anonymous" />
 	    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
@@ -13,8 +13,9 @@
 	<body>
 		<div th:replace="Inventory/fragments/SuperNavbar">This content will be gone</div>
 		<div class="container">
-			<div class="container my-3 bg-light">
-			<h3 class="col-md-12 text-center">Generated Order for Purchase :Inventor Management System</h3>
+		
+		  <div class="container my-3 bg-light">
+			<h3 class="col-md-12 text-center">Invoice Receipts:Inventor Management System</h3>
 			</div>
 			
 			<div class="container my-3 bg-light">
@@ -22,29 +23,28 @@
 		            <a th:href="@{/UserHome}" class="btn btn-warning">Back Home</a>
 		        </div>
 		    </div>
-			
-			
-			<table class="table table-bordered table-striped" id="productTable">
+					
+			<hr/>
+				
+			<table class="table table-bordered table-striped" id="purchaseTable">
 			
 				<thead>
-					<tr>
+					<tr>					    
 						<th>Order ID</th>
-						<th>Order Branch</th>
-						<th>Branch Name</th>
+						<th>Invoice</th>
+						<th>Company Name</th>
+						<th>Status</th>
 						<th>Actions</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:each="Order: ${GeneratedOrderList}">
-						<td th:text="${Order.OrderId}" />
-						<td th:text="${Order.OrderedBranch}" />
-						<td th:text="${Order.OrderedBranchName}" />
+					<tr th:each="invoice: ${InvoiceOrderList}">
+						<td th:text="${invoice.OrderId}" />
+						<td th:text="${invoice.InvoiceNo}" />
+						<td th:text="${invoice.ToCompany}" />
+						<td th:text="${invoice.Status}" />
 						<td>
-							<a th:href="@{/ViewOrderItemList(OrderId=${Order.OrderId})}" class="btn btn-info ml-2">View Items </a>
-							<a th:href="@{/IssueOrderLetter(OrderId=${Order.OrderId})}" class="btn btn-success"> Letter</a>
-							<a th:href="@{/GenerateOrderInvoice(OrderId=${Order.OrderId})}" class="btn btn-primary"> Invoice</a>
-							<a th:href="@{/GenerateOrderInvoice(OrderId=${Order.OrderId})}" class="btn btn-danger">Close</a>
-
+							<a th:href="@{/AddReceiptMaterials(OrderId=${invoice.OrderId},InvoiceNo=${invoice.InvoiceNo})}" class="btn btn-info">Add Receipt Material</a>
 						</td>
 					</tr>
 				</tbody>
@@ -56,7 +56,7 @@
 		<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.25/datatables.min.js"></script>
 		<script>
 			$(document).ready(function() {
-				$("#productTable").DataTable({
+				$("#purchaseTable").DataTable({
 						'aoColumnDefs': [{
         				'bSortable': false,
         				'aTargets': [-1] /* 1st one, start by the right */
@@ -66,6 +66,5 @@
 		</script>
 		<div th:replace="Inventory/footer :: footer">&copy; </div>
 	</body>
-	
 	
 </html>

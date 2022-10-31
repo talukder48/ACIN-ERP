@@ -44,7 +44,7 @@
 						<td th:text="${purchase.Remarks}" />
 						<td th:text="${purchase.Comments}" />
 						<td>
-							<a th:href="@{/showUpdatePurchaseForm(PurchaseId=${purchase.PurchaseId})}" class="btn btn-info">View</a>
+							<a th:href="@{/showAuthorizationPurchaseForm(PurchaseId=${purchase.PurchaseId})}" class="btn btn-info">View</a>
 							<a th:href="@{/AuthorizePurchaseOrder(PurchaseId=${purchase.PurchaseId})}" class="btn btn-success ml-2">Authorize</a>							
 							<a th:href="@{/RejectPurchaseOrder(PurchaseId=${purchase.PurchaseId})}" class="btn btn-danger ml-2">Reject</a>
 						</td>

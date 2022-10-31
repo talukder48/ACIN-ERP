@@ -48,6 +48,25 @@ public class InventoryController<RequsitionList> {
 	DisburseListRepo DisburseListRepo;
 	@Autowired
 	PurchaseDetailsRepo PurchaseDetailsRepo;
+	@Autowired
+	InvoiceOrderRepo InvoiceOrderRepo;
+	@Autowired
+	InvoiceOrderDetailsRepo InvoiceOrderDetailsRepo;
+	@Autowired
+	InventoryProductRepo InventoryProductRepo;
+	@Autowired
+	RequisitionListRepo RequisitionListRepo;
+	@Autowired
+	private TransactionTemplate template;
+	@Autowired
+	RequisitionRepo RequisitionRepo;
+	@Autowired
+	OrderListRepo OrderListRepo;
+	@Autowired
+	OrderDetailsRepo OrderDetailsRepo;
+	@Autowired
+	MasterBranchRepo MasterBranchRepo;
+	
 	@GetMapping({ "/ProductList" })
 	public ModelAndView getAllProducts() {
 		ModelAndView mav = new ModelAndView("Inventory/Parameter/list-products");
@@ -107,6 +126,7 @@ public class InventoryController<RequsitionList> {
 		return "Inventory/Entry/add-purchase-form";
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@PostMapping("/SavePurchaseInfo")
 	public String SavePurchaseInfo(@ModelAttribute PurchaseList purchase,Model model,HttpServletRequest request) {
 		
@@ -150,21 +170,41 @@ public class InventoryController<RequsitionList> {
 	}
 
 	@GetMapping("/showUpdatePurchaseForm")
-	public ModelAndView showUpdatePurchaseForm(@RequestParam int ProductCode, @RequestParam String Branch,
-			@RequestParam String Date, @RequestParam int PurchaseSL) {
-		System.out.println(ProductCode);
-		System.out.println(Branch);
-		System.out.println(Date);
-		System.out.println(PurchaseSL);
-		ModelAndView mav = new ModelAndView("Inventory/Entry/add-purchase-form");
-		/*
-		 * Employee employee = eRepo.findById(employeeId).get();
-		 * mav.addObject("employee", employee);
-		 */
-		// mav.addObject("purchase", newPurchase);
+	public ModelAndView showUpdatePurchaseForm(@RequestParam String PurchaseId) {
+		ModelAndView mav = new ModelAndView("Inventory/Entry/view-purchase-details");
+		mav.addObject("OrderID", PurchaseId);
+		mav.addObject("PurchaseDetailsList", PurchaseDetailsRepo.GetPurchaseDetails(PurchaseId));
 		return mav;
 	}
-
+	
+	
+	@GetMapping("/AuthorizePurchaseOrder")
+	public String AuthorizePurchaseOrder(@RequestParam String PurchaseId) {
+		return "redirect:/ApprovalPurchaseList";
+	}
+	
+	@GetMapping("/RejectPurchaseOrder")
+	public String RejectPurchaseOrder(@RequestParam String PurchaseId) {
+		return "redirect:/ApprovalPurchaseList";
+	}
+	
+	
+	@GetMapping({ "/ApprovalPurchaseList" })
+	public ModelAndView ApprovalPurchaseList() {
+		ModelAndView mav = new ModelAndView("Inventory/Authorization/list-purchase-Approval");
+		mav.addObject("PurchaseList", PurchaseListRepo.findAll());
+		return mav;
+	}
+	
+	@GetMapping("/showAuthorizationPurchaseForm")
+	public ModelAndView showAuthorizationPurchaseForm(@RequestParam String PurchaseId) {
+		ModelAndView mav = new ModelAndView("Inventory/Authorization/view-purchase-details-approval");
+		mav.addObject("OrderID", PurchaseId);
+		mav.addObject("PurchaseDetailsList", PurchaseDetailsRepo.GetPurchaseDetails(PurchaseId));
+		return mav;
+	}
+	
+	
 	@GetMapping("/deletePurchase")
 	public String DeletePurchase(@RequestParam int ProductCode, @RequestParam String Branch, @RequestParam String Date,
 			@RequestParam int PurchaseSL) {
@@ -230,14 +270,7 @@ public class InventoryController<RequsitionList> {
 		return "redirect:/DisburseList";
 	}
 
-	@Autowired
-	RequisitionListRepo RequisitionListRepo;
-
-	@Autowired
-	private TransactionTemplate template;
-	@Autowired
-	RequisitionRepo RequisitionRepo;
-
+	
 	@GetMapping({ "/RequisitionList" })
 	public ModelAndView RequisitionList() {
 		ModelAndView mav = new ModelAndView("Inventory/Entry/List-requisition");
@@ -253,8 +286,7 @@ public class InventoryController<RequsitionList> {
 		return "Inventory/Entry/add-requisition";
 	}
 
-	@Autowired
-	InventoryProductRepo InventoryProductRepo;
+	
 
 	@SuppressWarnings({ "deprecation", "unchecked" })
 	@PostMapping("/saveRequisition")
@@ -282,9 +314,12 @@ public class InventoryController<RequsitionList> {
 					DataList = (Map<String, String>) it.next();
 					System.out.println(DataList);
 					if (DataList != null) {
-						ReqList.add(new Requisition(BranchCode, RequisitionList.getReqDate(), MaxSL,
-								DataList.get("ProductCode"),
-								InventoryProductRepo.GetProductName(DataList.get("ProductCode")),
+						ReqList.add(new Requisition(
+								BranchCode, 
+								RequisitionList.getReqDate(), 
+								MaxSL,
+								ProjectUtils.GetCode(DataList.get("ProductCode")),
+								InventoryProductRepo.GetProductName(ProjectUtils.GetCode(DataList.get("ProductCode"))),
 								Integer.parseInt(DataList.get("NoofItem")), DataList.get("Narration"),
 								DataList.get("Purpose")));
 					}
@@ -413,12 +448,6 @@ public class InventoryController<RequsitionList> {
 		return mav;
 	}
 
-	@Autowired
-	OrderListRepo OrderListRepo;
-	@Autowired
-	OrderDetailsRepo OrderDetailsRepo;
-	@Autowired
-	MasterBranchRepo MasterBranchRepo;
 
 	@GetMapping("/PurchaseOrderGenerate")
 	public String PurchaseOrderGenerate(@RequestParam String BranchCode, @RequestParam Date ReqDate,
@@ -493,12 +522,7 @@ public class InventoryController<RequsitionList> {
 		return "redirect:/OrderGenerationList";
 	}
 
-	@GetMapping({ "/ApprovalPurchaseList" })
-	public ModelAndView ApprovalPurchaseList() {
-		ModelAndView mav = new ModelAndView("Inventory/Authorization/list-purchase-Approval");
-		mav.addObject("PurchaseList", PurchaseListRepo.findAll());
-		return mav;
-	}
+	
 
 	@GetMapping({ "/ApprovalDisburseList" })
 	public ModelAndView ApprovalDisburseList() {
@@ -629,10 +653,7 @@ public class InventoryController<RequsitionList> {
 		return mav;
 	}
 
-	@Autowired
-	InvoiceOrderRepo InvoiceOrderRepo;
-	@Autowired
-	InvoiceOrderDetailsRepo InvoiceOrderDetailsRepo;
+
 
 	@GetMapping("/GenerateOrderInvoice")
 	public String GenerateOrderInvoice(@RequestParam String OrderId, HttpServletRequest request) {
@@ -672,6 +693,9 @@ public class InventoryController<RequsitionList> {
 
 		return "redirect:/GetInvoiceOrderList";
 	}
+	
+	
+	
 	@GetMapping({ "/GetInvoiceOrderList" })
 	public ModelAndView GetInvoiceOrderList() {
 
@@ -679,6 +703,15 @@ public class InventoryController<RequsitionList> {
 		mav.addObject("InvoiceOrderList", InvoiceOrderRepo.GetAuthorizableInvoice());
 		return mav;
 	}
+	
+	@GetMapping({ "/GetAuthorizedInvoiceOrderList" })
+	public ModelAndView GetAuthorizedInvoiceOrderList() {
+		ModelAndView mav = new ModelAndView("Inventory/Entry/List-Order-Receipt");
+		mav.addObject("InvoiceOrderList", InvoiceOrderRepo.GetAuthorizedInvoiceOrder());
+		return mav;
+	}
+	
+	
 	
 	@GetMapping("/ViewOrderInvoiceDetails")
 	public ModelAndView ViewOrderInvoiceDetails(@RequestParam String OrderId, @RequestParam int InvoiceNo, HttpServletRequest request) {
