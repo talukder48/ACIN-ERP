@@ -33,7 +33,6 @@
 					<tr>					    
 						<th>Purchase ID</th>
 						<th>Purchase Date</th>
-						<th>Remarks</th>
 						<th>Comments</th>
 						<th>Actions</th>
 					</tr>
@@ -42,7 +41,6 @@
 					<tr th:each="purchase: ${PurchaseList}">
 						<td th:text="${purchase.PurchaseId}" />
 						<td th:text="${purchase.Orderdate}" />
-						<td th:text="${purchase.Remarks}" />
 						<td th:text="${purchase.Comments}" />
 						<td>
 							<a th:href="@{/showUpdatePurchaseForm(PurchaseId=${purchase.PurchaseId})}" class="btn btn-info">View</a>

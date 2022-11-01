@@ -1,7 +1,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 	
 	<head>
-		<title>Panacea@ Inventory Purchase List</title>
+		<title>Panacea@ Accounting Transaction List</title>
 		<link rel="stylesheet"  type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.25/datatables.min.css" />
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"  integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l"  crossorigin="anonymous" />
 	    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
@@ -12,51 +12,65 @@
 	
 	<body>
 		<div th:replace="Inventory/fragments/SuperNavbar">This content will be gone</div>
-		<div class="container">
 		
-		  <div class="container my-3 bg-light">
-			<h3 class="col-md-12 text-center">Purchase List for Authorization :Inventor Management System</h3>
+			<div class="container my-3 bg-light">
+			<h3 class="col-md-12 text-center">Purchase Details  By Invoice Order </h3>
 			</div>
 			
 			<div class="container my-3 bg-light">
 		        <div class="col-md-12 text-center">
-		            <a th:href="@{/UserHome}" class="btn btn-warning">Back Home</a>
+		            <span  class="btn btn-info" th:text="${OrderID}"></span>
+		            <a th:href="@{/GetAuthorizedInvoiceOrderList}" class="btn btn-warning">Back to List</a>
 		        </div>
 		    </div>
-					
-			<hr/>
-				
-			<table class="table table-bordered table-striped" id="purchaseTable">
+		    
+		    
+		    <div class="container">
+		    
+		    
+		<hr/>
+		
+		<table class="table table-bordered table-striped" id="productTable">
 			
 				<thead>
-					<tr>					    
-						<th>Purchase ID</th>
-						<th>Purchase Date</th>
-						<th>Comments</th>
-						<th>Actions</th>
+					<tr>
+						<th>Product</th>
+						<th>Product Name</th>
+						<th>No of Item</th>
+						<th>Rate</th>	
+						<th>Amount</th>						
+						<th>Action</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:each="purchase: ${PurchaseList}">
-						<td th:text="${purchase.PurchaseId}" />
-						<td th:text="${purchase.Orderdate}" />
-						<td th:text="${purchase.Comments}" />
+					<tr th:each="Purchase: ${PurchaseDetailsList}">
+						<td th:text="${Purchase.ProductCode}" />
+						<td th:text="${Purchase.ProductName}" />
+						<td th:text="${Purchase.NoOfItem}" />
+						<td th:text="${Purchase.UnitPrice}" />
+						<td th:text="${Purchase.Amount}" />
+						
 						<td>
-							<a th:href="@{/showAuthorizationPurchaseForm(PurchaseId=${purchase.PurchaseId})}" class="btn btn-info">View</a>
-							<a th:href="@{/AuthorizePurchaseOrder(PurchaseId=${purchase.PurchaseId})}" class="btn btn-success ml-2">Authorize</a>							
-							<a th:href="@{/RejectPurchaseOrder(PurchaseId=${purchase.PurchaseId})}" class="btn btn-danger ml-2">Reject</a>
+							<a th:href="@{/UpdatePurchaseMaterials(PurchaseId=${Purchase.PurchaseId},ProductCode=${Purchase.ProductCode})}" class="btn btn-info">Update</a>
+							<a th:href="@{/RemovePurchaseMeterials(PurchaseId=${Purchase.PurchaseId},ProductCode=${Purchase.ProductCode})}" class="btn btn-danger ml-2">Remove</a>
+				
 						</td>
 					</tr>
 				</tbody>
 				
 			</table>
+			
+			<hr/>
+			
+			
+			
 		</div>
 		
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 		<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.25/datatables.min.js"></script>
 		<script>
 			$(document).ready(function() {
-				$("#purchaseTable").DataTable({
+				$("#productTable").DataTable({
 						'aoColumnDefs': [{
         				'bSortable': false,
         				'aTargets': [-1] /* 1st one, start by the right */
@@ -64,8 +78,8 @@
 				});
 			})
 		</script>
-		<div th:replace="Inventory/footer :: footer">&copy; </div>
 		
+		<div th:replace="Inventory/footer :: footer">&copy; </div>
 	</body>
 	
 </html>

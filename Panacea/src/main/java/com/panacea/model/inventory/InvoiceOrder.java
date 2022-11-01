@@ -26,6 +26,10 @@ public class InvoiceOrder {
 	@Id
 	@Column(name = "InvoiceNo", length = 10)
 	private int InvoiceNo;
+	@Column(name = "PurchaseId", length = 20)
+	private String PurchaseId;
+	@Column(name = "OrderDate", length = 20)
+	private Date OrderDate;
 	@Column(name="ToCompany",length=100)
 	private String ToCompany;
 	@Column(name="Subject",length=400)
@@ -122,10 +126,25 @@ public class InvoiceOrder {
 	public void setAuthOn(Date authOn) {
 		AuthOn = authOn;
 	}
-	public InvoiceOrder(String orderId, int invoiceNo, String toCompany, String subject, String body, String status,
+	
+	public Date getOrderDate() {
+		return OrderDate;
+	}
+	public void setOrderDate(Date orderDate) {
+		OrderDate = orderDate;
+	}
+	
+	public String getPurchaseId() {
+		return PurchaseId;
+	}
+	public void setPurchaseId(String purchaseId) {
+		PurchaseId = purchaseId;
+	}
+	public InvoiceOrder(String orderId,Date OrderDate, int invoiceNo, String toCompany, String subject, String body, String status,
 			String entryBy, Date entryOn) {
 		super();
 		OrderId = orderId;
+		this.OrderDate=OrderDate;
 		InvoiceNo = invoiceNo;
 		ToCompany = toCompany;
 		Subject = subject;

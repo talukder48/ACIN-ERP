@@ -670,7 +670,9 @@ public class InventoryController<RequsitionList> {
 			int invoiceNumber = InvoiceOrderRepo.GetOrderInvoiceNumber(OrderId);
 			OrderList ExistOrderList = OrderListRepo.findById(OrderId).orElseThrow();
 			List<OrderDetails> OrderDetails = OrderDetailsRepo.GetSelectedMaterialFromOrder(OrderId);
-			InvoiceOrder InvoiceOrder = new InvoiceOrder(OrderId, invoiceNumber, ExistOrderList.getToCompany(),
+			InvoiceOrder InvoiceOrder = new InvoiceOrder(OrderId, 
+					new java.sql.Date(new java.util.Date().getTime()),
+					invoiceNumber, ExistOrderList.getToCompany(),
 					ExistOrderList.getSubject(), ExistOrderList.getBody(), "Un-Authorized", UserId,
 					new java.sql.Date(new java.util.Date().getTime()));
 			List<InvoiceOrderDetails> InvoiceOrderDetailsList = new ArrayList<InvoiceOrderDetails>();
@@ -706,11 +708,66 @@ public class InventoryController<RequsitionList> {
 	
 	@GetMapping({ "/GetAuthorizedInvoiceOrderList" })
 	public ModelAndView GetAuthorizedInvoiceOrderList() {
-		ModelAndView mav = new ModelAndView("Inventory/Entry/List-Order-Receipt");
+		ModelAndView mav = new ModelAndView("Inventory/Entry/list-order-receipt");
 		mav.addObject("InvoiceOrderList", InvoiceOrderRepo.GetAuthorizedInvoiceOrder());
 		return mav;
 	}
 	
+	@GetMapping({ "/AddReceiptMaterials" })
+	public ModelAndView AddReceiptMaterials(@RequestParam String OrderId, @RequestParam int InvoiceNo, HttpServletRequest request) {
+		HttpSession sessionParam = request.getSession();
+		
+			String UserBranch = null;
+		try {
+			UserBranch = sessionParam.getValue("UserBranch").toString();
+		} catch (Exception e) {
+
+		}
+		InvoiceOrder InvoiceOrder=InvoiceOrderRepo.findById(new InvoiceOrderId(OrderId,InvoiceNo)).get();
+		
+		List<InvoiceOrderDetails> InvoiceOrderDetails=InvoiceOrderDetailsRepo.GetInvoiceOrderDetails(OrderId, InvoiceNo);
+		List<PurchaseDetails> PurchaseDetailsList=new ArrayList();
+		
+		String PurchaseId=InvoiceOrder.getPurchaseId();
+		if(PurchaseId==null) {
+			Date Sysdate=new java.sql.Date(new java.util.Date().getTime());
+			int PurchaseSl=PurchaseListRepo.GetPurchaseOrderSL(UserBranch, Sysdate);
+			PurchaseId=PurchaseListRepo.GetPurchaseOrder(UserBranch, Sysdate, Sysdate, Sysdate, PurchaseSl);
+			PurchaseList PurchaseList=new PurchaseList(PurchaseId,PurchaseSl,UserBranch,Sysdate,"Invoice Order:"+OrderId+" & Invoice Number:"+InvoiceNo);
+			InvoiceOrder.setPurchaseId(PurchaseId);
+			
+			
+			Long id = template.execute(status -> {
+			Iterator it = InvoiceOrderDetails.iterator();
+			while (it.hasNext()) {
+				InvoiceOrderDetails orderList = (InvoiceOrderDetails) it.next();
+				PurchaseDetailsList.add(new PurchaseDetails
+						(InvoiceOrder.getPurchaseId(), 
+						orderList.getProductCode(),
+						orderList.getProductName(), 
+						orderList.getOrderedNoOfItem(),
+						orderList.getActualUnitPrice(),
+						orderList.getTotalAmount()));
+
+			}
+			PurchaseListRepo.save(PurchaseList);
+			InvoiceOrderRepo.save(InvoiceOrder);
+			PurchaseDetailsRepo.saveAll(PurchaseDetailsList);
+			return 1L;
+			});
+		}
+		{
+			PurchaseId=InvoiceOrder.getPurchaseId();
+		}
+		
+		
+		
+		ModelAndView mav = new ModelAndView("Inventory/Entry/view-purchase-details-by-receipt");
+		
+		mav.addObject("OrderID",PurchaseId);
+		mav.addObject("PurchaseDetailsList", PurchaseDetailsRepo.GetPurchaseDetails(PurchaseId));
+		return mav;
+	}
 	
 	
 	@GetMapping("/ViewOrderInvoiceDetails")

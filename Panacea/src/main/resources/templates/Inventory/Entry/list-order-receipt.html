@@ -33,7 +33,7 @@
 						<th>Order ID</th>
 						<th>Invoice</th>
 						<th>Company Name</th>
-						<th>Status</th>
+						<th>Purchase Id</th>
 						<th>Actions</th>
 					</tr>
 				</thead>
@@ -42,9 +42,11 @@
 						<td th:text="${invoice.OrderId}" />
 						<td th:text="${invoice.InvoiceNo}" />
 						<td th:text="${invoice.ToCompany}" />
-						<td th:text="${invoice.Status}" />
+						<td th:text="${invoice.PurchaseId}" />
 						<td>
-							<a th:href="@{/AddReceiptMaterials(OrderId=${invoice.OrderId},InvoiceNo=${invoice.InvoiceNo})}" class="btn btn-info">Add Receipt Material</a>
+							<a th:href="@{/AddReceiptMaterials(OrderId=${invoice.OrderId},InvoiceNo=${invoice.InvoiceNo})}" class="btn btn-info"> Receipt Material</a>
+							<a th:href="@{/CompleteReceiptMaterials(OrderId=${invoice.OrderId},InvoiceNo=${invoice.InvoiceNo})}" class="btn btn-info"> Complete</a>
+
 						</td>
 					</tr>
 				</tbody>
