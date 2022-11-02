@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.panacea.model.acounting.Transaction;
+import com.panacea.model.acounting.TransactionList;
 import com.panacea.model.common.DropDownType;
 import com.panacea.model.common.UserMaster;
 import com.panacea.model.inventory.*;
@@ -31,6 +32,8 @@ import com.panacea.model.key.InvoiceOrderId;
 import com.panacea.model.key.OrderDetailsId;
 import com.panacea.model.key.RequisitionListId;
 import com.panacea.repository.Accounting.GLCodeRepo;
+import com.panacea.repository.Accounting.TransactionListRepo;
+import com.panacea.repository.Accounting.TransactionRepo;
 import com.panacea.repository.common.*;
 import com.panacea.repository.inventory.*;
 
@@ -141,7 +144,7 @@ public class InventoryController<RequsitionList> {
 				
 				int purchaseSL =PurchaseListRepo.GetPurchaseOrderSL(BranchCode, purchase.getOrderdate());
 				String PurchaseID=PurchaseListRepo.GetPurchaseOrder(BranchCode, purchase.getOrderdate(), purchase.getOrderdate(), purchase.getOrderdate(), purchaseSL);
-				PurchaseList PurchaseList=new PurchaseList(PurchaseID,purchaseSL,BranchCode,purchase.getOrderdate(),"Un-Authorized");
+				PurchaseList PurchaseList=new PurchaseList(PurchaseID,purchaseSL,BranchCode,purchase.getOrderdate(),"Dirrect Purchase");
 				List<PurchaseDetails> PurchaseDetailsList=new ArrayList();
 				LinkedList<Map> GridData = new LinkedList<Map>();
 				GridData = ProjectUtils.GridtoLinkedList(purchase.getPurchaseGrid());
@@ -176,15 +179,79 @@ public class InventoryController<RequsitionList> {
 		mav.addObject("PurchaseDetailsList", PurchaseDetailsRepo.GetPurchaseDetails(PurchaseId));
 		return mav;
 	}
+	@Autowired
+	TransactionListRepo TransactionListRepo;
+	@Autowired
+	TransactionRepo TransactionRepo;
+	
 	
 	
 	@GetMapping("/AuthorizePurchaseOrder")
-	public String AuthorizePurchaseOrder(@RequestParam String PurchaseId) {
+	public String AuthorizePurchaseOrder(@RequestParam String PurchaseId,HttpServletRequest request) {
+		
+		HttpSession sessionParam = request.getSession();
+		String UserId = sessionParam.getValue("UserId").toString();
+		List<Transaction> TransactionData = new ArrayList<Transaction>();		
+		PurchaseList PurchaseList=PurchaseListRepo.findById(PurchaseId).get();
+		List<PurchaseDetails> PurchaseDetailsList=PurchaseDetailsRepo.GetPurchaseDetails(PurchaseId);
+		
+		
+		Long id = template.execute(status -> {
+		Date TransactionDate=new java.sql.Date(new java.util.Date().getTime());
+		int BatchNumber=TransactionListRepo.FindBatchNumber(PurchaseList.getBranchCode(),TransactionDate);
+		Iterator it = PurchaseDetailsList.iterator();
+		int BatchSL=1;
+		Double TotalTranAmt=0.00;
+		while (it.hasNext()) {
+			PurchaseDetails PurchaseDoc = (PurchaseDetails) it.next();
+			
+			InventoryProduct Product =InventoryProductRepo.findById(PurchaseDoc.getProductCode()).get();
+			TotalTranAmt+=PurchaseDoc.getAmount();
+			TransactionData.add(new Transaction(1, 
+					BatchSL, 
+					PurchaseList.getBranchCode(), 
+					TransactionDate, 
+					BatchNumber,
+					Product.getPurchaseGL(),
+					glcoderepository.TransactionHead(Product.getPurchaseGL()),
+					PurchaseDoc.getAmount(),
+					0,
+					"Stock of "+Product.getProductName()+" No of Item: "+PurchaseDoc.getNoOfItem(),
+					"Not Applicable",
+					"Not Applicable"));
+		
+		       BatchSL++;
+		       
+		       TransactionData.add(new Transaction(1, 
+						BatchSL, 
+						PurchaseList.getBranchCode(), 
+						TransactionDate, 
+						BatchNumber,
+						Product.getStockGL(),
+						glcoderepository.TransactionHead(Product.getStockGL()),
+						0,
+						PurchaseDoc.getAmount(),
+						"Stock of "+Product.getProductName()+" No of Item: "+PurchaseDoc.getNoOfItem(),
+						"Not Applicable",
+						"Not Applicable"));
+			
+			       BatchSL++;
+		}
+		TransactionList TransactionList= new TransactionList(PurchaseList.getBranchCode(),TransactionDate,BatchNumber,"Voucher for:"+PurchaseList.getComments());
+		TransactionList.setDebitAmt(TotalTranAmt);
+		TransactionList.setCreditAmt(TotalTranAmt);
+		TransactionList.setEntyBy(UserId);
+		TransactionList.setEntyOn(TransactionDate);
+		TransactionListRepo.save(TransactionList);
+		TransactionRepo.saveAll(TransactionData);
+		return 1L;
+		});
 		return "redirect:/ApprovalPurchaseList";
+		
 	}
 	
 	@GetMapping("/RejectPurchaseOrder")
-	public String RejectPurchaseOrder(@RequestParam String PurchaseId) {
+	public String RejectPurchaseOrder(@RequestParam String PurchaseId,HttpServletRequest request) {
 		return "redirect:/ApprovalPurchaseList";
 	}
 	

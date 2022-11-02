@@ -37,13 +37,13 @@
           Inventory Entry
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown1">
-          <a class="dropdown-item"  th:href="@{/PurchaseList}">Purchase Entry</a>
+          <a class="dropdown-item"  th:href="@{/PurchaseList}">Dirrect Purchase</a>
           <a class="dropdown-item" th:href="@{/DisburseList}" >Disburse Entry</a>
 
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" th:href="@{/RequisitionList}">New Requisition Entry</a>
-          <a class="dropdown-item" th:href="@{/GetGeneratedOrderList}">Requisition Order Creation</a>
-          <a class="dropdown-item" th:href="@{/GetAuthorizedInvoiceOrderList}" >Order Receipts</a>
+          <a class="dropdown-item" th:href="@{/RequisitionList}">Purchase Requisition </a>
+          <a class="dropdown-item" th:href="@{/GetGeneratedOrderList}">Purchase Order Generation</a>
+          <a class="dropdown-item" th:href="@{/GetAuthorizedInvoiceOrderList}" > Material Receipt</a>
 
         </div>
       </li>
@@ -53,12 +53,12 @@
           Authorization
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown2">
-          <a class="dropdown-item"  th:href="@{/ApprovalPurchaseList}">Purchase Authorization</a>
+          <a class="dropdown-item"  th:href="@{/ApprovalPurchaseList}">Purchase Confirmation</a>
           <a class="dropdown-item" th:href="@{/ApprovalDisburseList}" >Disburse Authorization </a>
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" th:href="@{/AprrovalRequisitionList}">Requisition Authorization</a>
+          <a class="dropdown-item" th:href="@{/AprrovalRequisitionList}">Requisition Approval</a>
           <a class="dropdown-item" th:href="@{/OrderGenerationList}">Requisition Received </a>
-          <a class="dropdown-item" th:href="@{/GetInvoiceOrderList}">Invoice Order Authorization</a>
+          <a class="dropdown-item" th:href="@{/GetInvoiceOrderList}">Purchase Order Approval</a>
         </div>
       </li>
       
@@ -70,7 +70,7 @@
         <div class="dropdown-menu" aria-labelledby="navbarDropdown2">
           <a class="dropdown-item"  th:href="@{/ListAuthorizedRequisition}">Requisition List </a>
           <a class="dropdown-item"  th:href="@{/ListAuthorizedPurchase}">Purchase List </a>
-          <a class="dropdown-item" th:href="@{/ListInvoiceOrder}">Invoice Order List </a>
+          <a class="dropdown-item" th:href="@{/ListInvoiceOrder}">Purchase Order List </a>
           <div class="dropdown-divider"></div>
          
         </div>
