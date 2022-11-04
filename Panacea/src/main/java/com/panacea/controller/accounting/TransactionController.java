@@ -42,7 +42,9 @@ public class TransactionController {
 
 	@Autowired
 	private TransactionTemplate template;
-
+	@Autowired
+	GLBalanceRepo GLBalanceRepo;
+	
 	@GetMapping({ "/OnlyAuthorizableList" })
 	public ModelAndView TransactionAuthorization() {
 		ModelAndView mav = new ModelAndView("Accounting/Authorization/List-Transactions");
@@ -66,7 +68,7 @@ public class TransactionController {
 	public String AuthorizeVoucher(@ModelAttribute TransactionList transactionList) {
 		System.out.println(transactionList.getTran_branch());
 		System.out.println("AuthorizeVoucher");
-
+		//GLBalanceRepo
 		//to do lots of things
 		
 		return "redirect:/OnlyAuthorizableList";
