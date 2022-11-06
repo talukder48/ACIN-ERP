@@ -22,8 +22,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.panacea.model.acounting.GLBalance;
 import com.panacea.model.acounting.Transaction;
 import com.panacea.model.acounting.TransactionList;
+import com.panacea.model.inventory.PurchaseDetails;
+import com.panacea.model.key.GLBalanceId;
 import com.panacea.model.key.TransactionListId;
 import com.panacea.repository.Accounting.*;
 import com.panacea.utils.ProjectUtils;
@@ -39,7 +42,8 @@ public class TransactionController {
 	TransactionListRepo TransactionListRepo;
 	@Autowired
 	TransactionRepo TransactionRepo;
-
+	@Autowired
+	GLCodeRepo GLCodeRepo;
 	@Autowired
 	private TransactionTemplate template;
 	@Autowired
@@ -48,7 +52,7 @@ public class TransactionController {
 	@GetMapping({ "/OnlyAuthorizableList" })
 	public ModelAndView TransactionAuthorization() {
 		ModelAndView mav = new ModelAndView("Accounting/Authorization/List-Transactions");
-		mav.addObject("TransactionList", TransactionListRepo.findAll());
+		mav.addObject("TransactionList", TransactionListRepo.GetUnAuthorizedTransaction());
 		return mav;
 	}
 	
@@ -64,13 +68,31 @@ public class TransactionController {
 		mav.addObject("TransactionEntityList", TransactionRepo.FindVoucherDetails(tran_branch,tran_date,tran_batch));
 		return mav;
 	}
+	
 	@PostMapping("/AuthorizeVoucher")
 	public String AuthorizeVoucher(@ModelAttribute TransactionList transactionList) {
 		System.out.println(transactionList.getTran_branch());
-		System.out.println("AuthorizeVoucher");
-		//GLBalanceRepo
-		//to do lots of things
 		
+		Long id = template.execute(status -> {
+		
+		TransactionList TransactionList=TransactionListRepo.findById(new TransactionListId(transactionList.getTran_branch(), transactionList.getTran_date(), transactionList.getTran_batch())).get();
+		List<Transaction> transactionDetailsList=TransactionRepo.FindVoucherDetails(transactionList.getTran_branch(),transactionList.getTran_date(),transactionList.getTran_batch());
+		Iterator it = transactionDetailsList.iterator();
+		while (it.hasNext()) {
+			Transaction Transaction = (Transaction) it.next();
+			String glcodeString=Transaction.getGlcode();
+			while (glcodeString!=null && !glcodeString.equals("")) {
+				GLBalance GLBalance=GLBalanceRepo.findById(new GLBalanceId(Transaction.getTran_branch(),glcodeString)).get();
+				GLBalance.setGlBalance(GLBalance.getGlBalance()-Transaction.getDebit_amt()+Transaction.getCredit_amt());
+				GLBalanceRepo.save(GLBalance);
+				glcodeString=GLCodeRepo.GetPrimeGL(glcodeString);
+			}			
+		}
+		TransactionList.setAuthBy("Auth");
+		TransactionList.setAuthOn(new java.sql.Date(new java.util.Date().getTime()));
+		TransactionListRepo.save(TransactionList);
+		return 1L;
+		});
 		return "redirect:/OnlyAuthorizableList";
 	}
 	

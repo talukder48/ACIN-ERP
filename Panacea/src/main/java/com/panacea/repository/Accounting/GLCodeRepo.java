@@ -16,4 +16,6 @@ public interface GLCodeRepo extends JpaRepository <GLCode,String> {
 	@Query(value = "SELECT `gl_name` FROM `as_glcode` WHERE `gl_code`=?1", nativeQuery = true)
 	 String TransactionHead(String TransactionHead);
 	
+	@Query(value = "SELECT `primegl` FROM `as_glcode` WHERE `gl_code`=?1", nativeQuery = true)
+	 String GetPrimeGL(String TransactionHead);
 }

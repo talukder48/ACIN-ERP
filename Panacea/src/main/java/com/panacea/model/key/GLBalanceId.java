@@ -39,6 +39,10 @@ public class GLBalanceId implements Serializable{
 		BranchCode = branchCode;
 		this.glCode = glCode;
 	}
+	public GLBalanceId() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 	
 	
 }
