@@ -28,6 +28,7 @@ import com.panacea.model.acounting.TransactionList;
 import com.panacea.model.common.DropDownType;
 import com.panacea.model.common.UserMaster;
 import com.panacea.model.inventory.*;
+import com.panacea.model.key.InProductCountId;
 import com.panacea.model.key.InvoiceOrderId;
 import com.panacea.model.key.OrderDetailsId;
 import com.panacea.model.key.RequisitionListId;
@@ -69,7 +70,8 @@ public class InventoryController<RequsitionList> {
 	OrderDetailsRepo OrderDetailsRepo;
 	@Autowired
 	MasterBranchRepo MasterBranchRepo;
-	
+	@Autowired
+	InProductCountRepo InProductCountRepo;
 	@GetMapping({ "/ProductList" })
 	public ModelAndView getAllProducts() {
 		ModelAndView mav = new ModelAndView("Inventory/Parameter/list-products");
@@ -195,7 +197,6 @@ public class InventoryController<RequsitionList> {
 		PurchaseList PurchaseList=PurchaseListRepo.findById(PurchaseId).get();
 		List<PurchaseDetails> PurchaseDetailsList=PurchaseDetailsRepo.GetPurchaseDetails(PurchaseId);
 		
-		
 		Long id = template.execute(status -> {
 		Date TransactionDate=new java.sql.Date(new java.util.Date().getTime());
 		int BatchNumber=TransactionListRepo.FindBatchNumber(PurchaseList.getBranchCode(),TransactionDate);
@@ -204,7 +205,8 @@ public class InventoryController<RequsitionList> {
 		Double TotalTranAmt=0.00;
 		while (it.hasNext()) {
 			PurchaseDetails PurchaseDoc = (PurchaseDetails) it.next();
-			
+			InProductCount 		InProductCount=		InProductCountRepo.findById(new InProductCountId(PurchaseList.getBranchCode(),PurchaseDoc.getProductCode())).get();
+			InProductCount.setProductCount(InProductCount.getProductCount()+PurchaseDoc.getNoOfItem());
 			InventoryProduct Product =InventoryProductRepo.findById(PurchaseDoc.getProductCode()).get();
 			TotalTranAmt+=PurchaseDoc.getAmount();
 			TransactionData.add(new Transaction(1, 
@@ -236,6 +238,7 @@ public class InventoryController<RequsitionList> {
 						"Not Applicable"));
 			
 			       BatchSL++;
+			       InProductCountRepo.save(InProductCount);
 		}
 		TransactionList TransactionList= new TransactionList(PurchaseList.getBranchCode(),TransactionDate,BatchNumber,"Voucher for:"+PurchaseList.getComments());
 		TransactionList.setDebitAmt(TotalTranAmt);
