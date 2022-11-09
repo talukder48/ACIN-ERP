@@ -7,7 +7,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "HR_ARMY_RANK")
-public class ArmyRank {
+public class Designation {
 	@Id
 	@Column(name="RankId",length=4)
 	private String RankId;
@@ -16,13 +16,13 @@ public class ArmyRank {
 	@Column(name="RankDescription",length=50)
 	private String RankDescription;
 	
-	public ArmyRank(String rankId, String rankType, String rankDescription) {
+	public Designation(String rankId, String rankType, String rankDescription) {
 		super();
 		RankId = rankId;
 		RankType = rankType;
 		RankDescription = rankDescription;
 	}
-	public ArmyRank() {
+	public Designation() {
 		super();
 		// TODO Auto-generated constructor stub
 	}

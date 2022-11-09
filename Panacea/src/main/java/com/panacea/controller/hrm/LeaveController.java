@@ -27,7 +27,6 @@ import com.panacea.model.hrm.ArmyEmployee;
 import com.panacea.model.hrm.LeaveRegister;
 import com.panacea.model.hrm.RpRegister;
 import com.panacea.repository.common.UserMaserRepo;
-import com.panacea.repository.hrm.ArmyCompayRepo;
 import com.panacea.repository.hrm.ArmyEmployeeRepo;
 import com.panacea.repository.hrm.ArmyRankRepo;
 import com.panacea.repository.hrm.ArmyTradeRepo;
@@ -64,8 +63,7 @@ public class LeaveController {
 	@Autowired
 	EmployeeRepo employeeRepo;
 	
-	@Autowired
-	ArmyCompayRepo ArmyCompayRepo;
+	
 	@Autowired
 	ArmyRankRepo ArmyRankRepo;
 	@Autowired
@@ -79,7 +77,7 @@ public class LeaveController {
 	@GetMapping({ "/EmployeeList" })
 	public ModelAndView getEmployeeList() {
 		ModelAndView mav = new ModelAndView("HRM/List-Employee");
-		mav.addObject("EmployeeList", ArmyEmployeeRepo.findAll());
+		mav.addObject("EmployeeList", employeeRepo.findAll());
 		return mav;
 	}
 
@@ -116,7 +114,6 @@ public class LeaveController {
 		model.addAttribute("Employee", ArmyEmployee);
 		model.addAttribute("RankList", ArmyRankRepo.findAll());
 		model.addAttribute("TradeList", ArmyTradeRepo.findAll());
-		model.addAttribute("CompanyList", ArmyCompayRepo.findAll());
 		return "HRM/add-Employee";
 	}
 	@Autowired
@@ -166,7 +163,6 @@ public class LeaveController {
 		model.addObject("LivingList", LivingList);
 		model.addObject("RankList", ArmyRankRepo.findAll());
 		model.addObject("TradeList", ArmyTradeRepo.findAll());
-		model.addObject("CompanyList", ArmyCompayRepo.findAll());
 		return model;
 	}
 

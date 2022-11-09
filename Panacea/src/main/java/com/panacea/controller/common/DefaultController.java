@@ -11,9 +11,8 @@ import com.panacea.model.acounting.Charges;
 import com.panacea.model.acounting.GLCode;
 import com.panacea.model.acounting.ProductParam;
 import com.panacea.model.common.UserMaster;
-import com.panacea.model.hrm.ArmyCompany;
 import com.panacea.model.hrm.ArmyEmployee;
-import com.panacea.model.hrm.ArmyRank;
+import com.panacea.model.hrm.Designation;
 import com.panacea.model.hrm.ArmyTrade;
 import com.panacea.model.hrm.Employee;
 import com.panacea.model.hrm.LeaveDescription;
@@ -166,8 +165,7 @@ public class DefaultController {
 	
 	
     
-    @Autowired
-    ArmyCompayRepo ArmyCompayRepo;
+   
     @Autowired
     ArmyRankRepo ArmyRankRepo;
     @Autowired
@@ -185,36 +183,25 @@ public class DefaultController {
     
     @GetMapping("/DefaultLeaveParameterCreation")
    	public String DefaultParameterCreation() {
-   		if (ArmyCompayRepo.count() == 0) {
-   			List <ArmyCompany> ArmyCompanyList = new ArrayList<ArmyCompany>() ;
-   			ArmyCompanyList.add(new ArmyCompany("000","Not Applicable"));
-   			ArmyCompanyList.add(new ArmyCompany("101","BHQ"));	
-   			ArmyCompanyList.add(new ArmyCompany("102","HQ Company"));	
-   			ArmyCompanyList.add(new ArmyCompany("103","OP Company"));	
-   			ArmyCompanyList.add(new ArmyCompany("104","RR Company"));	
-   			ArmyCompanyList.add(new ArmyCompany("105","Radio Company"));	
-   			ArmyCompanyList.add(new ArmyCompany("106","BSC"));
-   			ArmyCompanyList.add(new ArmyCompany("107","ABSC"));
-   			ArmyCompayRepo.saveAll(ArmyCompanyList);
-   		}
+   		
    		if (ArmyRankRepo.count() == 0) {
-   			List <ArmyRank> ArmyRankList = new ArrayList<ArmyRank>() ;
-   			ArmyRankList.add(new ArmyRank("101","OFFR","Second Lieutenant"));	
-   			ArmyRankList.add(new ArmyRank("102","OFFR","Lieutenant"));	
-   			ArmyRankList.add(new ArmyRank("103","OFFR","Captain"));	
-   			ArmyRankList.add(new ArmyRank("104","OFFR","Major"));	
-   			ArmyRankList.add(new ArmyRank("105","OFFR","Lieutenant Colonel"));	
-   			ArmyRankList.add(new ArmyRank("106","OFFR","Honorary captain"));
+   			List <Designation> ArmyRankList = new ArrayList<Designation>() ;
+   			ArmyRankList.add(new Designation("101","OFFR","Second Lieutenant"));	
+   			ArmyRankList.add(new Designation("102","OFFR","Lieutenant"));	
+   			ArmyRankList.add(new Designation("103","OFFR","Captain"));	
+   			ArmyRankList.add(new Designation("104","OFFR","Major"));	
+   			ArmyRankList.add(new Designation("105","OFFR","Lieutenant Colonel"));	
+   			ArmyRankList.add(new Designation("106","OFFR","Honorary captain"));
    			
-   			ArmyRankList.add(new ArmyRank("201","JCO","Honorary Lieutenant"));
-   			ArmyRankList.add(new ArmyRank("202","JCO","Master Warrant Officer"));
-   			ArmyRankList.add(new ArmyRank("203","JCO","Senior Warrant officer"));
-   			ArmyRankList.add(new ArmyRank("204","JCO","Warrant Officer"));
+   			ArmyRankList.add(new Designation("201","JCO","Honorary Lieutenant"));
+   			ArmyRankList.add(new Designation("202","JCO","Master Warrant Officer"));
+   			ArmyRankList.add(new Designation("203","JCO","Senior Warrant officer"));
+   			ArmyRankList.add(new Designation("204","JCO","Warrant Officer"));
    			
-   			ArmyRankList.add(new ArmyRank("301","OR","Corporal"));
-   			ArmyRankList.add(new ArmyRank("302","OR","Lance Corporal"));
-   			ArmyRankList.add(new ArmyRank("303","OR","Sainik"));
-   			ArmyRankList.add(new ArmyRank("304","OR","NC(E)"));
+   			ArmyRankList.add(new Designation("301","OR","Corporal"));
+   			ArmyRankList.add(new Designation("302","OR","Lance Corporal"));
+   			ArmyRankList.add(new Designation("303","OR","Sainik"));
+   			ArmyRankList.add(new Designation("304","OR","NC(E)"));
    			ArmyRankRepo.saveAll(ArmyRankList);
    		}
    		if (ArmyTradeRepo.count() == 0) {

@@ -247,6 +247,9 @@ public class InventoryController<RequsitionList> {
 		TransactionList.setEntyOn(TransactionDate);
 		TransactionListRepo.save(TransactionList);
 		TransactionRepo.saveAll(TransactionData);
+		PurchaseList.setApproveBy(UserId);
+		PurchaseList.setApproveOn(TransactionDate);
+		PurchaseListRepo.save(PurchaseList);
 		return 1L;
 		});
 		return "redirect:/ApprovalPurchaseList";
@@ -262,7 +265,7 @@ public class InventoryController<RequsitionList> {
 	@GetMapping({ "/ApprovalPurchaseList" })
 	public ModelAndView ApprovalPurchaseList() {
 		ModelAndView mav = new ModelAndView("Inventory/Authorization/list-purchase-Approval");
-		mav.addObject("PurchaseList", PurchaseListRepo.findAll());
+		mav.addObject("PurchaseList", PurchaseListRepo.GetUnauthorizedPurchase());
 		return mav;
 	}
 	

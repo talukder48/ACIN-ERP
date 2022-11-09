@@ -1,0 +1,88 @@
+<nav class="navbar navbar-expand-lg navbar bg-warning navbar-light" style="background-color: #33cccc;">
+  <a class="navbar-brand" href="/UserHome">[[${session.BranchName}]]</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+    
+      <li class="nav-item dropdown">
+         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown3" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+           [[${session.UserName}]]
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown3">
+            <a class="dropdown-item">   User ID: [[${session.UserId}]] </a>
+            <a class="dropdown-item"  th:href="@{/AccountsInfo(UserId=${session.UserId})}">User Info </a>
+        	<a class="dropdown-item"  th:href="@{/LogOut}">Logout </a>
+         
+        </div>
+      </li>
+      
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown0" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+         Parameter Setup
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown0">
+          <a class="dropdown-item" th:href="@{/erpUserList}">User Setup</a>
+          <a class="dropdown-item" th:href="@{/erpUserList}">Allowance Setup</a>
+          <a class="dropdown-item" th:href="@{/erpUserList}">Deduction Setup</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#">System Setup</a>
+        </div>
+      </li>
+      
+      
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Data Entry
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown1">
+          <a class="dropdown-item"  th:href="@{/EmployeeList}">Add New Employee</a>
+          <a class="dropdown-item"  th:href="@{/PurchaseList}">Add Eduction </a>
+		  <a class="dropdown-item"  th:href="@{/PurchaseList}">Add Professional </a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" th:href="@{/RequisitionList}">Add Allowance </a>
+          <a class="dropdown-item" th:href="@{/GetGeneratedOrderList}">Add Deduction</a>
+
+        </div>
+      </li>
+      
+       <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Process
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown2">
+          <a class="dropdown-item"  th:href="@{/ApprovalPurchaseList}">Make Salary</a>
+          <a class="dropdown-item"  th:href="@{/ApprovalPurchaseList}">Make Bonus</a>
+          <div class="dropdown-divider"></div>
+        </div>
+      </li>
+      
+      
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Report Print
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown2">
+        
+          <a class="dropdown-item"  th:href="@{/ListAuthorizedRequisition}">Monthly Report </a>
+          <a class="dropdown-item"  th:href="@{/ListAuthorizedPurchase}">Yearly Report </a>
+          <a class="dropdown-item" th:href="@{/ListInvoiceOrder}">MISC Report </a>
+          <div class="dropdown-divider"></div>
+         
+        </div>
+      </li>
+     
+      
+     
+    </ul>
+    
+    <form class="form-inline my-2 my-lg-0">
+      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+    
+    
+  </div>
+</nav>
