@@ -72,6 +72,23 @@ public class InventoryController<RequsitionList> {
 	MasterBranchRepo MasterBranchRepo;
 	@Autowired
 	InProductCountRepo InProductCountRepo;
+	@Autowired
+	InProductRateRepo InProductRateRepo;
+	
+	@GetMapping({ "/GetProductRateData" })
+	public ModelAndView getProductRateList() {
+		ModelAndView mav = new ModelAndView("Inventory/Parameter/list-product-rate");
+		mav.addObject("ProductRateList", InProductRateRepo.findAll());
+		return mav;
+	}
+	@GetMapping({ "/GetProductStatusData" })
+	public ModelAndView GetProductStatusData() {
+		ModelAndView mav = new ModelAndView("Inventory/Parameter/list-product-status");
+		mav.addObject("ProductStatusList", InProductCountRepo.findAll());
+		return mav;
+	}
+	
+	
 	@GetMapping({ "/ProductList" })
 	public ModelAndView getAllProducts() {
 		ModelAndView mav = new ModelAndView("Inventory/Parameter/list-products");

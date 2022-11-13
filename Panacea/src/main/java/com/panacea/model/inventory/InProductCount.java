@@ -18,6 +18,9 @@ public class InProductCount {
 	@Id
 	@Column(name="ProductCode",length=10)
 	private String ProductCode;
+	
+	@Column(name = "ProductName", length =100)
+	private String ProductName;
 	@Column(name="ProductCount",length=12)
 	private int ProductCount;
 	public InProductCount() {
@@ -47,6 +50,12 @@ public class InProductCount {
 	}
 	public void setProductCount(int productCount) {
 		ProductCount = productCount;
+	}
+	public String getProductName() {
+		return ProductName;
+	}
+	public void setProductName(String productName) {
+		ProductName = productName;
 	}
 	
 	
