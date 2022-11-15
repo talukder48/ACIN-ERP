@@ -30,7 +30,6 @@
 			
 				<thead>
 					<tr>
-						<th>Transaction Branch</th>
 						<th>Transaction Date</th>
 						<th>Transaction Batch</th>	
 						<th>Transaction Amount</th>	
@@ -40,7 +39,6 @@
 				</thead>
 				<tbody>
 					<tr th:each="transaction: ${TransactionList}">
-						<td th:text="${transaction.tran_branch}" />
 						<td th:text="${transaction.tran_date}" />
 						<td th:text="${transaction.tran_batch}" />
 							<td th:text="${transaction.debitAmt}" />

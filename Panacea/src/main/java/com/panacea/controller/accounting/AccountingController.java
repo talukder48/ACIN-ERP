@@ -183,48 +183,6 @@ public class AccountingController {
 		return "redirect:/FeesAndChargesList";
 	}
 
-	@GetMapping({ "/GetCashBook" })
-	public ModelAndView GetCashBook() {
-		ModelAndView mav = new ModelAndView("Accounting/Report/view-CashBook");
-		List<DropDownType> ReportType = new ArrayList<DropDownType>();
-		ReportType.add(new DropDownType("Summary", "Summary Report"));
-		ReportType.add(new DropDownType("Details", "Details Report"));
-		mav.addObject("ReportType", ReportType);
-		return mav;
-	}
 	
-	@GetMapping({ "/GetLedgerStatement" })
-	public ModelAndView GetLedgerStatement() {
-		ModelAndView mav = new ModelAndView("Accounting/Report/View-Ledger-Statement");
-		
-		List<DropDownType> ReportType = new ArrayList<DropDownType>();
-		ReportType.add(new DropDownType("LedgerStmt", "Ledger Statement"));
-		mav.addObject("ReportType", ReportType);
-		mav.addObject("gllist", glcoderepository.FindTransactionGL());
-		return mav;
-	}
-	
-	
-	@GetMapping({ "/GetLedgerBalance" })
-	public ModelAndView GetLedgerBalance() {
-		ModelAndView mav = new ModelAndView("Accounting/Report/View-Ledger-Balance");
-		List<DropDownType> ReportType = new ArrayList<DropDownType>();
-		ReportType.add(new DropDownType("LedgerBal", "Ledger Balance"));
-		mav.addObject("ReportType", ReportType);
-		mav.addObject("gllist", glcoderepository.FindPrimeGL());
-		return mav;
-	}
-	@GetMapping({ "/GetFinancialStatement" })
-	public ModelAndView GetFinancialStatement() {
-		ModelAndView mav = new ModelAndView("Accounting/Report/View-Financial-Statement");
-		List<DropDownType> ReportType = new ArrayList<DropDownType>();
-		ReportType.add(new DropDownType("TB", "Financial Statement:Trail Balance"));
-		ReportType.add(new DropDownType("IN", "Financial Statement:Income Statement"));
-		ReportType.add(new DropDownType("EX", "Financial Statement:Expenditure Statement"));
-		ReportType.add(new DropDownType("PL", "Financial Statement:Profit & Loss Account"));
-		ReportType.add(new DropDownType("BS", "Financial Statement:Balance Sheet"));
-		mav.addObject("ReportType", ReportType);
-		return mav;
-	}
 
 }
