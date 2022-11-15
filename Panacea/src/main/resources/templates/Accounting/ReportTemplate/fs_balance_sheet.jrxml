@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="fs_balance_sheet" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="718cd6a9-8573-4966-9997-01668c63e2ee">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[SELECT
+case l.gl_type when 'A' then 'Assets' else 'Liablities & Equity' end Group_name,
+gl_type,
+    b.gl_code,
+    l.gl_name,
+    b.gl_balance,
+  case l.gl_type when 'L' then -1*b.gl_balance else  b.gl_balance end balance
+FROM
+    `as_glbalance` b
+JOIN `as_glcode` l ON
+    (b.gl_code = l.gl_code)
+WHERE
+    branch_code = '0018'
+    and gl_balance<>0
+    and l.gl_level='P'
+    order by gl_type]]>
+	</queryString>
+	<field name="Group_name" class="java.lang.String"/>
+	<field name="gl_type" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="gl_code" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="gl_name" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="gl_balance" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="balance" class="java.math.BigDecimal"/>
+	<variable name="v_balance" class="java.lang.Double" resetType="Group" resetGroup="GLType" calculation="Sum">
+		<variableExpression><![CDATA[$F{balance}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<group name="GLType">
+		<groupExpression><![CDATA[$F{gl_type}]]></groupExpression>
+		<groupHeader>
+			<band height="42">
+				<textField>
+					<reportElement x="40" y="2" width="469" height="20" forecolor="#003333" uuid="c096640a-fc04-439b-b1ab-30b2a3a2cde2"/>
+					<box>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{Group_name}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="40" y="22" width="100" height="20" uuid="532c30ae-fbbd-46ad-bd87-6c4b352269f7"/>
+					<box>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Particular Code]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="140" y="22" width="212" height="20" uuid="3fd77657-07b7-4abd-8dd8-46ee587e9ed2"/>
+					<box leftPadding="3">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Partculars Name]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="352" y="22" width="157" height="20" uuid="87806b6e-f9fc-474e-b906-43cba99e616b"/>
+					<box rightPadding="3">
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Right">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Amount in Tk.]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="34">
+				<textField pattern="#,##0.00;(#,##0.00)">
+					<reportElement x="352" y="0" width="157" height="20" forecolor="#000033" backcolor="#000033" uuid="1a5c2119-f0e2-4758-a68f-8e95e362b994"/>
+					<box rightPadding="3">
+						<pen lineWidth="0.3" lineColor="#000033"/>
+						<topPen lineWidth="0.3" lineColor="#000033"/>
+						<leftPen lineWidth="0.3" lineColor="#000033"/>
+						<bottomPen lineWidth="0.3" lineColor="#000033"/>
+						<rightPen lineWidth="0.3" lineColor="#000033"/>
+					</box>
+					<textElement textAlignment="Right">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{v_balance}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="40" y="0" width="312" height="20" forecolor="#000033" backcolor="#000033" uuid="95a32e76-c992-406f-9987-53340125302d"/>
+					<box>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Total: "+$F{Group_name}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="40" y="59" width="469" height="20" forecolor="#330033" uuid="dd7be142-5c2b-403c-b6c0-d169abc23c6b"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Financial Statement: Balance Sheet(BS)]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="21" splitType="Stretch">
+			<textField pattern="dd/MM/yyyy h.mm a">
+				<reportElement x="444" y="0" width="100" height="20" forecolor="#003300" uuid="2b15c6fa-aa3f-4368-b51a-6643cd344185"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="40" y="0" width="100" height="20" uuid="e7894f37-682b-4857-8537-a218c2011c64"/>
+				<box>
+					<pen lineWidth="0.3" lineColor="#330033"/>
+					<topPen lineWidth="0.3" lineColor="#330033"/>
+					<leftPen lineWidth="0.3" lineColor="#330033"/>
+					<bottomPen lineWidth="0.3" lineColor="#330033"/>
+					<rightPen lineWidth="0.3" lineColor="#330033"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{gl_code}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="140" y="0" width="212" height="20" uuid="f63fad5e-449e-47fd-b99b-27ba3a918d84"/>
+				<box leftPadding="3">
+					<pen lineWidth="0.3" lineColor="#330033"/>
+					<topPen lineWidth="0.3" lineColor="#330033"/>
+					<leftPen lineWidth="0.3" lineColor="#330033"/>
+					<bottomPen lineWidth="0.3" lineColor="#330033"/>
+					<rightPen lineWidth="0.3" lineColor="#330033"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{gl_name}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement x="352" y="0" width="157" height="20" uuid="bff51b40-d5d3-48d9-b548-7e0650e1b027"/>
+				<box rightPadding="3">
+					<pen lineWidth="0.3" lineColor="#330033"/>
+					<topPen lineWidth="0.3" lineColor="#330033"/>
+					<leftPen lineWidth="0.3" lineColor="#330033"/>
+					<bottomPen lineWidth="0.3" lineColor="#330033"/>
+					<rightPen lineWidth="0.3" lineColor="#330033"/>
+				</box>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{balance}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="22" splitType="Stretch">
+			<textField>
+				<reportElement x="232" y="0" width="80" height="20" uuid="efdfb867-e40b-4484-ab84-ffff9edd9356"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="312" y="0" width="40" height="20" uuid="e3f73dd3-503b-4c2a-8e53-b2b26a4998ea"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>
