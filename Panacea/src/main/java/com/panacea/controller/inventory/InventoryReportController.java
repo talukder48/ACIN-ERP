@@ -1,16 +1,9 @@
 package com.panacea.controller.inventory;
 
 
-import java.io.File;
-import java.io.IOException;
-import java.sql.Date;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,20 +14,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.panacea.repository.inventory.InvoiceOrderRepo;
-import com.panacea.repository.inventory.RequisitionListRepo;
+import com.panacea.repository.inventory.*;
 
-import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperRunManager;
 
 @Controller
 public class InventoryReportController {
@@ -46,6 +35,16 @@ public class InventoryReportController {
 	InvoiceOrderRepo InvoiceOrderRepo;
 	@Autowired
 	RequisitionListRepo RequisitionListRepo;
+	@Autowired
+	PurchaseListRepo PurchaseListRepo;
+	
+	
+	@GetMapping({ "/ListAuthorizedPurchase" })
+	public ModelAndView ListAuthorizedPurchase() {
+		ModelAndView mav = new ModelAndView("Inventory/Report/list-print-purchase");
+		mav.addObject("PurchaseList", PurchaseListRepo.GetAuthorizedPurchase());
+		return mav;
+	}
 	
 	@GetMapping({ "/ListAuthorizedRequisition" })
 	public ModelAndView ListAuthorizedRequisition() {
@@ -63,7 +62,7 @@ public class InventoryReportController {
 		return mav;
 	}
 	@GetMapping("/DownloadInvoiceOrder")
-	public ResponseEntity<byte[]> PrintVoucher(@RequestParam String OrderId,@RequestParam int InvoiceNo) {		
+	public ResponseEntity<byte[]> DownloadInvoiceOrder(@RequestParam String OrderId,@RequestParam int InvoiceNo) {		
 		Map<String, Object> parameter = new HashMap<String, Object>();	
 		parameter.put("p_order_no", OrderId);
 		parameter.put("p_invoice_no", InvoiceNo);
@@ -80,5 +79,28 @@ public class InventoryReportController {
 			return new ResponseEntity<byte[]>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}		
 	}
+	
+	@GetMapping("/PrintAuthorizedPurchase")
+	public ResponseEntity<byte[]> PrintAuthorizedPurchase(@RequestParam String OrderId,@RequestParam int InvoiceNo) {		
+		Map<String, Object> parameter = new HashMap<String, Object>();	
+		parameter.put("p_order_no", OrderId);
+		parameter.put("p_invoice_no", InvoiceNo);
+		try {
+			JasperPrint empReport=JasperFillManager.fillReport(JasperCompileManager.compileReport(ResourceUtils.getFile("classpath:templates/Inventory/ReportTemplate/in_invoice_order_details.jrxml").getAbsolutePath()) , parameter , dataSource.getConnection());
+			HttpHeaders headers = new HttpHeaders();
+			//set the PDF format
+			headers.setContentType(MediaType.APPLICATION_PDF);
+			headers.setContentDispositionFormData("filename", "InvoiceOrder"+":"+OrderId+"|"+InvoiceNo+".pdf");
+			//create the report in PDF format
+			return new ResponseEntity<byte[]>(JasperExportManager.exportReportToPdf(empReport), headers, HttpStatus.OK);
+			
+		} catch(Exception e) {
+			return new ResponseEntity<byte[]>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}		
+	}
+	
+	
+	
+	
 }
 

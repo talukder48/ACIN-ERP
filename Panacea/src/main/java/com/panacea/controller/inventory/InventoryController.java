@@ -294,6 +294,13 @@ public class InventoryController<RequsitionList> {
 		return mav;
 	}
 	
+	@GetMapping("/showAuthorizedPurchase")
+	public ModelAndView showAuthorizedPurchase(@RequestParam String PurchaseId) {
+		ModelAndView mav = new ModelAndView("Inventory/Report/view-purchase-details");
+		mav.addObject("OrderID", PurchaseId);
+		mav.addObject("PurchaseDetailsList", PurchaseDetailsRepo.GetPurchaseDetails(PurchaseId));
+		return mav;
+	}
 	
 	@GetMapping("/deletePurchase")
 	public String DeletePurchase(@RequestParam int ProductCode, @RequestParam String Branch, @RequestParam String Date,

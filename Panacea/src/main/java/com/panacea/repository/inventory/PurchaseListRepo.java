@@ -18,4 +18,7 @@ public interface PurchaseListRepo extends JpaRepository<PurchaseList,String> {
 	 @Query(value = "SELECT * FROM `in_purchase_list` WHERE `approve_on` is null and `rej_on` is null", nativeQuery = true)
 	 List<PurchaseList> GetUnauthorizedPurchase();
 	 
+	 @Query(value = "SELECT * FROM `in_purchase_list` WHERE `approve_on` is not null and `rej_on` is null", nativeQuery = true)
+	 List<PurchaseList> GetAuthorizedPurchase();
+	 
 }
