@@ -3,6 +3,9 @@
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="79"/>
+	<parameter name="P_BranchCode" class="java.lang.String"/>
+	<parameter name="P_TranDate" class="java.lang.String"/>
+	<parameter name="P_Batch" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[SELECT
     concat( l.tran_date, l.tran_batch) tranGroup,
@@ -25,7 +28,9 @@ JOIN `as_transaction` h ON
     )
 JOIN `as_glcode` k
 on(k.gl_code=h.glcode)
-WHERE 1
+WHERE l.tran_date=$P{P_TranDate}
+and l.tran_branch=$P{P_BranchCode}
+and l.tran_batch=$P{P_Batch}
 ORDER BY
     l.tran_date,
     l.tran_batch]]>

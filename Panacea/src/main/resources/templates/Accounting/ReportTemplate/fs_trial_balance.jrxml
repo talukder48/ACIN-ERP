@@ -3,7 +3,7 @@
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<parameter name="p_branch_code" class="java.lang.String"/>
+	<parameter name="P_BranchCode" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[SELECT
     b.gl_code,
@@ -15,7 +15,7 @@ FROM
 JOIN `as_glcode` l ON
     (b.gl_code = l.gl_code)
 WHERE
-    branch_code = '0018'
+    branch_code = $P{P_BranchCode}
     and gl_balance<>0
     and l.gl_level='P']]>
 	</queryString>

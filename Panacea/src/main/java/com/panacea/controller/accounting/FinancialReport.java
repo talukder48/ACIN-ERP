@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,8 +81,13 @@ public class FinancialReport {
 		return mav;
 	}
 	@GetMapping("/ViewCashBook")
-	public ResponseEntity<byte[]> ViewCashBook(HttpServletRequest request ) {		
+	public ResponseEntity<byte[]> ViewCashBook(HttpServletRequest request ) {
+		HttpSession sessionParam = request.getSession();
+		String UserBranch = sessionParam.getValue("UserBranch").toString();
 		Map<String, Object> parameter = new HashMap<String, Object>();	
+		parameter.put("P_BranchCode", UserBranch);
+		parameter.put("P_From_Date", request.getParameter("FromDate"));
+		parameter.put("P_To_Date", request.getParameter("ToDate"));
 		try {
 			
 			JasperPrint empReport =JasperFillManager.fillReport(JasperCompileManager.compileReport(ResourceUtils.getFile("classpath:templates/Accounting/ReportTemplate/fs_cashbook.jrxml").getAbsolutePath()) , parameter , dataSource.getConnection());
@@ -102,7 +108,10 @@ public class FinancialReport {
 	
 	@GetMapping("/ViewFinancialStatement")
 	public ResponseEntity<byte[]> ViewFinancialStatement(HttpServletRequest request ) {		
+		HttpSession sessionParam = request.getSession();
+		String UserBranch = sessionParam.getValue("UserBranch").toString();
 		Map<String, Object> parameter = new HashMap<String, Object>();	
+		parameter.put("P_BranchCode", UserBranch);
 		try {
 			JasperPrint empReport;
 			String reportTypeString=request.getParameter("ReportType");
@@ -130,12 +139,15 @@ public class FinancialReport {
 	@GetMapping("/PrintVoucher")
 	public ResponseEntity<byte[]> PrintVoucher(@RequestParam String tran_branch,@RequestParam Date tran_date,@RequestParam int tran_batch) {		
 		Map<String, Object> parameter = new HashMap<String, Object>();	
+		parameter.put("P_BranchCode", tran_branch);
+		parameter.put("P_TranDate", tran_date);
+		parameter.put("P_Batch", tran_batch);
 		try {
 			JasperPrint empReport=JasperFillManager.fillReport(JasperCompileManager.compileReport(ResourceUtils.getFile("classpath:templates/Accounting/ReportTemplate/fs_voucher.jrxml").getAbsolutePath()) , parameter , dataSource.getConnection());
 			HttpHeaders headers = new HttpHeaders();
 			//set the PDF format
 			headers.setContentType(MediaType.APPLICATION_PDF);
-			headers.setContentDispositionFormData("filename", "Voucher"+":"+new java.sql.Date(new java.util.Date().getTime())+".pdf");
+			headers.setContentDispositionFormData("filename", "Voucher"+":"+tran_branch+"|"+tran_date+"|"+tran_batch+".pdf");
 			//create the report in PDF format
 			return new ResponseEntity<byte[]>(JasperExportManager.exportReportToPdf(empReport), headers, HttpStatus.OK);
 			
