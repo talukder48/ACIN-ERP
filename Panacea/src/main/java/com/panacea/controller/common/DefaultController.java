@@ -10,10 +10,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import com.panacea.model.acounting.Charges;
 import com.panacea.model.acounting.GLCode;
 import com.panacea.model.acounting.ProductParam;
+import com.panacea.model.common.DropDownType;
 import com.panacea.model.common.UserMaster;
 import com.panacea.model.hrm.ArmyEmployee;
 import com.panacea.model.hrm.Designation;
-import com.panacea.model.hrm.ArmyTrade;
+import com.panacea.model.hrm.BloodGroup;
 import com.panacea.model.hrm.Employee;
 import com.panacea.model.hrm.LeaveDescription;
 import com.panacea.model.inventory.InventoryProduct;
@@ -81,11 +82,7 @@ public class DefaultController {
 		}
 		if (employeeRepo.count() == 0) {
 			List <Employee> EmployeeList = new ArrayList<Employee>() ;
-			EmployeeList.add(new Employee("ID2020080002","Abu Tayab","Abdur Rahim","Amena Begum","199210000001","1098234567","M","test@gmail.com","017120908902","Barisal","01-01-2009","20"));	
-			EmployeeList.add(new Employee("ID2020080001","Abdur Rahim","Abdur Karim","Momena Begum","199210003001","1098231567","M","test@gmail.com","017120908902","Feni","01-01-2009","19"));	
-			EmployeeList.add(new Employee("ID2020080003","Tanjila Akter","Abdur Rob","Jorina Begum","199210004001","1098232567","M","test@gmail.com","017120908902","Rangamati","01-01-2009","18"));	
-			EmployeeList.add(new Employee("ID2020080005","Habibur Rahman","Aminur Rahmna","Maymuna Begum","199210080001","4098234567","M","test@gmail.com","017120908902","Dhaka","01-01-2009","17"));	
-			employeeRepo.saveAll(EmployeeList);
+						employeeRepo.saveAll(EmployeeList);
 		}
 		
 		if (inventoryProductRepo.count() == 0) {
@@ -167,9 +164,9 @@ public class DefaultController {
     
    
     @Autowired
-    ArmyRankRepo ArmyRankRepo;
+    DesignationRepo DesignationRepo;
     @Autowired
-    ArmyTradeRepo ArmyTradeRepo;
+    BloodGroupRepo ArmyTradeRepo;
     @Autowired
 	ArmyEmployeeRepo ArmyEmployeeRepo;
     @Autowired
@@ -178,50 +175,26 @@ public class DefaultController {
     RequisitionRepo RequisitionRepo;
     @Autowired
     RequisitionListRepo RequisitionListRepo;
-    
+    @Autowired
+    BloodGroupRepo BloodGroupRepo;
 
     
     @GetMapping("/DefaultLeaveParameterCreation")
    	public String DefaultParameterCreation() {
    		
-   		if (ArmyRankRepo.count() == 0) {
-   			List <Designation> ArmyRankList = new ArrayList<Designation>() ;
-   			ArmyRankList.add(new Designation("101","OFFR","Second Lieutenant"));	
-   			ArmyRankList.add(new Designation("102","OFFR","Lieutenant"));	
-   			ArmyRankList.add(new Designation("103","OFFR","Captain"));	
-   			ArmyRankList.add(new Designation("104","OFFR","Major"));	
-   			ArmyRankList.add(new Designation("105","OFFR","Lieutenant Colonel"));	
-   			ArmyRankList.add(new Designation("106","OFFR","Honorary captain"));
+   		if (DesignationRepo.count() == 0) {
+   			List <Designation> DesignationList = new ArrayList<Designation>() ;
+   			DesignationList.add(new Designation("101","OFFR","Asssistant Officer"));	
+   			DesignationList.add(new Designation("102","OFFR","Officer"));	
+   			DesignationList.add(new Designation("103","OFFR","Assistant Manager"));	
+   			DesignationList.add(new Designation("104","OFFR","Deputy Manager"));	
+   			DesignationList.add(new Designation("105","OFFR","Joint Manager"));	
+   			DesignationList.add(new Designation("106","OFFR","Senior Manager"));
    			
-   			ArmyRankList.add(new Designation("201","JCO","Honorary Lieutenant"));
-   			ArmyRankList.add(new Designation("202","JCO","Master Warrant Officer"));
-   			ArmyRankList.add(new Designation("203","JCO","Senior Warrant officer"));
-   			ArmyRankList.add(new Designation("204","JCO","Warrant Officer"));
    			
-   			ArmyRankList.add(new Designation("301","OR","Corporal"));
-   			ArmyRankList.add(new Designation("302","OR","Lance Corporal"));
-   			ArmyRankList.add(new Designation("303","OR","Sainik"));
-   			ArmyRankList.add(new Designation("304","OR","NC(E)"));
-   			ArmyRankRepo.saveAll(ArmyRankList);
+   			DesignationRepo.saveAll(DesignationList);
    		}
-   		if (ArmyTradeRepo.count() == 0) {
-   			List <ArmyTrade> ArmyTradeList = new ArrayList<ArmyTrade>() ;
-   			ArmyTradeList.add(new ArmyTrade("000","Not Applicable"));	
-   			ArmyTradeList.add(new ArmyTrade("101","Operator"));	
-   			ArmyTradeList.add(new ArmyTrade("102","Technician"));	
-   			ArmyTradeList.add(new ArmyTrade("103","W/S"));	
-   			ArmyTradeList.add(new ArmyTrade("104","DTMN"));	
-   			ArmyTradeList.add(new ArmyTrade("105","Driver"));	
-   			ArmyTradeList.add(new ArmyTrade("106","Clerk"));
-   			ArmyTradeList.add(new ArmyTrade("107","SMT"));
-   			ArmyTradeRepo.saveAll(ArmyTradeList);
-   		}
-	   	 if (ArmyEmployeeRepo.count() == 0) {
-	 		List <ArmyEmployee> ArmyEmployeeList = new ArrayList<ArmyEmployee>() ;
-	 		ArmyEmployeeList.add(new ArmyEmployee("50001","Mr. Rubel","Abdur Rahim","Amena Begum","101","101","101","O","A+","01-01-1991","M","test@gmail.com","017120908902","Barisal","10","Wirless Gate","M","01515222234","Abu Naser","01515222235"));	
-
-	 		ArmyEmployeeRepo.saveAll(ArmyEmployeeList);
-	 	}
+   		
 	   	if (LeaveDescriptionRepo.count() == 0) {
    			List <LeaveDescription> LeavList = new ArrayList<LeaveDescription>() ;
    			LeavList.add(new LeaveDescription("C","Casual leave"));	
@@ -232,15 +205,19 @@ public class DefaultController {
    			LeavList.add(new LeaveDescription("W","Weekend"));
    			LeaveDescriptionRepo.saveAll(LeavList);
    		}
-	   	if (UserMasterRepo.count() == 0) {
-			List<UserMaster> UserList = new ArrayList<UserMaster>();
-			UserList.add(new UserMaster("50001", "Mr. Rubel", AESEncrypt.encrypt("admin"), "0018", "01", "01515240013","Test@gmail.com", "LEAVE","S","50001","A"));
-			
-			UserMasterRepo.saveAll(UserList);
-		}
+	   	 if(BloodGroupRepo.count()==0) {
+	   		List<BloodGroup> BloodgroupList = new ArrayList<BloodGroup>();
+			BloodgroupList.add(new BloodGroup("AP", "A+"));
+			BloodgroupList.add(new BloodGroup("AN", "A-"));
+			BloodgroupList.add(new BloodGroup("BP", "B+"));
+			BloodgroupList.add(new BloodGroup("BN", "B-"));
+			BloodgroupList.add(new BloodGroup("ABP", "AB+"));
+			BloodgroupList.add(new BloodGroup("ABN", "AB-"));
+			BloodgroupList.add(new BloodGroup("OP", "O+"));
+			BloodgroupList.add(new BloodGroup("ON", "O-"));
+			BloodGroupRepo.saveAll(BloodgroupList);
+	   	 }
 	   	
-	   	
-	   	 
    		return "index";
    	}   
    

@@ -10,6 +10,8 @@
 		<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
 		<script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
 		<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 </head>
 	
 	<body>
@@ -19,13 +21,13 @@
 		
 		
 		<div class="container my-3 bg-light">
-			<h3 class="col-md-12 text-center">Employee Lists</h3>
+			<h3 class="col-md-12 text-center">Employee Dahboard</h3>
 			</div>
 			
 			<div class="container my-3 bg-light">
 		        <div class="col-md-12 text-center">
-		           <a th:href="@{/AddNewEmployeeData}" class="btn btn-primary">Add New Employee</a>
-		            <a th:href="@{/UserHome}" class="btn btn-warning">Back Home</a>
+		           <a th:href="@{/AddEmployee}" class="btn btn-primary"><i class="fa fa-plus">Add</i></a>
+		            <a th:href="@{/UserHome}" class="btn btn-info"><i class="fa fa-arrow-left">Back</i></a>
 		        </div>
 		    </div>
 					
@@ -39,6 +41,7 @@
 						<th>Employee Name</th>
 						<th>Mobile No</th>
 						<th>Action</th>
+						
 					</tr>
 				</thead>
 				<tbody>
@@ -48,10 +51,13 @@
 						<td th:text="${employee.MobileNo}" />
 																		
 						<td>
-							<a th:href="@{/showUpdateEmployeeForm(EmployeeId=${employee.EmployeeId})}" class="btn btn-info">Update</a>
-							<a th:href="@{/PrintPersonalInfo(EmployeeId=${employee.EmployeeId})}" class="btn btn-info">Profile Download</a>
-							
+						
+							<a th:href="@{/showUpdateEmployeeForm(EmployeeId=${employee.EmployeeId})}" class="btn btn-secondary"> <i class="fa fa-edit" >Edit</i></a>
+							<a th:href="@{/showUpdateEmployeeForm(EmployeeId=${employee.EmployeeId})}" class="btn btn-primary"><i class="fa fa-money" >Allawance</i></a>
+							<a th:href="@{/showUpdateEmployeeForm(EmployeeId=${employee.EmployeeId})}" class="btn btn-danger"><i class="fa fa fa-minus" >Deduction</i></a>
+
 						</td>
+						
 					</tr>
 				</tbody>
 				

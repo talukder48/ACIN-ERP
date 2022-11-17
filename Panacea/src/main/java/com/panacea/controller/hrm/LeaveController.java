@@ -28,8 +28,8 @@ import com.panacea.model.hrm.LeaveRegister;
 import com.panacea.model.hrm.RpRegister;
 import com.panacea.repository.common.UserMaserRepo;
 import com.panacea.repository.hrm.ArmyEmployeeRepo;
-import com.panacea.repository.hrm.ArmyRankRepo;
-import com.panacea.repository.hrm.ArmyTradeRepo;
+import com.panacea.repository.hrm.DesignationRepo;
+import com.panacea.repository.hrm.BloodGroupRepo;
 import com.panacea.repository.hrm.EmployeeRepo;
 import com.panacea.repository.leave.LeaveDescriptionRepo;
 import com.panacea.repository.leave.LeaveRegisterRepo;
@@ -65,22 +65,16 @@ public class LeaveController {
 	
 	
 	@Autowired
-	ArmyRankRepo ArmyRankRepo;
+	DesignationRepo DesignationRepo;
 	@Autowired
-	ArmyTradeRepo ArmyTradeRepo;
+	BloodGroupRepo ArmyTradeRepo;
 
 	
 
 	@Autowired
 	ArmyEmployeeRepo ArmyEmployeeRepo;
 
-	@GetMapping({ "/EmployeeList" })
-	public ModelAndView getEmployeeList() {
-		ModelAndView mav = new ModelAndView("HRM/List-Employee");
-		mav.addObject("EmployeeList", employeeRepo.findAll());
-		return mav;
-	}
-
+	
 	@GetMapping("/AddNewEmployeeData")
 	public String addNewEmployee(Model model) {
 		List<DropDownType> typeList = new ArrayList<DropDownType>();
@@ -112,60 +106,14 @@ public class LeaveController {
 		model.addAttribute("LivingList", LivingList);
 		model.addAttribute("typeList", typeList);
 		model.addAttribute("Employee", ArmyEmployee);
-		model.addAttribute("RankList", ArmyRankRepo.findAll());
+		model.addAttribute("RankList", DesignationRepo.findAll());
 		model.addAttribute("TradeList", ArmyTradeRepo.findAll());
 		return "HRM/add-Employee";
 	}
 	@Autowired
 	UserMaserRepo UserMasterRepo;
-	@PostMapping("/saveEmployee")
-	public String saveEmployee(@ModelAttribute ArmyEmployee ArmyEmployee) {
-		ArmyEmployeeRepo.save(ArmyEmployee);
-		if (!UserMasterRepo.existsById(ArmyEmployee.getEmployeeId())) {			
-			UserMaster UserMaster=new UserMaster(ArmyEmployee.getEmployeeId(),ArmyEmployee.getEmployeeName(),AESEncrypt.encrypt("admin"),"0018","",ArmyEmployee.getMobileNo(),ArmyEmployee.getEmailAddress(),"LEAVE","E",ArmyEmployee.getEmployeeId(),"A");
-			UserMasterRepo.save(UserMaster);			
-		}
-		
-		return "redirect:/EmployeeList";
-	}
-
-	@GetMapping("/showUpdateEmployeeForm")
-	public ModelAndView showUpdateAccountingProductForm(@RequestParam String EmployeeId) {
-		List<DropDownType> typeList = new ArrayList<DropDownType>();
-		typeList.add(new DropDownType("OFFR", "Officer"));
-		typeList.add(new DropDownType("JCO", "JCO"));
-		typeList.add(new DropDownType("OR", "Others"));
-		List<DropDownType> LivingList = new ArrayList<DropDownType>();
-		LivingList.add(new DropDownType("N", "Not Applicable"));
-		LivingList.add(new DropDownType("L", "L-Line member"));
-		LivingList.add(new DropDownType("I", "I-In living family member"));
-		LivingList.add(new DropDownType("O", "O-Out living family member"));
-		List<DropDownType> GenderList = new ArrayList<DropDownType>();
-		GenderList.add(new DropDownType("M", "M-Male"));
-		GenderList.add(new DropDownType("F", "F-Female"));
-		GenderList.add(new DropDownType("O", "O-Others"));
-		List<DropDownType> BloodgroupList = new ArrayList<DropDownType>();
-		BloodgroupList.add(new DropDownType("AP", "A+"));
-		BloodgroupList.add(new DropDownType("AN", "A-"));
-		BloodgroupList.add(new DropDownType("BP", "B+"));
-		BloodgroupList.add(new DropDownType("BN", "B-"));
-		BloodgroupList.add(new DropDownType("ABP", "AB+"));
-		BloodgroupList.add(new DropDownType("ABN", "AB-"));
-		BloodgroupList.add(new DropDownType("OP", "O+"));
-		BloodgroupList.add(new DropDownType("ON", "O-"));
-
-		ModelAndView model = new ModelAndView("HRM/add-Employee");
-		ArmyEmployee ArmyEmployee = ArmyEmployeeRepo.findById(EmployeeId).get();
-		model.addObject("GenderList", GenderList);
-		model.addObject("BloodgroupList", BloodgroupList);
-		model.addObject("Employee", ArmyEmployee);
-		model.addObject("typeList", typeList);
-		model.addObject("LivingList", LivingList);
-		model.addObject("RankList", ArmyRankRepo.findAll());
-		model.addObject("TradeList", ArmyTradeRepo.findAll());
-		return model;
-	}
-
+	
+	
 	@GetMapping({ "/LeaveDashBoard" })
 	public ModelAndView LeaveDashBoard(HttpServletRequest request) {
 		ModelAndView mav = new ModelAndView("HRM/LeaveDashBoard");
@@ -247,7 +195,7 @@ public class LeaveController {
 			ArmyEmployee ArmyEmployee = ArmyEmployeeRepo.findById(LeaveRegister.getEmployeeId()).get();
 			LeaveRegister.setEmployeeName(ArmyEmployee.getEmployeeName());
 			LeaveRegister.setRankCode(ArmyEmployee.getRank());
-			LeaveRegister.setRankName(ArmyRankRepo.FindRank(ArmyEmployee.getRank()));
+			LeaveRegister.setRankName(DesignationRepo.FindRank(ArmyEmployee.getRank()));
 			LeaveRegister.setLeaveStatus("Recomendation Pending");
 			leaveregisterRepo.save(LeaveRegister);
 		} else {
@@ -264,7 +212,7 @@ public class LeaveController {
 				leaveregister.setLeaveType(LeaveRegister.getLeaveType());
 				leaveregister.setLeaveStatus(LeaveRegister.getLeaveStatus());
 				leaveregister.setRankCode(ArmyEmployee.getRank());
-				leaveregister.setRankCode(ArmyRankRepo.FindRank(ArmyEmployee.getRank()));
+				leaveregister.setRankCode(DesignationRepo.FindRank(ArmyEmployee.getRank()));
 				leaveregister.setVill(LeaveRegister.getVill());
 				leaveregister.setPost(LeaveRegister.getPost());
 				leaveregister.setPlace(LeaveRegister.getPlace());

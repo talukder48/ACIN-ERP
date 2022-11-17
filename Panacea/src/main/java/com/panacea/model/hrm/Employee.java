@@ -1,5 +1,7 @@
 package com.panacea.model.hrm;
 
+import java.sql.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -30,16 +32,22 @@ public class Employee {
 	@Column(name = "HomeDistrict", length = 30)
 	private String HomeDistrict;
 	@Column(name = "JoinDate", length = 20)
-	private String JoinDate;
+	private Date JoinDate;
+	@Column(name = "dob", length = 20)
+	private Date dob;
 	@Column(name = "Designation", length = 4)
 	private String Designation;
+	@Column(name = "bloodGrgp", length = 4)
+	private String bloodGrgp;
+	
 	public Employee() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+	
 	public Employee(String employeeId, String employeeName, String fatherName, String motherName, String nID,
-			String tIN, String gender, String emailAddress, String mobileNo, String homeDistrict, String joinDate,
-			String designation) {
+			String tIN, String gender, String emailAddress, String mobileNo, String homeDistrict, Date joinDate,
+			String designation, String bloodGrgp) {
 		super();
 		EmployeeId = employeeId;
 		EmployeeName = employeeName;
@@ -53,7 +61,25 @@ public class Employee {
 		HomeDistrict = homeDistrict;
 		JoinDate = joinDate;
 		Designation = designation;
+		this.bloodGrgp = bloodGrgp;
 	}
+
+	public Date getDob() {
+		return dob;
+	}
+
+	public void setDob(Date dob) {
+		this.dob = dob;
+	}
+
+	public String getBloodGrgp() {
+		return bloodGrgp;
+	}
+
+	public void setBloodGrgp(String bloodGrgp) {
+		this.bloodGrgp = bloodGrgp;
+	}
+
 	public String getEmployeeId() {
 		return EmployeeId;
 	}
@@ -114,10 +140,10 @@ public class Employee {
 	public void setHomeDistrict(String homeDistrict) {
 		HomeDistrict = homeDistrict;
 	}
-	public String getJoinDate() {
+	public Date getJoinDate() {
 		return JoinDate;
 	}
-	public void setJoinDate(String joinDate) {
+	public void setJoinDate(Date joinDate) {
 		JoinDate = joinDate;
 	}
 	public String getDesignation() {
