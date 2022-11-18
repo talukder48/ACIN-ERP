@@ -18,7 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.panacea.model.common.*;
-import com.panacea.model.hrm.ArmyEmployee;
+import com.panacea.model.hrm.Employee;
 import com.panacea.repository.common.*;
 import com.panacea.repository.hrm.*;
 import com.panacea.utils.AESDecrypt;
@@ -32,7 +32,7 @@ public class CommonController {
 	@Autowired
 	UserMaserRepo UserMasterRepo;
 	@Autowired
-	ArmyEmployeeRepo ArmyEmployeeRepo;
+	EmployeeRepo ArmyEmployeeRepo;
 	@Autowired
 	MasterBranchRepo MasterBranchRepo;
 	private static final Logger LOGGER = LogManager.getLogger(CommonController.class);
@@ -100,9 +100,9 @@ public class CommonController {
 					}
 
 				} else if (usermaster.getUserModule().equals("LEAVE")) {
-					ArmyEmployee ArmyEmployee = ArmyEmployeeRepo.findById(usermaster.getEmployeeId()).get();
+					Employee ArmyEmployee = ArmyEmployeeRepo.findById(usermaster.getEmployeeId()).get();
 					
-					sessionParam.setAttribute("Rank", ArmyEmployee.getRank());
+					sessionParam.setAttribute("Rank", ArmyEmployee.getDesignation());
 					
 					if (usermaster.getUserRole().equals("M")) {
 						ViewName = "HRM/LeaveManagement";

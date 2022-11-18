@@ -23,11 +23,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.panacea.model.common.DropDownType;
 import com.panacea.model.common.UserMaster;
-import com.panacea.model.hrm.ArmyEmployee;
+import com.panacea.model.hrm.Employee;
 import com.panacea.model.hrm.LeaveRegister;
 import com.panacea.model.hrm.RpRegister;
 import com.panacea.repository.common.UserMaserRepo;
-import com.panacea.repository.hrm.ArmyEmployeeRepo;
 import com.panacea.repository.hrm.DesignationRepo;
 import com.panacea.repository.hrm.BloodGroupRepo;
 import com.panacea.repository.hrm.EmployeeRepo;
@@ -72,7 +71,7 @@ public class LeaveController {
 	
 
 	@Autowired
-	ArmyEmployeeRepo ArmyEmployeeRepo;
+	EmployeeRepo ArmyEmployeeRepo;
 
 	
 	@GetMapping("/AddNewEmployeeData")
@@ -100,12 +99,12 @@ public class LeaveController {
 		BloodgroupList.add(new DropDownType("OP", "O+"));
 		BloodgroupList.add(new DropDownType("ON", "O-"));
 
-		ArmyEmployee ArmyEmployee = new ArmyEmployee();
+		Employee Employee = new Employee();
 		model.addAttribute("GenderList", GenderList);
 		model.addAttribute("BloodgroupList", BloodgroupList);
 		model.addAttribute("LivingList", LivingList);
 		model.addAttribute("typeList", typeList);
-		model.addAttribute("Employee", ArmyEmployee);
+		model.addAttribute("Employee", Employee);
 		model.addAttribute("RankList", DesignationRepo.findAll());
 		model.addAttribute("TradeList", ArmyTradeRepo.findAll());
 		return "HRM/add-Employee";
@@ -192,18 +191,18 @@ public class LeaveController {
 	public String saveLeaveData(@ModelAttribute LeaveRegister LeaveRegister,HttpServletRequest request) {
 		
 		if (LeaveRegister.getLeaveID() == null) {
-			ArmyEmployee ArmyEmployee = ArmyEmployeeRepo.findById(LeaveRegister.getEmployeeId()).get();
-			LeaveRegister.setEmployeeName(ArmyEmployee.getEmployeeName());
-			LeaveRegister.setRankCode(ArmyEmployee.getRank());
-			LeaveRegister.setRankName(DesignationRepo.FindRank(ArmyEmployee.getRank()));
+			Employee Employee = ArmyEmployeeRepo.findById(LeaveRegister.getEmployeeId()).get();
+			LeaveRegister.setEmployeeName(Employee.getEmployeeName());
+			LeaveRegister.setRankCode(Employee.getDesignation());
+			LeaveRegister.setRankName(DesignationRepo.FindRank(Employee.getDesignation()));
 			LeaveRegister.setLeaveStatus("Recomendation Pending");
 			leaveregisterRepo.save(LeaveRegister);
 		} else {
 
 			if (leaveregisterRepo.existsById(LeaveRegister.getLeaveID())) {
-				ArmyEmployee ArmyEmployee = ArmyEmployeeRepo.findById(LeaveRegister.getEmployeeId()).get();
+				Employee Employee = ArmyEmployeeRepo.findById(LeaveRegister.getEmployeeId()).get();
 				LeaveRegister leaveregister = leaveregisterRepo.findById(LeaveRegister.getLeaveID()).orElseThrow();
-				leaveregister.setEmployeeName(ArmyEmployee.getEmployeeName());
+				leaveregister.setEmployeeName(Employee.getEmployeeName());
 				leaveregister.setEmployeeId(LeaveRegister.getEmployeeId());
 				leaveregister.setApplyDate(LeaveRegister.getApplyDate());
 				leaveregister.setStartDate(LeaveRegister.getStartDate());
@@ -211,8 +210,8 @@ public class LeaveController {
 				leaveregister.setLeaveReason(LeaveRegister.getLeaveReason());
 				leaveregister.setLeaveType(LeaveRegister.getLeaveType());
 				leaveregister.setLeaveStatus(LeaveRegister.getLeaveStatus());
-				leaveregister.setRankCode(ArmyEmployee.getRank());
-				leaveregister.setRankCode(DesignationRepo.FindRank(ArmyEmployee.getRank()));
+				leaveregister.setRankCode(Employee.getDesignation());
+				leaveregister.setRankCode(DesignationRepo.FindRank(Employee.getDesignation()));
 				leaveregister.setVill(LeaveRegister.getVill());
 				leaveregister.setPost(LeaveRegister.getPost());
 				leaveregister.setPlace(LeaveRegister.getPlace());
@@ -224,8 +223,8 @@ public class LeaveController {
 				
 				leaveregisterRepo.save(leaveregister);
 			} else {
-				ArmyEmployee ArmyEmployee = ArmyEmployeeRepo.findById(LeaveRegister.getEmployeeId()).get();
-				LeaveRegister.setEmployeeName(ArmyEmployee.getEmployeeName());
+				Employee Employee = ArmyEmployeeRepo.findById(LeaveRegister.getEmployeeId()).get();
+				LeaveRegister.setEmployeeName(Employee.getEmployeeName());
 				leaveregisterRepo.save(LeaveRegister);
 			}
 
@@ -243,8 +242,8 @@ public class LeaveController {
 
 			if (leaveregisterRepo.existsById(LeaveRegister.getLeaveID())) {
 				LeaveRegister leaveregister = leaveregisterRepo.findById(LeaveRegister.getLeaveID()).orElseThrow();
-				ArmyEmployee ArmyEmployee = ArmyEmployeeRepo.findById(LeaveRegister.getEmployeeId()).get();
-				leaveregister.setEmployeeName(ArmyEmployee.getEmployeeName());
+				Employee Employee = ArmyEmployeeRepo.findById(LeaveRegister.getEmployeeId()).get();
+				leaveregister.setEmployeeName(Employee.getEmployeeName());
 				leaveregister.setEmployeeId(LeaveRegister.getEmployeeId());
 				leaveregister.setApplyDate(LeaveRegister.getApplyDate());
 				leaveregister.setStartDate(LeaveRegister.getStartDate());
@@ -270,8 +269,8 @@ public class LeaveController {
 
 			if (leaveregisterRepo.existsById(LeaveRegister.getLeaveID())) {
 				LeaveRegister leaveregister = leaveregisterRepo.findById(LeaveRegister.getLeaveID()).orElseThrow();
-				ArmyEmployee ArmyEmployee = ArmyEmployeeRepo.findById(LeaveRegister.getEmployeeId()).get();
-				leaveregister.setEmployeeName(ArmyEmployee.getEmployeeName());
+				Employee Employee = ArmyEmployeeRepo.findById(LeaveRegister.getEmployeeId()).get();
+				leaveregister.setEmployeeName(Employee.getEmployeeName());
 				leaveregister.setEmployeeId(LeaveRegister.getEmployeeId());
 				leaveregister.setApplyDate(LeaveRegister.getApplyDate());
 				leaveregister.setStartDate(LeaveRegister.getStartDate());
@@ -396,7 +395,7 @@ public class LeaveController {
 		RpRegister.setVill(LeaveRegister.getVill());
 		
 		
-		model.addObject("EmployeeList", ArmyEmployeeRepo.SingleEmployee(LeaveRegister.getEmployeeId()));
+		//model.addObject("EmployeeList", ArmyEmployeeRepo.SingleEmployee(LeaveRegister.getEmployeeId()));
 		model.addObject("RpRegister", RpRegister);
 
 		return model;
@@ -450,7 +449,7 @@ public class LeaveController {
 		RpRegister.setVill(LeaveRegister.getVill());
 		
 		
-		model.addObject("EmployeeList", ArmyEmployeeRepo.SingleEmployee(LeaveRegister.getEmployeeId()));
+		//model.addObject("EmployeeList", ArmyEmployeeRepo.SingleEmployee(LeaveRegister.getEmployeeId()));
 		model.addObject("RpRegister", RpRegister);
 
 		return model;

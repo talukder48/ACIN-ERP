@@ -21,12 +21,11 @@
 		
 		
 		<div class="container my-3 bg-light">
-			<h3 class="col-md-12 text-center">Employee Dahboard</h3>
+			<h3 class="col-md-12 text-center">Employee Education Dahboard</h3>
 			</div>
 			
 			<div class="container my-3 bg-light">
 		        <div class="col-md-12 text-center">
-		           <a th:href="@{/AddEmployee}" class="btn btn-primary"><i class="fa fa-plus">Add</i></a>
 		            <a th:href="@{/UserHome}" class="btn btn-info"><i class="fa fa-arrow-left">Back</i></a>
 		        </div>
 		    </div>
@@ -52,9 +51,7 @@
 																		
 						<td>
 						
-							<a th:href="@{/showUpdateEmployeeForm(EmployeeId=${employee.EmployeeId})}" class="btn btn-secondary"> <i class="fa fa-edit" ></i></a>
-							<a th:href="@{/showUpdateAllawance(EmployeeId=${employee.EmployeeId})}" class="btn btn-primary"><i class="fa fa-money" ></i></a>
-							<a th:href="@{/showUpdateDeduction(EmployeeId=${employee.EmployeeId})}" class="btn btn-danger"><i class="fa fa fa-minus" ></i></a>
+							<a th:href="@{/ShowEducationDegree(EmployeeId=${employee.EmployeeId})}" class="btn btn-secondary"> <i class="fa fa-eye" ></i></a>
 
 						</td>
 						

@@ -10,9 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import com.panacea.model.acounting.Charges;
 import com.panacea.model.acounting.GLCode;
 import com.panacea.model.acounting.ProductParam;
-import com.panacea.model.common.DropDownType;
 import com.panacea.model.common.UserMaster;
-import com.panacea.model.hrm.ArmyEmployee;
 import com.panacea.model.hrm.Designation;
 import com.panacea.model.hrm.BloodGroup;
 import com.panacea.model.hrm.Employee;
@@ -168,8 +166,7 @@ public class DefaultController {
     @Autowired
     BloodGroupRepo ArmyTradeRepo;
     @Autowired
-	ArmyEmployeeRepo ArmyEmployeeRepo;
-    @Autowired
+	
     LeaveDescriptionRepo LeaveDescriptionRepo;
     @Autowired
     RequisitionRepo RequisitionRepo;

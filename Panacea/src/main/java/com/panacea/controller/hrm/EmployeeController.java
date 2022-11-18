@@ -13,11 +13,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.panacea.model.common.DropDownType;
-import com.panacea.model.common.UserMaster;
-import com.panacea.model.hrm.ArmyEmployee;
+import com.panacea.model.hrm.AllawanceData;
+import com.panacea.model.hrm.DeductionData;
 import com.panacea.model.hrm.Employee;
 import com.panacea.repository.hrm.*;
-import com.panacea.utils.AESEncrypt;
 
 @Controller
 public class EmployeeController {
@@ -27,6 +26,11 @@ public class EmployeeController {
 	DesignationRepo DesignationRepo;
 	@Autowired 
 	BloodGroupRepo BloodGroupRepo;
+	@Autowired
+	AllawanceDataRepo AllawanceDataRepo;
+	@Autowired
+	DeductionDataRepo DeductionDataRepo;
+	
 	@GetMapping({ "/EmployeeList" })
 	public ModelAndView getEmployeeList() {
 		ModelAndView mav = new ModelAndView("HRM/Entry/List-Employee");
@@ -67,7 +71,64 @@ public class EmployeeController {
 		employeeRepo.save(Employee);
 		return "redirect:/EmployeeList";
 	}
-
+	
+	@GetMapping("/showUpdateAllawance")
+	public ModelAndView showUpdateAllawance(@RequestParam String EmployeeId) {
+		AllawanceData allawanceData;
+		if (AllawanceDataRepo.existsById(EmployeeId)){
+			 allawanceData=AllawanceDataRepo.findById(EmployeeId).get();
+		}
+		else {
+			 allawanceData=new AllawanceData();
+			 allawanceData.setEmployeeId(EmployeeId);
+		}
+		ModelAndView model = new ModelAndView("HRM/Entry/add-Allawance");
+		model.addObject("EmployeeAllwance", allawanceData);
+		return model;
+	}
+	
+	@PostMapping("/saveEmployeeAllawance")
+	public String saveEmployeeAllawance(@ModelAttribute AllawanceData allawanceData) {
+		AllawanceDataRepo.save(allawanceData);
+		return "redirect:/EmployeeList";
+	}
+	
+	
+	@GetMapping("/showUpdateDeduction")
+	public ModelAndView showUpdateDeduction(@RequestParam String EmployeeId) {
+		DeductionData deductionData;
+		if (DeductionDataRepo.existsById(EmployeeId)){
+			deductionData=DeductionDataRepo.findById(EmployeeId).get();
+		}
+		else {
+			deductionData=new DeductionData();
+			deductionData.setEmployeeId(EmployeeId);
+		}
+		ModelAndView model = new ModelAndView("HRM/Entry/add-Deduction");
+		model.addObject("EmployeeDeduction", deductionData);
+		return model;
+	}
+	
+	@PostMapping("/saveEmployeeDeduction")
+	public String saveEmployeeDeduction(@ModelAttribute DeductionData deductionData) {
+		DeductionDataRepo.save(deductionData);
+		return "redirect:/EmployeeList";
+	}
+	
+	
+	@GetMapping({ "/EmployeeEducation" })
+	public ModelAndView EmployeeEducation() {
+		ModelAndView mav = new ModelAndView("HRM/Entry/List-Education");
+		mav.addObject("EmployeeList", employeeRepo.findAll());
+		return mav;
+	}
+	
+	@GetMapping({ "/EmployeeProfessionalDegree" })
+	public ModelAndView EmployeeProfessionalDegree() {
+		ModelAndView mav = new ModelAndView("HRM/Entry/List-Professional");
+		mav.addObject("EmployeeList", employeeRepo.findAll());
+		return mav;
+	}
 	
 
 }
