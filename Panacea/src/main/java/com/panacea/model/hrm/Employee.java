@@ -39,12 +39,14 @@ public class Employee {
 	private String Designation;
 	@Column(name = "bloodGrgp", length = 4)
 	private String bloodGrgp;
-	
+	@Column(name = "bankAcc", length = 20)
+	private String bankAcc;
+
 	public Employee() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	
+
 	public Employee(String employeeId, String employeeName, String fatherName, String motherName, String nID,
 			String tIN, String gender, String emailAddress, String mobileNo, String homeDistrict, Date joinDate,
 			String designation, String bloodGrgp) {
@@ -83,77 +85,105 @@ public class Employee {
 	public String getEmployeeId() {
 		return EmployeeId;
 	}
+
 	public void setEmployeeId(String employeeId) {
 		EmployeeId = employeeId;
 	}
+
 	public String getEmployeeName() {
 		return EmployeeName;
 	}
+
 	public void setEmployeeName(String employeeName) {
 		EmployeeName = employeeName;
 	}
+
 	public String getFatherName() {
 		return FatherName;
 	}
+
 	public void setFatherName(String fatherName) {
 		FatherName = fatherName;
 	}
+
 	public String getMotherName() {
 		return MotherName;
 	}
+
 	public void setMotherName(String motherName) {
 		MotherName = motherName;
 	}
+
 	public String getNID() {
 		return NID;
 	}
+
 	public void setNID(String nID) {
 		NID = nID;
 	}
+
 	public String getTIN() {
 		return TIN;
 	}
+
 	public void setTIN(String tIN) {
 		TIN = tIN;
 	}
+
 	public String getGender() {
 		return Gender;
 	}
+
 	public void setGender(String gender) {
 		Gender = gender;
 	}
+
 	public String getEmailAddress() {
 		return EmailAddress;
 	}
+
 	public void setEmailAddress(String emailAddress) {
 		EmailAddress = emailAddress;
 	}
+
 	public String getMobileNo() {
 		return MobileNo;
 	}
+
 	public void setMobileNo(String mobileNo) {
 		MobileNo = mobileNo;
 	}
+
 	public String getHomeDistrict() {
 		return HomeDistrict;
 	}
+
 	public void setHomeDistrict(String homeDistrict) {
 		HomeDistrict = homeDistrict;
 	}
+
 	public Date getJoinDate() {
 		return JoinDate;
 	}
+
 	public void setJoinDate(Date joinDate) {
 		JoinDate = joinDate;
 	}
+
 	public String getDesignation() {
 		return Designation;
 	}
+
 	public void setDesignation(String designation) {
 		Designation = designation;
 	}
-	
-	
-	
-	
+
+	public String getBankAcc() {
+		return bankAcc;
+	}
+
+	public void setBankAcc(String bankAcc) {
+		this.bankAcc = bankAcc;
+	}
+
 }
