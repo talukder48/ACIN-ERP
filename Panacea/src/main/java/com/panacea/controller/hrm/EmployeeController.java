@@ -140,16 +140,18 @@ public class EmployeeController {
 
 	@GetMapping({ "/GetSalaryProcess" })
 	public ModelAndView GetSalaryProcess() {
+		
 		ModelAndView mav = new ModelAndView("HRM/Process/process-salary");
+		mav.addObject("message", "");
 		return mav;
 	}
 
 	@PostMapping("/RunSalaryProcess")
-	public String ViewCashBook(HttpServletRequest request) {
+	public String ViewCashBook(HttpServletRequest request,Model model) {
 		HttpSession sessionParam = request.getSession();
 		String UserBranch = sessionParam.getValue("UserBranch").toString();
 		Date SalaryDate = Date.valueOf(request.getParameter("SalaryDate"));
-		int Year = SalaryDate.getYear();
+		int Year =SalaryTransactionRepo.GetSalaryYear(SalaryDate);
 		int Month = SalaryDate.getMonth();
 		List<Employee> employees = employeeRepo.findAll();
 		Iterator<Employee> it = employees.iterator();
@@ -187,8 +189,9 @@ public class EmployeeController {
 					deductionData.getRevenue(), deductionData.getOtherDed(), GrossPay, TotalDeduction, NetPay);
 			SalaryTransactionRepo.save(salaryTransaction);
 		}
+		model.addAttribute("message", "Salary Process sucessfully Done for "+ SalaryDate);
 
-		return "redirect:/UserHome";
+		return "HRM/Process/process-salary";
 	}
 
 }

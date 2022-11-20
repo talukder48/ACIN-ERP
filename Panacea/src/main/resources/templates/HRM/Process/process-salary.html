@@ -18,6 +18,8 @@
 			</div>
 			<hr/>
 			
+			<p th:if="${message}" class="col-md-12 text-center" th:text="${message}"></p>
+			
 			<form th:action="@{/RunSalaryProcess}"  method="POST">
 			
 			
