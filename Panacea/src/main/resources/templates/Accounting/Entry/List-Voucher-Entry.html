@@ -32,20 +32,16 @@
 			
 				<thead>
 					<tr>
-						<th>Transaction Branch</th>
 						<th>Transaction Date</th>
 						<th>Transaction Batch</th>	
-						<th>Transaction Amount</th>	
 						<th>Remarks</th>						
 						<th>Actions</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr th:each="transaction: ${TransactionList}">
-						<td th:text="${transaction.tran_branch}" />
 						<td th:text="${transaction.tran_date}" />
 						<td th:text="${transaction.tran_batch}" />
-						<td th:text="${transaction.debitAmt}" />
 						<td th:text="${transaction.tran_remarks}" />
 						<td>
 							<a th:href="@{/showUpdateTransactionForm(tran_branch=${transaction.tran_branch},tran_date=${transaction.tran_date},tran_batch=${transaction.tran_batch})}" class="btn btn-info">View </a>
