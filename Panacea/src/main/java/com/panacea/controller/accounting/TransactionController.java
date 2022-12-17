@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -159,57 +160,63 @@ public class TransactionController {
 
 	@SuppressWarnings({ "deprecation", "rawtypes", "unchecked" })
 	@PostMapping("/saveTransaction")
-	public String saveTransaction(@ModelAttribute TransactionList TransactionList, HttpServletRequest request,Model model,RedirectAttributes redirectAttributes) {
+	public String saveTransaction(@ModelAttribute TransactionList TransactionList, Errors errors,HttpServletRequest request,Model model,RedirectAttributes redirectAttributes) {
+		if (null != errors && errors.getErrorCount() > 0) {
+            return "redirect:/VoucherEntryFormNew";
+        }{
+        
+        	try {
+    			HttpSession sessionParam = request.getSession();
+    			String UserId = sessionParam.getValue("UserId").toString();
+    			String UserBranch = sessionParam.getValue("UserBranch").toString();
 
-		try {
-			HttpSession sessionParam = request.getSession();
-			String UserId = sessionParam.getValue("UserId").toString();
-			String UserBranch = sessionParam.getValue("UserBranch").toString();
+    			Long id = template.execute(status -> {
+    				List<Transaction> TransactionData = new ArrayList<Transaction>();
+    				int BatchNumber = TransactionListRepo.FindBatchNumber(UserBranch,TransactionList.getTran_date());
+    				TransactionList.setTran_batch(BatchNumber);
+    				TransactionList.setTran_branch(UserBranch);
+    				TransactionList.setEntyBy(UserId);
+    				TransactionList.setEntyOn(new java.sql.Date(new java.util.Date().getTime()));
+    				TransactionList.setTran_remarks("Un-Authorized");
+    				LinkedList<Map> GridData = new LinkedList<Map>();
+    				GridData = ProjectUtils.GridtoLinkedList(TransactionList.getDataGrid());
 
-			Long id = template.execute(status -> {
-				List<Transaction> TransactionData = new ArrayList<Transaction>();
-				int BatchNumber = TransactionListRepo.FindBatchNumber(UserBranch,TransactionList.getTran_date());
-				TransactionList.setTran_batch(BatchNumber);
-				TransactionList.setTran_branch(UserBranch);
-				TransactionList.setEntyBy(UserId);
-				TransactionList.setEntyOn(new java.sql.Date(new java.util.Date().getTime()));
-				TransactionList.setTran_remarks("Un-Authorized");
-				LinkedList<Map> GridData = new LinkedList<Map>();
-				GridData = ProjectUtils.GridtoLinkedList(TransactionList.getDataGrid());
+    				int BatchSL = 1;
+    				Iterator it = GridData.iterator();
 
-				int BatchSL = 1;
-				Iterator it = GridData.iterator();
+    				while (it.hasNext()) {
+    					Map<String, String> DataList = new HashMap<String, String>();
+    					DataList = (Map<String, String>) it.next();
+    						TransactionData.add(new Transaction(1, 
+    								BatchSL, 
+    								UserBranch, 
+    								TransactionList.getTran_date(), 
+    								BatchNumber,
+    								ProjectUtils.GetCode(DataList.get("transactionHead")),
+    								glcoderepository.TransactionHead(ProjectUtils.GetCode(DataList.get("transactionHead"))),
+    								Double.parseDouble(DataList.get("DrAmount")),
+    								Double.parseDouble(DataList.get("CrAmount")),
+    								DataList.get("Narration"),
+    								DataList.get("CHQ_ADV_NO"),
+    								DataList.get("IssueDate")));
+    					
+    					BatchSL++;
+    				}
+    				TransactionList.setDataGrid("");
+    				TransactionListRepo.save(TransactionList);
+    				TransactionRepo.saveAll(TransactionData);
+    				return 1L;
+    			});
 
-				while (it.hasNext()) {
-					Map<String, String> DataList = new HashMap<String, String>();
-					DataList = (Map<String, String>) it.next();
-						TransactionData.add(new Transaction(1, 
-								BatchSL, 
-								UserBranch, 
-								TransactionList.getTran_date(), 
-								BatchNumber,
-								ProjectUtils.GetCode(DataList.get("transactionHead")),
-								glcoderepository.TransactionHead(ProjectUtils.GetCode(DataList.get("transactionHead"))),
-								Double.parseDouble(DataList.get("DrAmount")),
-								Double.parseDouble(DataList.get("CrAmount")),
-								DataList.get("Narration"),
-								DataList.get("CHQ_ADV_NO"),
-								DataList.get("IssueDate")));
-					
-					BatchSL++;
-				}
-				TransactionList.setDataGrid("");
-				TransactionListRepo.save(TransactionList);
-				TransactionRepo.saveAll(TransactionData);
-				return 1L;
-			});
+    		} catch (Exception e) {
+    			return "redirect:/";
+    		}
+            redirectAttributes.addFlashAttribute("message", "Voucher Sucessfully Done ");
 
-		} catch (Exception e) {
-			return "redirect:/";
-		}
-        redirectAttributes.addFlashAttribute("message", "Voucher Sucessfully Done ");
-
-		return "redirect:/GetVoucherList";
+    		return "redirect:/GetVoucherList";
+        }
+		
+		
 	}
 
 	

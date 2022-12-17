@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import com.panacea.model.key.TransactionListId;
 @Entity
@@ -19,6 +20,7 @@ public class TransactionList implements Serializable {
 	private String tran_branch;
 	@Id
 	@Column(name="tran_date",length=10)
+	@NotNull(message = "Please enter birth date")
 	private Date tran_date;
 	@Id
 	@Column(name="tran_batch",length=6)
