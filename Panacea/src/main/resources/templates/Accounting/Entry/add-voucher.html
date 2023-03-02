@@ -26,7 +26,7 @@
 		var clause = "<clause>";
 
 		var arrHead = new Array();
-		arrHead = ['Activity', 'Transaction Head', 'Crdit Amount', 'Debit Amount', 'CQ/Adv._Date', 'CQ/Adv._No', 'Narration'];
+		arrHead = ['Activity', 'Transaction Head', 'Crdit Amount', 'Debit Amount', 'Issue Date', 'Cheque No', 'Narration'];
 
 		// first create TABLE structure with the headers. 
 		function createTable() {
@@ -171,7 +171,6 @@
 			var myTab = document.getElementById('tranTable');
 			var arrValues = new Array();
 			var RowIndex = oButton.parentNode.parentNode.rowIndex;
-			alert(myTab.rows.length);
 			for (row = 1; row < myTab.rows.length; row++) {
 				if (RowIndex != row) {
 					formJason(myTab.rows.item(row).cells[1].childNodes[0].value, myTab.rows.item(row).cells[2].childNodes[0].value, myTab.rows.item(row).cells[3].childNodes[0].value, myTab.rows.item(row).cells[4].childNodes[0].value, myTab.rows.item(row).cells[5].childNodes[0].value, myTab.rows.item(row).cells[6].childNodes[0].value);
@@ -380,7 +379,17 @@
 			document.getElementById("transactionHead").focus();
 		}
   function FinalValidation(){
-	if (document.getElementById("TransactionAmtDr").value!=document.getElementById("TransactionAmtCR").value){
+	if (document.getElementById("TransactionDate").value==""){
+		alert("Voucher Date Should not Blank");
+		document.getElementById("TransactionDate").focus();
+		 return false;
+	}
+	else if (document.getElementById("TransactionAmtDr").value=="0" && document.getElementById("TransactionAmtCR").value=="0"){
+		alert("No Entity is selected yet !!");
+		document.getElementById("transactionHead").focus();
+		 return false;
+	}
+	else if (document.getElementById("TransactionAmtDr").value!=document.getElementById("TransactionAmtCR").value){
 		alert("Total Debit & Credit Must Be Equal !!");
 		document.getElementById("transactionHead").focus();
 		 return false;
@@ -391,120 +400,188 @@
 		
 }
 
-	</script>
-
+</script>
+<style>
+	
+.columnX {
+  float: left;
+  width: 35%;
+}
+.columnK {
+  float: left;
+  width: 18%;
+}
+.columnL {
+  float: left;
+  text-align: center;
+  width: 15%;
+}
+	
+</style>
 
 </head>
 
 
 <body onload="initValues()">
 	<div th:replace="Accounting/fragments/SuperNavbar">This content will be gone</div>
-	<div class="container">
-		<hr />
-		<div class="container my-3 bg-light">
-			<h3 class="col-md-12 text-center">Add New Voucher </h3>
-		</div>
-		<hr />
-		<!-- <div th:if="${message}"> <h2 th:text="${message}"/></div> -->
-
-
+	<div class="container body-content" style="background-image:linear-gradient(white,aliceblue)">        
+       
 		<form th:action="@{/saveTransaction}" th:object="${Transaction}" method="POST"
 			onkeydown="return event.key != 'Enter';">
 
-
+			<fieldset class="border p-2">  <legend  class="w-auto">Loop</legend>
+			
+			
+			
 			<div class="row">
-
-				<div class="col">
+				
+		   <div class="offset-md-1 col-md-5 col-12">
+			<div class="form-group required row">
+                <label class="col-sm-4 col-form-label" for="transactionHead">Select Head</label>
+                <div class="col-sm-8">
 					<select class="selectpicker" data-live-search="true" id="transactionHead"
-						onkeydown="ValidateTransactonHead(event)">
-						<option th:each="optionType : ${gllist}"
-							th:value="${optionType.glCode}+'#'+${optionType.glName}"
-							th:text="${optionType.glCode}+'-'+${optionType.glName}" class="selectpicker"
-							data-live-search="true">
-					</select>
-
-				</div>
-				<br>
-
-				<div class="col">
-					<select class="selectpicker" id="DrCrType" name="DrCrType" data-live-search="true">
+						onkeydown="ValidateTransactonHead(event)"> <option th:each="optionType : ${gllist}" th:value="${optionType.glCode}+'#'+${optionType.glName}" th:text="${optionType.glCode}+'-'+${optionType.glName}" class="selectpicker" data-live-search="true">
+					</select>               
+					 </div>
+            </div>
+		   </div>
+		   
+		   <div class="offset-md-1 col-md-5 col-12">
+			<div class="form-group required row">
+                <label class="col-sm-4 col-form-label" for="DrCrType">Type</label>
+                <div class="col-sm-8">
+					<select class="selectpicker" id="DrCrType" name="DrCrType">
 						<option value="D">D-Debit</option>
 						<option value="C">C-Credit</option>
-					</select>
-
-				</div>
-
-				<div class="col">
-					<input type="date" th:field="*{tran_date}" id="TransactionDate" class="date form-control col-8 mb-8"
-						onkeydown="ValidateTransactionDate(event)" />
-					<p class="alert alert-danger" th:if="${#fields.hasErrors('tran_date')}" th:errors="*{tran_date}">
-
-					
-				</div>
-				
-
-			</div>
-				<br>
-					
+					</select>	           
+					 </div>
+            </div>
+		   </div>
+	
 			
+			</div>
+			
+			
+			
+		<div class="row">		
+		<div class="offset-md-1 col-md-5 col-12">
+			<div class="form-group required row">
+                <label class="col-sm-4 col-form-label" for="TransactionAmt">Amount(Taka)</label>
+                <div class="col-sm-8">
+                 <input class="form-control form-control-sm text-box single-line" data-val="true" data-val-number="The field  Amount must be a number." 
+                 data-val-required="The Transaction Amount field is required."  name="TransactionAmt" id="TransactionAmt" style="text-align:right" type="text" value="0"
+                  onkeydown="ValidateTransactionAmount(event)"/>                                          
+                </div>
+            </div>
+		</div>
+		<div class="offset-md-1 col-md-5 col-12">
+			<div class="form-group required row">
+                <label class="col-sm-4 col-form-label" for="CHQ_ADV_NO">Cheque No:</label>
+                <div class="col-sm-8">
+                 <input class="form-control form-control-sm text-box single-line"  name="CHQ_ADV_NO" id="CHQ_ADV_NO" style="text-align:right"
+                  type="text" value="" onkeydown="ValidateCQNumber(event)"/>                                          
+                </div>
+            </div>
+		</div>		
+	   </div>	
+	   
+	   <div class="row">		
+		<div class="offset-md-1 col-md-5 col-12">
+			<div class="form-group required row">
+                <label class="col-sm-4 col-form-label" for="IssueDate">Issue Date</label>
+                <div class="col-sm-8">
+                 <input class="date form-control col-8 mb-8"  name="IssueDate" id="IssueDate" style="text-align:right"
+                  type="date"  onkeydown="ValidateIssueDate(event)"/>                                          
+                </div>
+            </div>
+		</div>	
+		<div class="offset-md-1 col-md-5 col-12">
+			<div class="form-group required row">
+                <label class="col-sm-4 col-form-label" for="Narration">Narration</label>
+                <div class="col-sm-8">
+                 <input class="form-control form-control-sm text-box single-line"  name="Narration" id="Narration" style="text-align:right"
+                  type="text" value="" onkeydown="NarrationKeyPress(event)"/>                                          
+                </div>
+            </div>
+		</div>		
+	   </div>	
+	   </fieldset>
+	   
 			<div class="row">
-			<div class="col">
-						<input type="text" class="form-control col-8 mb-4" placeholder="Transaction Amount" name="TransactionAmt" id="TransactionAmt" onkeydown="ValidateTransactionAmount(event)"/>
-					</div>
-					
-					<div class="col">
-						<input type="text" class="form-control col-8 mb-4" placeholder="Cheque/Advice No" name="CHQ_ADV_NO" id="CHQ_ADV_NO" onkeydown="ValidateCQNumber(event)"/>
-					</div>
-					<div class="col">
-						<input type="date" class="form-control col-8 mb-4" placeholder="Issue Date" name="IssueDate" id="IssueDate" onkeydown="ValidateIssueDate(event)"/>
-					</div>
-					
-					
-					
-				</div>
 				
+			
 				
-				
-				<div class="row">
-					
-					
-					
-					<div class="col">
-						<input type="text" class="form-control col-8 mb-4" placeholder=" Reference " name="Narration" onkeydown="NarrationKeyPress(event)" id="Narration" />
-					</div>
-					
-					<div class="col">
-					<input type="button" class="btn btn-success" value="Add Row"
-						onclick="NarrationKeyClick(event)">
+		   <div class="offset-md-1 col-md-5 col-12">
+			<div class="form-group required row">
+                <label class="col-sm-4 col-form-label" for="TransactionDate">Voucher Date</label>
+                <div class="col-sm-8">
+					<input type="date" th:field="*{tran_date}" id="TransactionDate" class="date form-control col-8 mb-8" onkeydown="ValidateTransactionDate(event)" /> <p class="alert alert-danger" th:if="${#fields.hasErrors('tran_date')}" th:errors="*{tran_date}">
+                </div>
+            </div>
+		   </div>
+		   
+		   <div class="offset-md-1 col-md-5 col-12">
+			<div class="form-group required row">
+				<label class="col-sm-4 col-form-label" >To Continue</label>
+                <div class="col-sm-8">
+						<input type="button" class="btn btn-success" value="Add Row to Grid" onclick="NarrationKeyClick(event)">
+                </div>
+            </div>
+		   </div>
+		   
+	
+			
+			</div>
+			
+			
+						<hr />		
 
-				</div>
+			<div class="row">	
+	   <div class="offset-md-1 col-md-5 col-12">
+			<div class="form-group required row">
+                <label class="col-sm-4 col-form-label" for="TransactionAmtCR">Total Cr</label>
+                <div class="col-sm-8">
+              
+                  <input type="text" th:field="*{CreditAmt}" id="TransactionAmtCR"  class="form-control form-control-sm text-box single-line" placeholder="Credit Amount" readonly />
+                                                          
+                </div>
+                
+                
+            </div>
+		</div>				
 					
-				</div>
-			<hr />		
+		<div class="offset-md-1 col-md-5 col-12">
+			<div class="form-group required row">
+                <label class="col-sm-4 col-form-label" for="TransactionAmtDr">Total Dr</label>
+                <div class="col-sm-8">
+                
+                  <input type="text" th:field="*{debitAmt}" id="TransactionAmtDr"  class="form-control form-control-sm text-box single-line" placeholder="Debit Amount" readonly/>
+                                                         
+                </div>
+            </div>
+		</div>
+			
+	   </div>	
+			
+			
+	   
+				
 			<table id="gridContainer" class="table table-bordered table-striped"></table>		
 			
-
-			<hr />
-			<div class="row">
-			<div class="col"></div>
-			   <div class="col">
-					Total Credit <input type="text" th:field="*{CreditAmt}" id="TransactionAmtCR"  class="form-control col-8 mb-8" placeholder="Credit Amount" />
-				</div>
-				<div class="col">
-					Total Debit <input type="text" th:field="*{debitAmt}" id="TransactionAmtDr"  class="form-control col-8 mb-8" placeholder="Debit Amount" />
-				</div>
-				
-				<div class="col"></div>
-				
-			</div>
-				<input type="hidden" id="TransactionGrid" th:field="*{DataGrid}" name="TransactionGrid" >
-
-			<div class="container my-3 bg-light">
+			
+			
+			
+			<div class="container my-2 bg-light">
 				<div class="col-md-12 text-center">
 					<button type="submit" class="btn btn-primary" onclick="JavaScript:return FinalValidation();" >Submit</button>
 					<a th:href="@{/UserHome}" class="btn btn-warning">Cancel</a>
 				</div>
+				
+				
 			</div>
+				<input type="hidden" id="TransactionGrid" th:field="*{DataGrid}" name="TransactionGrid" >
+
+			
 
 
 		</form>
